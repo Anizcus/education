@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Main from "./Main.vue";
-import Router from "./router";
-import Store from "./store";
+import Router from "./routes/router";
+import Store from "./stores/store";
 import Ant from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
 
