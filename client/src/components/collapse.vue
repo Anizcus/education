@@ -21,6 +21,7 @@
 <style scoped lang="scss">
 .dark {
   background-color: #001529;
+  overflow: hidden;
 }
 
 .header {
@@ -69,6 +70,9 @@
 .content {
   color: red;
   animation: visibility 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 @keyframes visibility {
