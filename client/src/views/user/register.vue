@@ -47,66 +47,78 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { ValidationRule } from "ant-design-vue/types/form/form";
 
 const Register = Vue.extend({
   data: function() {
-    let form = this.$form.createForm(this);
-
-    return {
-      form,
-      input: {
-        username: {
-          key: "username",
-          placeholder: "Username",
-          options: {
-            rules: [{ required: true, message: "Please input your username!" }]
-          }
-        },
-        password: {
-          key: "password",
-          placeholder: "Password",
-          options: {
-            rules: [
-              { required: true, message: "Please input your Password!" },
-              {
-                validator: function(
-                  rule: String,
-                  value: String,
-                  error: Function
-                ) {
-                  if (value && form.isFieldTouched("confirm")) {
-                    form.validateField("confirm", { force: true });
-                  }
-                  error();
-                }
-              }
-            ]
-          }
-        },
-        confirm: {
-          key: "confirm",
-          placeholder: "Confirm password",
-          options: {
-            rules: [
-              { required: true, message: "Please confirm your Password!" },
-              {
-                validator: function(
-                  rule: String,
-                  value: String,
-                  error: Function
-                ) {
-                  if (value && value !== form.getFieldValue("password")) {
-                    error("Passwords do not match!");
-                  }
-                  error();
-                }
-              }
-            ]
-          }
+    const form = this.$form.createForm(this);
+    const input = {
+      username: {
+        key: "username",
+        placeholder: "Username",
+        options: {
+          rules: [{ required: true, message: "Please input your username!" }]
+        }
+      },
+      password: {
+        key: "password",
+        placeholder: "Password",
+        options: {
+          rules: Array<{}>()
+        }
+      },
+      confirm: {
+        key: "confirm",
+        placeholder: "Confirm password",
+        options: {
+          rules: Array<{}>()
         }
       }
     };
+
+    input.password.options.rules.push({
+      required: true,
+      message: "Please input your Password!"
+    });
+
+    input.password.options.rules.push({
+      validator: function(
+        rule: ValidationRule,
+        value: String,
+        error: Function
+      ) {
+        if (value && form.isFieldTouched(input.confirm.key)) {
+          form.validateFields([input.confirm.key]);
+        }
+        error();
+      }
+    });
+
+    input.confirm.options.rules.push({
+      required: true,
+      message: "Please confirm your Password!"
+    });
+
+    input.confirm.options.rules.push({
+      message: "Passwords do not match!",
+      validator: function(
+        rule: ValidationRule,
+        value: String,
+        error: Function
+      ) {
+        if (value && value !== form.getFieldValue(input.password.key)) {
+          error(rule.message);
+        }
+        error();
+      }
+    });
+
+    return {
+      form,
+      input
+    };
   },
+
   methods: {
     onSubmit: function() {
       return null;

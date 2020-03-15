@@ -39,26 +39,27 @@ import Vue from "vue";
 
 const Login = Vue.extend({
   data: function() {
-    let form = this.$form.createForm(this);
+    const form = this.$form.createForm(this);
+    const input = {
+      username: {
+        key: "username",
+        placeholder: "Username",
+        options: {
+          rules: [{ required: true, message: "Please input your username!" }]
+        }
+      },
+      password: {
+        key: "password",
+        placeholder: "Password",
+        options: {
+          rules: [{ required: true, message: "Please input your password!" }]
+        }
+      }
+    };
 
     return {
       form,
-      input: {
-        username: {
-          key: "username",
-          placeholder: "Username",
-          options: {
-            rules: [{ required: true, message: "Please input your username!" }]
-          }
-        },
-        password: {
-          key: "password",
-          placeholder: "Password",
-          options: {
-            rules: [{ required: true, message: "Please input your password!" }]
-          }
-        }
-      }
+      input
     };
   },
   methods: {
