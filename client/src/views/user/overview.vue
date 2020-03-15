@@ -1,8 +1,8 @@
 <template>
-  <a-layout> </a-layout>
+  <div></div>
 </template>
 
-<style lang="sass" scoped></style>
+<style lang="scss" scoped></style>
 
 <script lang="ts">
 import Vue from "vue";

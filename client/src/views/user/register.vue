@@ -1,61 +1,71 @@
 <template>
-  <a-layout>
-    <a-form :form="form" @submit="onSubmit">
-      <a-form-item>
-        <a-input placeholder="Username" v-decorator="input.username">
-          <a-icon slot="prefix" type="user" />
-          <a-tooltip slot="suffix" title="Extra information">
-            <a-icon type="info-circle" style="color: rgba(0,0,0,.45)" />
-          </a-tooltip>
-        </a-input>
-      </a-form-item>
-      <a-form-item>
-        <a-input placeholder="Password" v-decorator="input.password">
-          <a-icon slot="prefix" type="lock" />
-          <a-tooltip slot="suffix" title="Extra information">
-            <a-icon type="info-circle" style="color: rgba(0,0,0,.45)" />
-          </a-tooltip>
-        </a-input>
-      </a-form-item>
-      <a-form-item>
-        <a-input placeholder="Confirm password" v-decorator="input.confirm">
-          <a-icon slot="prefix" type="lock" />
-          <a-tooltip slot="suffix" title="Input same password">
-            <a-icon type="info-circle" style="color: rgba(0,0,0,.45)" />
-          </a-tooltip>
-        </a-input>
-      </a-form-item>
-      <a-form-item>
-        <a-button type="primary" html-type="submit">Register</a-button>
-      </a-form-item>
-    </a-form>
-  </a-layout>
+  <a-form :form="form" @submit="onSubmit">
+    <a-form-item>
+      <a-input
+        :placeholder="input.username.placeholder"
+        v-decorator="[input.username.key, input.username.options]"
+      >
+        <a-icon slot="prefix" type="user" />
+        <a-tooltip slot="suffix" title="Extra information">
+          <a-icon type="info-circle" class="icon" />
+        </a-tooltip>
+      </a-input>
+    </a-form-item>
+    <a-form-item>
+      <a-input
+        :placeholder="input.password.placeholder"
+        v-decorator="[input.password.key, input.password.options]"
+      >
+        <a-icon slot="prefix" type="lock" />
+        <a-tooltip slot="suffix" title="Extra information">
+          <a-icon type="info-circle" class="icon" />
+        </a-tooltip>
+      </a-input>
+    </a-form-item>
+    <a-form-item>
+      <a-input
+        :placeholder="input.confirm.placeholder"
+        v-decorator="[input.confirm.key, input.confirm.options]"
+      >
+        <a-icon slot="prefix" type="lock" />
+        <a-tooltip slot="suffix" title="Input same password">
+          <a-icon type="info-circle" class="icon" />
+        </a-tooltip>
+      </a-input>
+    </a-form-item>
+    <a-form-item>
+      <a-button type="primary" html-type="submit">Register</a-button>
+    </a-form-item>
+  </a-form>
 </template>
 
-<style lang="sass" scoped></style>
+<style scoped lang="scss">
+.icon {
+  color: rgba(0, 0, 0, 0.45);
+}
+</style>
 
 <script lang="ts">
 import Vue from "vue";
-import {
-  ValidateCallback,
-  ValidationRule
-} from "ant-design-vue/types/form/form";
 
 const Register = Vue.extend({
   data: function() {
-    const form = this.$form.createForm(this);
+    let form = this.$form.createForm(this);
+
     return {
       form,
       input: {
-        username: [
-          "username",
-          {
+        username: {
+          key: "username",
+          placeholder: "Username",
+          options: {
             rules: [{ required: true, message: "Please input your username!" }]
           }
-        ],
-        password: [
-          "password",
-          {
+        },
+        password: {
+          key: "password",
+          placeholder: "Password",
+          options: {
             rules: [
               { required: true, message: "Please input your Password!" },
               {
@@ -65,17 +75,18 @@ const Register = Vue.extend({
                   error: Function
                 ) {
                   if (value && form.isFieldTouched("confirm")) {
-                    form.validateFields(["confirm"], { force: true });
+                    form.validateField("confirm", { force: true });
                   }
                   error();
                 }
               }
             ]
           }
-        ],
-        confirm: [
-          "confirm",
-          {
+        },
+        confirm: {
+          key: "confirm",
+          placeholder: "Confirm password",
+          options: {
             rules: [
               { required: true, message: "Please confirm your Password!" },
               {
@@ -92,7 +103,7 @@ const Register = Vue.extend({
               }
             ]
           }
-        ]
+        }
       }
     };
   },

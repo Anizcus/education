@@ -45,7 +45,9 @@
           <a-breadcrumb-item>An Application</a-breadcrumb-item>
         </a-breadcrumb>
         <a-layout-content class="content">
-          <router-view />
+          <a-layout class="router">
+            <router-view />
+          </a-layout>
           <a-layout-footer class="footer">
             Educational system with gamification ©2020 Created by Daniel Vrubel
           </a-layout-footer>
@@ -101,6 +103,10 @@
 .content {
   padding: 0px 12px 0px 12px;
   overflow-x: hidden;
+}
+
+.router {
+  min-height: calc(100% - 69px);
 }
 </style>
 
