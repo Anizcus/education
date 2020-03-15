@@ -57,24 +57,29 @@ const Register = Vue.extend({
         key: "username",
         placeholder: "Username",
         options: {
-          rules: [{ required: true, message: "Please input your username!" }]
+          rules: Array<ValidationRule>()
         }
       },
       password: {
         key: "password",
         placeholder: "Password",
         options: {
-          rules: Array<{}>()
+          rules: Array<ValidationRule>()
         }
       },
       confirm: {
         key: "confirm",
         placeholder: "Confirm password",
         options: {
-          rules: Array<{}>()
+          rules: Array<ValidationRule>()
         }
       }
     };
+
+    input.username.options.rules.push({
+      required: true,
+      message: "Please input your username!"
+    });
 
     input.password.options.rules.push({
       required: true,

@@ -36,6 +36,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { ValidationRule } from "ant-design-vue/types/form/form";
 
 const Login = Vue.extend({
   data: function() {
@@ -45,17 +46,27 @@ const Login = Vue.extend({
         key: "username",
         placeholder: "Username",
         options: {
-          rules: [{ required: true, message: "Please input your username!" }]
+          rules: Array<ValidationRule>()
         }
       },
       password: {
         key: "password",
         placeholder: "Password",
         options: {
-          rules: [{ required: true, message: "Please input your password!" }]
+          rules: Array<ValidationRule>()
         }
       }
     };
+
+    input.username.options.rules.push({
+      required: true,
+      message: "Please input your username!"
+    });
+
+    input.password.options.rules.push({
+      required: true,
+      message: "Please input your password!"
+    });
 
     return {
       form,
