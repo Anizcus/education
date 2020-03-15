@@ -1,18 +1,24 @@
 <template>
   <a-form :form="form" @submit="onSubmit">
     <a-form-item>
-      <a-input placeholder="Username" v-decorator="input.username">
+      <a-input
+        :placeholder="input.username.placeholder"
+        v-decorator="[input.username.key, input.username.options]"
+      >
         <a-icon slot="prefix" type="user" />
         <a-tooltip slot="suffix" title="Extra information">
-          <a-icon type="info-circle" style="color: rgba(0,0,0,0.45)" />
+          <a-icon type="info-circle" class="icon" />
         </a-tooltip>
       </a-input>
     </a-form-item>
     <a-form-item>
-      <a-input placeholder="Password" v-decorator="input.password">
+      <a-input
+        :placeholder="input.password.placeholder"
+        v-decorator="[input.password.key, input.password.options]"
+      >
         <a-icon slot="prefix" type="lock" />
         <a-tooltip slot="suffix" title="Extra information">
-          <a-icon type="info-circle" style="color: rgba(0,0,0,0.45)" />
+          <a-icon type="info-circle" class="icon" />
         </a-tooltip>
       </a-input>
     </a-form-item>
@@ -22,7 +28,11 @@
   </a-form>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.icon {
+  color: rgba(0, 0, 0, 0.45);
+}
+</style>
 
 <script lang="ts">
 import Vue from "vue";
