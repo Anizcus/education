@@ -1,11 +1,15 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Server.Attributes;
+using Server.Enums;
 using Server.Models.Payloads;
 using Server.Models.Requests;
 using Server.Services.Interfaces;
 
 namespace Server.Controllers
 {
+   [Authorize]
    [ApiController]
    [Route("[controller]")]
    public class UserController : ControllerBase
@@ -18,6 +22,7 @@ namespace Server.Controllers
       }
 
       [HttpGet]
+      [Permission((uint) PermissionEnum.User.View)]
       public async Task<ActionResult> Get([FromQuery] RequestById request)
       {
          var user = await _userService.GetAsync(request.Id);

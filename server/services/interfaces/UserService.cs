@@ -25,5 +25,20 @@ namespace Server.Services.Interfaces
             Name = user.Name
          };
       }
+
+      public Task<SessionAnswer> LogInAsync(string username, string password)
+      {
+         throw new System.NotImplementedException();
+      }
+
+      public Task<NameAnswer> RegisterAsync(string username, string password)
+      {
+         throw new System.NotImplementedException();
+      }
+
+      public Task<SessionAnswer> RestoreAsync(string session, string account)
+      {
+         throw new System.NotImplementedException();
+      }
    }
 }
