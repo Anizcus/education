@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.Attributes;
@@ -11,8 +12,7 @@ namespace Server.Controllers
 {
    [Authorize]
    [ApiController]
-   [Route("[controller]")]
-   public class UserController : ControllerBase
+   public class UserController: ControllerBase
    {
       private readonly IUserService _userService;
 
@@ -21,14 +21,15 @@ namespace Server.Controllers
          _userService = userService;
       }
 
-      [HttpGet]
-      [Permission((uint) PermissionEnum.User.View)]
-      public async Task<ActionResult> Get([FromQuery] RequestById request)
+      [Permission((uint)PermissionEnum.User.View)]
+      [HttpGet("/get")]
+      public async Task<IActionResult> Get([FromQuery] RequestById request)
       {
          var user = await _userService.GetAsync(request.Id);
-         if (user.Error != null)
+
+         if (!String.IsNullOrEmpty(user.Error))
          {
-            return NotFound(
+            return BadRequest(
                new ErrorPayload
                {
                   Error = user.Error
@@ -40,6 +41,54 @@ namespace Server.Controllers
             new NamePayload
             {
                Name = user.Name
+            }
+         );
+      }
+
+      [AllowAnonymous]
+      [HttpPost("/user/signup")]
+      public async Task<IActionResult> SignUp([FromBody] RequestSignUp request)
+      {
+         var user = await _userService.SignUpAsync(request.Username, request.Password);
+
+         if (!String.IsNullOrEmpty(user.Error))
+         {
+            return BadRequest(
+               new ErrorPayload
+               {
+                  Error = user.Error
+               }
+            );
+         }
+
+         return Ok(
+            new NamePayload
+            {
+               Name = user.Name
+            }
+         );
+      }
+
+      [AllowAnonymous]
+      [HttpPost("/user/signin")]
+      public async Task<IActionResult> SignIn([FromBody] RequestSignIn request) 
+      {
+         var user = await _userService.SignInAsync(request.Username, request.Password);
+
+         if (!String.IsNullOrEmpty(user.Error))
+         {
+            return BadRequest(
+               new ErrorPayload
+               {
+                  Error = user.Error
+               }
+            );
+         }
+
+         return Ok(
+            new NamePayload
+            {
+               Name = user.Account
             }
          );
       }

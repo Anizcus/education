@@ -24,12 +24,12 @@ namespace Server.Stores.Configurations
 
          builder.Property(e => e.Password)
             .HasColumnName("password")
-            .HasColumnType("varchar(64)")
+            .HasColumnType("tinyblob")
             .IsRequired();
 
          builder.Property(e => e.Salt)
             .HasColumnName("salt")
-            .HasColumnType("varchar(64)")
+            .HasColumnType("tinyblob")
             .IsRequired();
 
          builder.Property(e => e.Created)

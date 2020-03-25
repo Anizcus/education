@@ -12,6 +12,15 @@ namespace Server.Stores.Interfaces
       {
          _store = store;
       }
+
+      public async Task<User> CreateAsync(User entity)
+      {
+         var added = await _store.Users.AddAsync(entity);
+         var saved = await _store.SaveChangesAsync();
+
+         return added.Entity;
+      }
+
       public async Task<User> GetAsync(int id)
       {
          return await _store.Users
@@ -22,6 +31,12 @@ namespace Server.Stores.Interfaces
       {
          return await _store.Users
             .ToListAsync();
+      }
+
+      public async Task<User> GetAsync(string name)
+      {
+         return await _store.Users
+            .FirstOrDefaultAsync(user => user.Name == name);
       }
    }
 }
