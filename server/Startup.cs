@@ -63,6 +63,8 @@ namespace Server
                ValidateAudience = true,
                ValidateLifetime = true,
                ValidateIssuerSigningKey = true,
+               RequireExpirationTime = true,
+               ClockSkew = TimeSpan.Zero,
                ValidIssuer = _configuration["Token:Issuer"],
                ValidAudience = _configuration["Token:Audience"],
                IssuerSigningKey = new SymmetricSecurityKey(

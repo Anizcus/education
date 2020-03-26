@@ -1,5 +1,9 @@
 using System;
+using System.Linq;
+using System.Net;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Server.Attributes
@@ -16,7 +20,14 @@ namespace Server.Attributes
 
       public void OnAuthorization(AuthorizationFilterContext context)
       {
-         throw new NotImplementedException();
+         var permission = context.HttpContext.User.Claims
+            .Where(c => c.Type == "ups" && c.Value == _permission.ToString())
+            .FirstOrDefault();
+
+         if (permission == null)
+         {
+            context.Result = new StatusCodeResult((int) HttpStatusCode.Forbidden);
+         }
       }
    }
 }

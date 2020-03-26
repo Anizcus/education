@@ -1,7 +1,14 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Server.Services.Answers;
 using Server.Stores.Entities;
 using Server.Stores.Interfaces;
@@ -11,12 +18,16 @@ namespace Server.Services.Interfaces
    public class UserService : IUserService
    {
       private readonly IUserStore _userStore;
+      private readonly IConfiguration _configuration;
+      private readonly JwtSecurityTokenHandler _tokenHandler;
 
-      public UserService(IUserStore userStore)
+      public UserService(IUserStore userStore, IConfiguration configuration)
       {
          _userStore = userStore;
+         _configuration = configuration;
+         _tokenHandler = new JwtSecurityTokenHandler();
       }
-      public async Task<NameAnswer> GetAsync(int id)
+      public async Task<NameAnswer> GetAsync(uint id)
       {
          var user = await _userStore.GetAsync(id);
 
@@ -65,16 +76,22 @@ namespace Server.Services.Interfaces
          var combine = CombineWithSalt(username, password, user.Salt);
          var hash = SecureWithSHA512(combine);
 
-         if (hash.SequenceEqual(user.Password)) {
+         if (!hash.SequenceEqual(user.Password))
+         {
             return new SessionAnswer
             {
-               Error = "You have logged in"
+               Error = "Wrong password / username!"
             };
          }
 
+         var permissions = await _userStore.GetPermissionsAsync(user.RoleId);
+         var token = CreateToken(user, permissions);
+
          return new SessionAnswer
          {
-            Error = "End of method"
+            Id = user.Id,
+            Name = user.Name,
+            Session = WriteToken(token)
          };
       }
 
@@ -160,10 +177,49 @@ namespace Server.Services.Interfaces
 
       private byte[] CombineWithSalt(string username, string password, byte[] salt)
       {
-         var name = System.Text.Encoding.UTF8.GetBytes(username);
-         var word = System.Text.Encoding.UTF8.GetBytes(password);
+         var name = Encoding.UTF8.GetBytes(username);
+         var word = Encoding.UTF8.GetBytes(password);
 
          return name.Concat(salt).Concat(word).ToArray();
+      }
+
+      public SecurityToken CreateToken(User user, IList<Permission> permissions)
+      {
+         var time = TimeSpan.Parse(_configuration["Token:Lifetime"]);
+         var key = Encoding.UTF8.GetBytes(_configuration["Token:Secret"]);
+
+         var tokenClaims = new ClaimsIdentity(
+            new[] {
+               new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+               new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            });
+
+         foreach(Permission p in permissions)
+         {
+            tokenClaims.AddClaim(
+               new Claim("ups", p.Id.ToString())
+            );
+         }
+
+         var credentials = new SigningCredentials(
+            new SymmetricSecurityKey(key),
+            SecurityAlgorithms.HmacSha512Signature
+         );
+
+         var tokenDescriptor = new SecurityTokenDescriptor
+         {
+            Subject = tokenClaims,
+            Audience = _configuration["Token:Audience"],
+            Issuer = _configuration["Token:Issuer"],
+            Expires = DateTime.UtcNow.Add(time),
+            SigningCredentials = credentials
+         };
+
+         return _tokenHandler.CreateToken(tokenDescriptor);
+      }
+      public string WriteToken(SecurityToken token)
+      {
+         return _tokenHandler.WriteToken(token);
       }
    }
 }

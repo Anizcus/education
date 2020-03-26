@@ -2,6 +2,6 @@ namespace Server.Models.Requests
 {
    public class RequestById
    {
-      public int Id { get; set; }
+      public uint Id { get; set; }
    }
 }

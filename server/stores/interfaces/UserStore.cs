@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Server.Stores.Entities;
@@ -21,7 +22,7 @@ namespace Server.Stores.Interfaces
          return added.Entity;
       }
 
-      public async Task<User> GetAsync(int id)
+      public async Task<User> GetAsync(uint id)
       {
          return await _store.Users
             .FirstOrDefaultAsync(user => user.Id == id);
@@ -37,6 +38,21 @@ namespace Server.Stores.Interfaces
       {
          return await _store.Users
             .FirstOrDefaultAsync(user => user.Name == name);
+      }
+
+      public async Task<IList<Permission>> GetPermissionsAsync(uint roleId)
+      {
+         var role = await _store.Roles
+            .Where(r => r.Id == roleId)
+            .Include(r => r.RolePermissions)
+               .ThenInclude(rp => rp.Permission)
+            .ToListAsync();
+
+         return role
+            .Select(r => r.RolePermissions
+               .Select(rp => rp.Permission))
+            .FirstOrDefault()
+            .ToList();
       }
    }
 }

@@ -54,6 +54,13 @@ namespace Server.Stores.Configurations
             .WithMany(p => p.RolePermissions)
             .HasForeignKey(e => e.RoleId)
             .HasConstraintName("FOREIGN_ROLE_PERMISSION_ROLE_ID");
+
+         builder.HasData(
+            new RolePermission { RoleId = (uint)RoleEnum.Student, PermissionId = (uint)PermissionEnum.User.View },
+            new RolePermission { RoleId = (uint)RoleEnum.Student, PermissionId = (uint)PermissionEnum.User.Create },
+            new RolePermission { RoleId = (uint)RoleEnum.Student, PermissionId = (uint)PermissionEnum.User.Update },
+            new RolePermission { RoleId = (uint)RoleEnum.Student, PermissionId = (uint)PermissionEnum.User.Delete }
+         );
       }
    }
 }

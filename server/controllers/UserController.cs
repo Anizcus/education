@@ -22,8 +22,8 @@ namespace Server.Controllers
       }
 
       [Permission((uint)PermissionEnum.User.View)]
-      [HttpGet("/get")]
-      public async Task<IActionResult> Get([FromQuery] RequestById request)
+      [HttpGet("/user/all")]
+      public async Task<IActionResult> Get([FromBody] RequestById request)
       {
          var user = await _userService.GetAsync(request.Id);
 
@@ -86,9 +86,13 @@ namespace Server.Controllers
          }
 
          return Ok(
-            new NamePayload
+            new SessionPayload
             {
-               Name = user.Account
+               User = {
+                  Id = user.Id,
+                  Name = user.Name
+               },
+               Session = user.Session
             }
          );
       }
