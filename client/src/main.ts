@@ -1,17 +1,15 @@
 import Vue from "vue";
-import Main from "./main.vue";
+import Main from "./Main.vue";
 import Router from "./routes/router";
 import Store from "./stores/store";
-import Ant from "ant-design-vue";
-
-import "ant-design-vue/dist/antd.css";
+import { Layout } from "ant-design-vue";
 
 Vue.config.productionTip = false;
 
-Vue.use(Ant);
+Vue.use(Layout);
 
 new Vue({
-  store: Store,
   router: Router,
-  render: element => element(Main)
+  store: Store,
+  render: Element => Element(Main)
 }).$mount("main");
