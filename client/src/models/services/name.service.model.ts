@@ -1,6 +1,6 @@
 interface NameServiceModel {
-   id: number;
-   name: string;
-};
+  id: number;
+  name: string;
+}
 
 export { NameServiceModel };

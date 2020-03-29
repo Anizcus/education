@@ -1,5 +1,5 @@
 interface IdServiceModel {
-   id: number;
-};
+  id: number;
+}
 
 export { IdServiceModel };

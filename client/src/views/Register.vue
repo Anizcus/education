@@ -9,7 +9,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit" :loading="loading">
-          <span>Login</span>
+          <span>Register</span>
         </el-button>
       </el-form-item>
     </el-form>
@@ -20,11 +20,11 @@
 import { Component, Vue } from "vue-property-decorator";
 import { FormRefModel } from "../models/refs/form.ref.model";
 import { UserService } from "../services/user.service";
-import { LoginFormModel } from "../models/forms/login.form.model";
+import { RegisterFormModel } from "../models/forms/register.form.model";
 
 @Component
-class Login extends Vue {
-  private form: LoginFormModel;
+class Register extends Vue {
+  private form: RegisterFormModel;
   private loading: boolean;
   private rule = {
     username: [
@@ -58,13 +58,13 @@ class Login extends Vue {
     this.$refs.form
       .validate()
       .then(() => {
-        return UserService.login({
+        return UserService.register({
           username: this.form.username,
           password: this.form.password
         });
       })
       .then((response: any) => {
-        localStorage.setItem("session", response.data.session);
+        alert(response.data.name);
       })
       .catch(error => {
         console.log(error);
@@ -75,7 +75,7 @@ class Login extends Vue {
   }
 }
 
-export default Login;
+export default Register;
 </script>
 
 <style lang="scss" scoped></style>
