@@ -26,7 +26,6 @@ namespace Server
 
       public void ConfigureServices(IServiceCollection services)
       {
-         services.AddCors();
          services.AddControllers();
          services.AddDbContextPool<Store>(
              options => options.UseMySql(_configuration["Database:MySQL"],
@@ -82,16 +81,14 @@ namespace Server
             app.UseDeveloperExceptionPage();
          }
 
-         app.UseHttpsRedirection();
+         //app.UseHttpsRedirection();
 
          app.UseRouting();
 
-         app.UseCors(option =>
-            {
-               option.AllowAnyHeader()
-                     .AllowAnyMethod()
-                     .AllowAnyOrigin();
-            }
+         app.UseCors(options => options
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod()
          );
 
          app.UseAuthentication();

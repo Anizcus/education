@@ -22,7 +22,7 @@ namespace Server.Controllers
       }
 
       [Permission((uint)PermissionEnum.User.View)]
-      [HttpGet("/user/all")]
+      [HttpGet("/user")]
       public async Task<IActionResult> Get([FromBody] RequestById request)
       {
          var user = await _userService.GetAsync(request.Id);
@@ -88,7 +88,7 @@ namespace Server.Controllers
          return Ok(
             new SessionPayload
             {
-               User = {
+               User = new NamePayload {
                   Id = user.Id,
                   Name = user.Name
                },
