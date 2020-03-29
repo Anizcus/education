@@ -92,19 +92,17 @@ class Register extends Vue {
     this.loading = true;
     this.$refs.form
       .validate()
-      .then(() => {
-        return UserService.register({
+      .then(() =>
+        UserService.register({
           username: this.form.username,
           password: this.form.password
-        });
-      })
+        })
+      )
       .then((response: any) => {
+        this.loading = false;
         alert(response.data.name);
       })
-      .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
+      .catch(() => {
         this.loading = false;
       });
   }

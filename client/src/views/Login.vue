@@ -57,19 +57,17 @@ class Login extends Vue {
     this.loading = true;
     this.$refs.form
       .validate()
-      .then(() => {
-        return UserService.login({
+      .then(() =>
+        UserService.login({
           username: this.form.username,
           password: this.form.password
-        });
-      })
+        })
+      )
       .then((response: any) => {
+        this.loading = false;
         localStorage.setItem("session", response.data.session);
       })
-      .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
+      .catch(() => {
         this.loading = false;
       });
   }

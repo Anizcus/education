@@ -14,7 +14,10 @@ import {
   FormItem,
   Input,
   Row,
-  Col
+  Col,
+  Menu,
+  MenuItem,
+  Link
 } from "element-ui";
 
 Vue.config.productionTip = false;
@@ -30,6 +33,9 @@ Vue.use(FormItem);
 Vue.use(Input);
 Vue.use(Row);
 Vue.use(Col);
+Vue.use(Menu);
+Vue.use(MenuItem);
+Vue.use(Link);
 
 new Vue({
   router: Router,
