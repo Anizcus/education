@@ -7,6 +7,9 @@
       <el-form-item label="Password" prop="password">
         <el-input v-model="form.password"></el-input>
       </el-form-item>
+      <el-form-item label="Confirm password" prop="confirm">
+        <el-input v-model="form.confirm"></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit" :loading="loading">
           <span>Register</span>
@@ -31,7 +34,38 @@ class Register extends Vue {
       { required: true, message: "Please input username", trigger: "blur" }
     ],
     password: [
-      { required: true, message: "Please input password", trigger: "blur" }
+      {
+        required: true,
+        validator: (rule: object, value: string, callback: Function) => {
+          if (value == "") {
+            return callback(new Error("Please input password"));
+          }
+
+          if (this.form.confirm !== "") {
+            this.$refs.form.validateField("confirm");
+          }
+
+          return callback();
+        },
+        trigger: "blur"
+      }
+    ],
+    confirm: [
+      {
+        required: true,
+        validator: (rule: object, value: string, callback: Function) => {
+          if (value == "") {
+            return callback(new Error("Please input password"));
+          }
+
+          if (this.form.password !== value) {
+            return callback(new Error("Password inputs don't match!"));
+          }
+
+          return callback();
+        },
+        trigger: "blur"
+      }
     ]
   };
 
@@ -44,7 +78,8 @@ class Register extends Vue {
 
     this.form = {
       username: "",
-      password: ""
+      password: "",
+      confirm: ""
     };
     this.loading = false;
   }
