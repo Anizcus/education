@@ -2,14 +2,19 @@
   <el-container class="container">
     <el-header class="header">
       <el-row>
-        <el-col :span="4" :offset="20">
-          <router-link to="/user/login/" v-slot="{ href, route }">
-            <el-link :href="href" type="primary">{{ route.name }}</el-link>
-          </router-link>
-          <span> or </span>
-          <router-link to="/user/register/" v-slot="{ href, route }">
-            <el-link :href="href" type="primary">{{ route.name }}</el-link>
-          </router-link>
+        <el-col v-if="!session" :span="4" :offset="20">
+          <p>
+            <router-link to="/user/login/" v-slot="{ href, route }">
+              <el-link :href="href" type="primary">{{ route.name }}</el-link>
+            </router-link>
+            <span> or </span>
+            <router-link to="/user/register/" v-slot="{ href, route }">
+              <el-link :href="href" type="primary">{{ route.name }}</el-link>
+            </router-link>
+          </p>
+        </el-col>
+        <el-col v-else :span="6" :offset="18">
+          <p>Hello {{ session.name }}</p>
         </el-col>
       </el-row>
     </el-header>
@@ -31,7 +36,8 @@
 </template>
 
 <style lang="scss">
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
 }
@@ -68,12 +74,35 @@ html, body {
 </style>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import Vue from "vue";
+import Component from "vue-class-component";
+import { mapGetters, mapActions, ActionMethod } from "vuex";
+import { SessionModel } from "./models/stores/user.store.model";
 
-@Component
+@Component({
+  computed: {
+    ...mapGetters("user", {
+      session: "getSession"
+    })
+  },
+  methods: {
+    ...mapActions("user", {
+      isOnline: "online"
+    })
+  }
+})
 class Main extends Vue {
-  public constructor() {
-    super();
+  private session!: SessionModel;
+  private isOnline!: ActionMethod;
+
+  created() {
+    this.isOnline()
+      .then(response => {
+        console.log("isOnline");
+      })
+      .catch(error => {
+        console.log("not online");
+      });
   }
 }
 export default Main;

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +14,7 @@ namespace Server.Controllers
 {
    [Authorize]
    [ApiController]
-   public class UserController: ControllerBase
+   public class UserController : ControllerBase
    {
       private readonly IUserService _userService;
 
@@ -40,6 +42,7 @@ namespace Server.Controllers
          return Ok(
             new NamePayload
             {
+               Id = user.Id,
                Name = user.Name
             }
          );
@@ -71,7 +74,7 @@ namespace Server.Controllers
 
       [AllowAnonymous]
       [HttpPost("/user/signin")]
-      public async Task<IActionResult> SignIn([FromBody] RequestSignIn request) 
+      public async Task<IActionResult> SignIn([FromBody] RequestSignIn request)
       {
          var user = await _userService.SignInAsync(request.Username, request.Password);
 
@@ -88,7 +91,8 @@ namespace Server.Controllers
          return Ok(
             new SessionPayload
             {
-               User = new NamePayload {
+               User = new NamePayload
+               {
                   Id = user.Id,
                   Name = user.Name
                },
@@ -96,5 +100,30 @@ namespace Server.Controllers
             }
          );
       }
+
+      [HttpPost("/user/online")]
+      public async Task<IActionResult> Online()
+      {
+         var user = await _userService.GetAsync(HttpContext.User.Claims);
+
+         if (!String.IsNullOrEmpty(user.Error))
+         {
+            return BadRequest(
+               new ErrorPayload
+               {
+                  Error = user.Error
+               }
+            );
+         }
+
+         return Ok(
+            new NamePayload
+            {
+               Id = user.Id,
+               Name = user.Name
+            }
+         );
+      }
+      
    }
 }

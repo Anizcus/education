@@ -20,7 +20,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import Vue from "vue";
+import Component from "vue-class-component";
 import { FormRefModel } from "../models/refs/form.ref.model";
 import { UserService } from "../services/user.service";
 import { RegisterFormModel } from "../models/forms/register.form.model";
@@ -98,9 +99,9 @@ class Register extends Vue {
           password: this.form.password
         })
       )
-      .then((response: any) => {
+      .then(response => {
         this.loading = false;
-        alert(response.data.name);
+        alert(response.name);
       })
       .catch(() => {
         this.loading = false;

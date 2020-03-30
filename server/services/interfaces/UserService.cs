@@ -146,6 +146,7 @@ namespace Server.Services.Interfaces
 
          return new NameAnswer
          {
+            Id = user.Id,
             Name = user.Name
          };
       }
@@ -194,7 +195,7 @@ namespace Server.Services.Interfaces
                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             });
 
-         foreach(Permission p in permissions)
+         foreach (Permission p in permissions)
          {
             tokenClaims.AddClaim(
                new Claim("ups", p.Id.ToString())
@@ -220,6 +221,37 @@ namespace Server.Services.Interfaces
       public string WriteToken(SecurityToken token)
       {
          return _tokenHandler.WriteToken(token);
+      }
+
+      public async Task<NameAnswer> GetAsync(IEnumerable<Claim> claims)
+      {
+         var subject = claims
+            .Where(c => c.Type == ClaimTypes.NameIdentifier)
+            .FirstOrDefault();
+
+         if (subject == null)
+         {
+            return new NameAnswer
+            {
+               Error = "Session has no subject"
+            };
+         }
+
+         var user = await _userStore.GetAsync(Convert.ToUInt32(subject.Value));
+
+         if (user == null)
+         {
+            return new NameAnswer
+            {
+               Error = "User does not exist!"
+            };
+         }
+
+         return new NameAnswer
+         {
+            Id = user.Id,
+            Name = user.Name
+         };
       }
    }
 }

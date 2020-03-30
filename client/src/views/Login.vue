@@ -17,7 +17,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import Vue from "vue";
+import Component from "vue-class-component";
 import { FormRefModel } from "../models/refs/form.ref.model";
 import { UserService } from "../services/user.service";
 import { LoginFormModel } from "../models/forms/login.form.model";
@@ -63,9 +64,10 @@ class Login extends Vue {
           password: this.form.password
         })
       )
-      .then((response: any) => {
+      .then(response => {
         this.loading = false;
-        localStorage.setItem("session", response.data.session);
+        localStorage.setItem("session", response.session);
+        this.$store.commit("user/insert", response.user);
       })
       .catch(() => {
         this.loading = false;

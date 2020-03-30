@@ -1,11 +1,14 @@
 import Vue from "vue";
-import Vuex from "vuex";
+import Vuex, { StoreOptions } from "vuex";
+import UserStore from "@/stores/user.store";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store: StoreOptions<{}> = {
   state: {},
-  mutations: {},
-  actions: {},
-  modules: {}
-});
+  modules: {
+    user: UserStore
+  }
+};
+
+export default new Vuex.Store<{}>(store);

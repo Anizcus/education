@@ -1,4 +1,5 @@
 import Axios from "axios";
+import Store from "@/stores/store";
 
 const Service = Axios.create({
   baseURL: "http://localhost:5000/",
@@ -7,8 +8,17 @@ const Service = Axios.create({
   }
 });
 
-// Service.interceptors.response.use(
-//    response => response.data
-// );
+Service.interceptors.response.use(
+  response => {
+    return response.data;
+  },
+  error => {
+    if (error.response.status == 401) {
+      Store.dispatch("user/logout");
+    } else {
+      return Promise.reject(error);
+    }
+  }
+);
 
 export { Service };
