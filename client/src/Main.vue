@@ -2,8 +2,8 @@
   <el-container class="container">
     <el-header class="header">
       <el-row>
-        <el-col v-if="!session" :span="4" :offset="20">
-          <p>
+        <el-col :span="6" :offset="18">
+          <p v-if="!session">
             <router-link to="/user/login/" v-slot="{ href, route }">
               <el-link :href="href" type="primary">{{ route.name }}</el-link>
             </router-link>
@@ -12,9 +12,7 @@
               <el-link :href="href" type="primary">{{ route.name }}</el-link>
             </router-link>
           </p>
-        </el-col>
-        <el-col v-else :span="6" :offset="18">
-          <p>Hello {{ session.name }}</p>
+          <p v-else>Hello {{ session.name }}!</p>
         </el-col>
       </el-row>
     </el-header>
@@ -34,6 +32,41 @@
     <el-footer class="footer">Footer</el-footer>
   </el-container>
 </template>
+
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+import { mapGetters, mapActions, ActionMethod } from "vuex";
+import { SessionModel } from "./models/stores/user.store.model";
+
+@Component({
+  computed: {
+    ...mapGetters("user", {
+      session: "session"
+    })
+  },
+  methods: {
+    ...mapActions("user", {
+      isOnline: "online"
+    })
+  }
+})
+class Main extends Vue {
+  private session!: SessionModel;
+  private isOnline!: ActionMethod;
+
+  public mounted() {
+    this.isOnline()
+      .then(() => {
+        console.log("isOnline");
+      })
+      .catch(() => {
+        console.log("not online");
+      });
+  }
+}
+export default Main;
+</script>
 
 <style lang="scss">
 html,
@@ -72,38 +105,3 @@ body {
   border-top: solid 1px #e6e6e6;
 }
 </style>
-
-<script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import { mapGetters, mapActions, ActionMethod } from "vuex";
-import { SessionModel } from "./models/stores/user.store.model";
-
-@Component({
-  computed: {
-    ...mapGetters("user", {
-      session: "getSession"
-    })
-  },
-  methods: {
-    ...mapActions("user", {
-      isOnline: "online"
-    })
-  }
-})
-class Main extends Vue {
-  private session!: SessionModel;
-  private isOnline!: ActionMethod;
-
-  created() {
-    this.isOnline()
-      .then(response => {
-        console.log("isOnline");
-      })
-      .catch(error => {
-        console.log("not online");
-      });
-  }
-}
-export default Main;
-</script>

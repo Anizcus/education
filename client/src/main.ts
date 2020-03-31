@@ -17,7 +17,8 @@ import {
   Col,
   Menu,
   MenuItem,
-  Link
+  Link,
+  Alert
 } from "element-ui";
 
 Vue.config.productionTip = false;
@@ -36,6 +37,7 @@ Vue.use(Col);
 Vue.use(Menu);
 Vue.use(MenuItem);
 Vue.use(Link);
+Vue.use(Alert);
 
 new Vue({
   router: Router,

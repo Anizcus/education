@@ -1,5 +1,13 @@
 <template>
   <el-col>
+    <el-alert
+      v-if="alert.message"
+      :title="alert.message"
+      :type="alert.type"
+      :show-icon="true"
+      @close="onCloseAlert"
+    >
+    </el-alert>
     <el-form :model="form" :rules="rule" ref="form">
       <el-form-item label="Username" prop="username">
         <el-input v-model="form.username"></el-input>
@@ -20,13 +28,23 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { FormRefModel } from "../models/refs/form.ref.model";
-import { UserService } from "../services/user.service";
 import { LoginFormModel } from "../models/forms/login.form.model";
+import { mapActions, ActionMethod } from "vuex";
 
-@Component
+@Component({
+  methods: {
+    ...mapActions("user", {
+      login: "login"
+    })
+  }
+})
 class Login extends Vue {
-  private form: LoginFormModel;
-  private loading: boolean;
+  private login!: ActionMethod;
+  private form: LoginFormModel = {
+    username: "",
+    password: ""
+  };
+  private loading = false;
   private rule = {
     username: [
       { required: true, message: "Please input username", trigger: "blur" }
@@ -35,41 +53,43 @@ class Login extends Vue {
       { required: true, message: "Please input password", trigger: "blur" }
     ]
   };
+  private alert = {
+    message: "",
+    type: ""
+  };
 
   public $refs!: {
     form: FormRefModel;
   };
 
-  public constructor() {
-    super();
-
-    this.form = {
-      username: "",
-      password: ""
-    };
-    this.loading = false;
+  private onCloseAlert() {
+    this.alert.message = "";
+    this.alert.type = "";
   }
 
   private onSubmit() {
     if (this.loading) {
       return;
+    } else {
+      this.loading = true;
     }
 
-    this.loading = true;
     this.$refs.form
       .validate()
       .then(() =>
-        UserService.login({
+        this.login({
           username: this.form.username,
           password: this.form.password
         })
       )
-      .then(response => {
+      .then(user => {
+        this.alert.message = `You have successfully logged in as ${user.name}!`;
+        this.alert.type = "success";
         this.loading = false;
-        localStorage.setItem("session", response.session);
-        this.$store.commit("user/insert", response.user);
       })
-      .catch(() => {
+      .catch(error => {
+        this.alert.message = error.response.data.error;
+        this.alert.type = "error";
         this.loading = false;
       });
   }

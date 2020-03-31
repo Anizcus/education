@@ -23,13 +23,24 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { FormRefModel } from "../models/refs/form.ref.model";
-import { UserService } from "../services/user.service";
 import { RegisterFormModel } from "../models/forms/register.form.model";
+import { mapActions, ActionMethod } from "vuex";
 
-@Component
+@Component({
+  methods: {
+    ...mapActions("user", {
+      register: "register"
+    })
+  }
+})
 class Register extends Vue {
-  private form: RegisterFormModel;
-  private loading: boolean;
+  private register!: ActionMethod;
+  private form: RegisterFormModel = {
+    username: "",
+    password: "",
+    confirm: ""
+  };
+  private loading = false;
   private rule = {
     username: [
       { required: true, message: "Please input username", trigger: "blur" }
@@ -74,27 +85,17 @@ class Register extends Vue {
     form: FormRefModel;
   };
 
-  public constructor() {
-    super();
-
-    this.form = {
-      username: "",
-      password: "",
-      confirm: ""
-    };
-    this.loading = false;
-  }
-
   private onSubmit() {
     if (this.loading) {
       return;
+    } else {
+      this.loading = true;
     }
 
-    this.loading = true;
     this.$refs.form
       .validate()
       .then(() =>
-        UserService.register({
+        this.register({
           username: this.form.username,
           password: this.form.password
         })
