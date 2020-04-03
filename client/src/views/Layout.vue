@@ -20,6 +20,7 @@
       <el-aside>
         <el-menu :router="true" default-active="/" mode="vertical" class="menu">
           <el-menu-item index="/">Home</el-menu-item>
+          <el-menu-item index="/about">About</el-menu-item>
         </el-menu>
       </el-aside>
       <el-main class="content">
@@ -37,33 +38,17 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { mapGetters, mapActions, ActionMethod } from "vuex";
-import { SessionModel } from "./models/stores/user.store.model";
+import { SessionModel } from "../models/stores/user.store.model";
 
 @Component({
   computed: {
     ...mapGetters("user", {
       session: "session"
     })
-  },
-  methods: {
-    ...mapActions("user", {
-      isOnline: "online"
-    })
   }
 })
 class Main extends Vue {
   private session!: SessionModel;
-  private isOnline!: ActionMethod;
-
-  public mounted() {
-    this.isOnline()
-      .then(() => {
-        console.log("isOnline");
-      })
-      .catch(() => {
-        console.log("not online");
-      });
-  }
 }
 export default Main;
 </script>

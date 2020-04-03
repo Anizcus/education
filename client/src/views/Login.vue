@@ -5,8 +5,7 @@
       :title="alert.message"
       :type="alert.type"
       :show-icon="true"
-      @close="onCloseAlert"
-    >
+      @close="onCloseAlert">
     </el-alert>
     <el-form :model="form" :rules="rule" ref="form">
       <el-form-item label="Username" prop="username">

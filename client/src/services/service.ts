@@ -13,7 +13,7 @@ Service.interceptors.response.use(
     return response.data;
   },
   error => {
-    if (error.response.status == 401) {
+    if (error.request.status == 401) {
       Store.dispatch("user/logout");
     } else {
       return Promise.reject(error);
