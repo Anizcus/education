@@ -34,7 +34,7 @@ class Application extends Vue {
             height: "100%"
           }}
         >
-          <el-button loading="loading" type="info" circle={true}></el-button>
+          <el-button loading={this.loading} type="info" circle={true}></el-button>
         </el-container>
       );
     } else {
