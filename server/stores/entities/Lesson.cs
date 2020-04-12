@@ -9,9 +9,10 @@ namespace Server.Stores.Entities
       public uint Id { get; set; }
       public string Name { get; set; }
       public string Description { get; set; }
-      public byte[] Badge { get; set; }
+      public byte?[] Badge { get; set; }
       public uint StatusId { get; set; }
       public uint CategoryId { get; set; }
+      public uint TypeId { get; set; }
       public uint OwnerId { get; set; }
       public DateTimeOffset Created { get; set; }
       public DateTimeOffset? Updated { get; set; }
@@ -19,6 +20,7 @@ namespace Server.Stores.Entities
       #region navigation
       public Status Status { get; set; }
       public User Owner { get; set; }
+      public Type Type { get; set; }
       public Category Category { get; set; }
       public IList<Assignment> Assignments { get; set; }
       public IList<UserLesson> LessonUsers { get; set; }

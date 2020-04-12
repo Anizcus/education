@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Server.Stores.Entities
 {
@@ -11,6 +12,7 @@ namespace Server.Stores.Entities
       public DateTimeOffset? Updated { get; set; }
       #endregion
       #region navigation
+      public IList<Status> Statuses { get; set; }
       #endregion
    }
 }

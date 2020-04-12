@@ -16,6 +16,7 @@ namespace Server.Stores.Entities
       #endregion
       #region navigation
       public Role Role { get; set; }
+      public IList<Lesson> Lessons { get; set; }
       public IList<UserLesson> UserLessons { get; set; }
       public IList<UserAssignment> UserAssignments { get; set; }
       #endregion

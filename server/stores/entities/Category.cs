@@ -13,6 +13,7 @@ namespace Server.Stores.Entities
       #endregion
       #region navigation
       public IList<Lesson> Lessons { get; set; }
+      public IList<Type> Types { get; set; }
       #endregion
    }
 }
