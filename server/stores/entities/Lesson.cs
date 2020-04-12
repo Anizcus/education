@@ -9,7 +9,7 @@ namespace Server.Stores.Entities
       public uint Id { get; set; }
       public string Name { get; set; }
       public string Description { get; set; }
-      public byte?[] Badge { get; set; }
+      public byte[] Badge { get; set; }
       public uint StatusId { get; set; }
       public uint CategoryId { get; set; }
       public uint TypeId { get; set; }
