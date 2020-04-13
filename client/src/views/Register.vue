@@ -1,22 +1,24 @@
 <template>
-  <el-col>
-    <el-form :model="form" :rules="rule" ref="form">
-      <el-form-item label="Username" prop="username">
-        <el-input v-model="form.username"></el-input>
-      </el-form-item>
-      <el-form-item label="Password" prop="password">
-        <el-input v-model="form.password"></el-input>
-      </el-form-item>
-      <el-form-item label="Confirm password" prop="confirm">
-        <el-input v-model="form.confirm"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit" :loading="loading">
-          <span>Register</span>
-        </el-button>
-      </el-form-item>
-    </el-form>
-  </el-col>
+  <el-row>
+    <el-col>
+      <el-form :model="form" :rules="rule" ref="form">
+        <el-form-item label="Username" prop="username">
+          <el-input v-model="form.username"></el-input>
+        </el-form-item>
+        <el-form-item label="Password" prop="password">
+          <el-input v-model="form.password"></el-input>
+        </el-form-item>
+        <el-form-item label="Confirm password" prop="confirm">
+          <el-input v-model="form.confirm"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit" :loading="loading">
+            <span>Register</span>
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-col>
+  </el-row>
 </template>
 
 <script lang="ts">

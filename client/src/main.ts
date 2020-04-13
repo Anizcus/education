@@ -18,7 +18,8 @@ import {
   Menu,
   MenuItem,
   Link,
-  Alert
+  Alert,
+  Card
 } from "element-ui";
 
 Vue.config.productionTip = false;
@@ -38,6 +39,7 @@ Vue.use(Menu);
 Vue.use(MenuItem);
 Vue.use(Link);
 Vue.use(Alert);
+Vue.use(Card);
 
 new Vue({
   router: Router,

@@ -1,26 +1,29 @@
 <template>
-  <el-col>
-    <el-alert
-      v-if="alert.message"
-      :title="alert.message"
-      :type="alert.type"
-      :show-icon="true"
-      @close="onCloseAlert">
-    </el-alert>
-    <el-form :model="form" :rules="rule" ref="form">
-      <el-form-item label="Username" prop="username">
-        <el-input v-model="form.username"></el-input>
-      </el-form-item>
-      <el-form-item label="Password" prop="password">
-        <el-input v-model="form.password"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit" :loading="loading">
-          <span>Login</span>
-        </el-button>
-      </el-form-item>
-    </el-form>
-  </el-col>
+  <el-row>
+    <el-col>
+      <el-alert
+        v-if="alert.message"
+        :title="alert.message"
+        :type="alert.type"
+        :show-icon="true"
+        @close="onCloseAlert"
+      >
+      </el-alert>
+      <el-form :model="form" :rules="rule" ref="form">
+        <el-form-item label="Username" prop="username">
+          <el-input v-model="form.username"></el-input>
+        </el-form-item>
+        <el-form-item label="Password" prop="password">
+          <el-input v-model="form.password"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit" :loading="loading">
+            <span>Login</span>
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-col>
+  </el-row>
 </template>
 
 <script lang="ts">
@@ -87,7 +90,7 @@ class Login extends Vue {
         this.loading = false;
       })
       .catch(error => {
-        this.alert.message = error.response.data.error;
+        this.alert.message = error ?? error.response.data.error;
         this.alert.type = "error";
         this.loading = false;
       });

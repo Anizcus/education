@@ -46,7 +46,9 @@ namespace Server
             )
          );
          services.AddScoped<IUserStore, UserStore>();
+         services.AddScoped<ILessonStore, LessonStore>();
          services.AddScoped<IUserService, UserService>();
+         services.AddScoped<ILessonService, LessonService>();
          services.AddAuthentication(
             option =>
             {
@@ -70,8 +72,7 @@ namespace Server
                   Encoding.UTF8.GetBytes(_configuration["Token:Secret"])
                )
             };
-         }
-         );
+         });
       }
 
       public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

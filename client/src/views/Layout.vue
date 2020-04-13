@@ -24,9 +24,7 @@
         </el-menu>
       </el-aside>
       <el-main class="content">
-        <el-row>
-          <router-view></router-view>
-        </el-row>
+        <router-view></router-view>
       </el-main>
       <el-aside class="side-right">ASide</el-aside>
     </el-container>
