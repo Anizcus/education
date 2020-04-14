@@ -36,7 +36,7 @@ namespace Server.Stores.Configurations
 
          builder.HasData(
             new State { Name = nameof(StateEnum.Waiting), Id = (uint) StateEnum.Waiting },
-            new State { Name = nameof(StateEnum.Accepted), Id = (uint) StateEnum.Accepted },
+            new State { Name = nameof(StateEnum.Published), Id = (uint) StateEnum.Published },
             new State { Name = nameof(StateEnum.Rejected), Id = (uint) StateEnum.Rejected }
          );
       }

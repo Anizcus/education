@@ -19,7 +19,10 @@ import {
   MenuItem,
   Link,
   Alert,
-  Card
+  Card,
+  Select,
+  Dialog,
+  Option
 } from "element-ui";
 
 Vue.config.productionTip = false;
@@ -40,6 +43,9 @@ Vue.use(MenuItem);
 Vue.use(Link);
 Vue.use(Alert);
 Vue.use(Card);
+Vue.use(Select);
+Vue.use(Dialog);
+Vue.use(Option);
 
 new Vue({
   router: Router,
