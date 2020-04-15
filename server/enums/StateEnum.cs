@@ -2,7 +2,8 @@ namespace Server.Enums
 {
    public enum StateEnum : uint
    {
-      Waiting = 1,
+      Created = 1,
+      Waiting,
       Published,
       Rejected
    }

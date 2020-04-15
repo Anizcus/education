@@ -2,6 +2,7 @@ import { Service } from "./service";
 import { NameListServiceModel } from '@/models/services/name-list.service.model';
 import { IdServiceModel } from '@/models/services/id.service.model';
 import { LessonModel } from '@/models/stores/lesson.store.model';
+import { NameServiceModel } from '@/models/services/name.service.model';
 
 const LessonService = {
   getCategories: (): Promise<NameListServiceModel> => {
@@ -16,6 +17,9 @@ const LessonService = {
     return Service.get("lesson/published", {
       params: model
     });
+  },
+  postLesson: (model: FormData): Promise<NameServiceModel> => {
+    return Service.post("lesson/create", model);
   }
 };
 

@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Server.Models.Payloads;
 using Server.Models.Requests;
@@ -66,6 +67,31 @@ namespace Server.Controllers
               OwnerId = lesson.OwnerId,
               OwnerName = lesson.OwnerName
            }).ToList();
+
+         return Ok(payload);
+      }
+
+      [HttpPost("/lesson/create")]
+      public async Task<IActionResult> PostLesson([FromForm] LessonFormRequest request)
+      {
+         var user = HttpContext.User.Claims.ElementAt(0);
+         var memoryStream = new System.IO.MemoryStream();
+
+         await request.Badge.CopyToAsync(memoryStream);
+
+         var lesson = await _lessonService.CreateLessonAsync(
+            uint.Parse(request.Type),
+            uint.Parse(user.Value),
+            request.Name,
+            request.Description,
+            memoryStream.ToArray()
+         );
+
+         var payload = new NamePayload
+         {
+            Id = lesson.Id,
+            Name = lesson.Name
+         };
 
          return Ok(payload);
       }

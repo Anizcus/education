@@ -15,6 +15,22 @@ namespace Server.Services.Interfaces
          _lessonStore = lessonStore;
       }
 
+      public async Task<NameAnswer> CreateLessonAsync(uint typeId, uint ownerId, string name, string description, byte[] badge)
+      {
+         var lesson = await _lessonStore.CreateLessonAsync(typeId, ownerId, name, description, badge);
+
+         if (lesson == null) {
+            return new NameAnswer {
+               Error = "Failed to create a lesson"
+            };
+         }
+
+         return new NameAnswer {
+            Name = lesson.Name,
+            Id = lesson.Id
+         };
+      }
+
       public async Task<IList<LessonListAnswer>> GetByTypePublishedAsync(uint typeId)
       {
          var lessons = await _lessonStore.GetByTypePublishedAsync(typeId);

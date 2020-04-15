@@ -18,16 +18,21 @@ namespace Server.Stores.Configurations
 
          builder.Property(e => e.Name)
             .HasColumnName("name")
-            .HasColumnType("varchar(64)");
+            .HasColumnType("varchar(64)")
+            .IsRequired();
 
          builder.Property(e => e.Description)
             .HasColumnName("description")
             .HasColumnType("varchar(256)")
             .IsRequired();
 
+         builder.Property(e => e.Status)
+            .HasColumnName("status")
+            .HasColumnType("varchar(256)");
+
          builder.Property(e => e.Badge)
             .HasColumnName("badge")
-            .HasColumnType("tinyblob");
+            .HasColumnType("blob");
 
          builder.Property(e => e.Created)
             .HasColumnName("create_time")
@@ -59,11 +64,11 @@ namespace Server.Stores.Configurations
 
          builder.HasIndex(e => e.OwnerId).HasName("INDEX_LESSON_OWNER_ID");
 
-         builder.Property(e => e.StatusId)
-            .HasColumnName("status_id")
+         builder.Property(e => e.StateId)
+            .HasColumnName("state_id")
             .HasColumnType("int(10) unsigned");
 
-         builder.HasIndex(e => e.StatusId).HasName("INDEX_LESSON_STATUS_ID");
+         builder.HasIndex(e => e.StateId).HasName("INDEX_LESSON_STATE_ID");
 
          builder
             .HasOne(u => u.Category)
@@ -84,10 +89,10 @@ namespace Server.Stores.Configurations
             .HasConstraintName("FOREIGN_LESSON_OWNER_ID");
 
          builder
-            .HasOne(u => u.Status)
+            .HasOne(u => u.State)
                .WithMany(r => r.Lessons)
-            .HasForeignKey(u => u.StatusId)
-            .HasConstraintName("FOREIGN_LESSON_STATUS_ID");
+            .HasForeignKey(u => u.StateId)
+            .HasConstraintName("FOREIGN_LESSON_STATE_ID");
       }
    }
 }

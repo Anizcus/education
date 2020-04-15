@@ -22,7 +22,8 @@ import {
   Card,
   Select,
   Dialog,
-  Option
+  Option,
+  Upload
 } from "element-ui";
 
 Vue.config.productionTip = false;
@@ -46,6 +47,7 @@ Vue.use(Card);
 Vue.use(Select);
 Vue.use(Dialog);
 Vue.use(Option);
+Vue.use(Upload);
 
 new Vue({
   router: Router,

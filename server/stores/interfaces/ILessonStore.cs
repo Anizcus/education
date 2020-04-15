@@ -8,5 +8,6 @@ namespace Server.Stores.Interfaces {
       Task<IList<Category>> GetCategoriesAsync();
       Task<IList<Type>> GetTypesByCategoryAsync(uint categoryId);
       Task<IList<Lesson>> GetByTypePublishedAsync(uint typeId);
+      Task<Lesson> CreateLessonAsync(uint typeId, uint ownerId, string name, string description, byte[] badge);
    }
 }

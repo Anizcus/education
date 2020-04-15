@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Stores;
 
 namespace server.stores.migrations
 {
     [DbContext(typeof(Store))]
-    partial class StoreModelSnapshot : ModelSnapshot
+    [Migration("20200415200611_removed status, not needed")]
+    partial class removedstatusnotneeded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,7 +117,7 @@ namespace server.stores.migrations
 
                     b.Property<byte[]>("Badge")
                         .HasColumnName("badge")
-                        .HasColumnType("blob");
+                        .HasColumnType("tinyblob");
 
                     b.Property<uint>("CategoryId")
                         .HasColumnName("category_id")

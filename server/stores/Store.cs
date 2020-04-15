@@ -14,7 +14,6 @@ namespace Server.Stores
       public DbSet<Type> Types { get; set; }
       public DbSet<Lesson> Lessons { get; set; }
       public DbSet<State> States { get; set; }
-      public DbSet<Status> Statuses { get; set; }
       public DbSet<Assignment> Assignments { get; set; }
       public DbSet<Progress> Progresses { get; set; }
       #endregion
@@ -28,7 +27,6 @@ namespace Server.Stores
          modelBuilder.ApplyConfiguration(new CategoryConfiguration());
          modelBuilder.ApplyConfiguration(new TypeConfiguration());
          modelBuilder.ApplyConfiguration(new StateConfiguration());
-         modelBuilder.ApplyConfiguration(new StatusConfiguration());
          modelBuilder.ApplyConfiguration(new ProgressConfiguration());
          modelBuilder.ApplyConfiguration(new AssignmentConfiguration());
          modelBuilder.ApplyConfiguration(new LessonConfiguration());

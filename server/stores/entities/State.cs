@@ -12,7 +12,7 @@ namespace Server.Stores.Entities
       public DateTimeOffset? Updated { get; set; }
       #endregion
       #region navigation
-      public IList<Status> Statuses { get; set; }
+      public IList<Lesson> Lessons { get; set; }
       #endregion
    }
 }

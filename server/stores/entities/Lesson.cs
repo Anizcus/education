@@ -9,8 +9,9 @@ namespace Server.Stores.Entities
       public uint Id { get; set; }
       public string Name { get; set; }
       public string Description { get; set; }
+      public string Status { get; set; }
       public byte[] Badge { get; set; }
-      public uint StatusId { get; set; }
+      public uint StateId { get; set; }
       public uint CategoryId { get; set; }
       public uint TypeId { get; set; }
       public uint OwnerId { get; set; }
@@ -18,7 +19,7 @@ namespace Server.Stores.Entities
       public DateTimeOffset? Updated { get; set; }
       #endregion
       #region navigation
-      public Status Status { get; set; }
+      public State State { get; set; }
       public User Owner { get; set; }
       public Type Type { get; set; }
       public Category Category { get; set; }

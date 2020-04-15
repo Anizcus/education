@@ -15,12 +15,33 @@ namespace Server.Stores.Interfaces
          _store = store;
       }
 
+      public async Task<Lesson> CreateLessonAsync(uint typeId, uint ownerId, string name, string description, byte[] badge)
+      {
+         var type = await _store.Types.FirstOrDefaultAsync(type => type.Id == typeId);
+
+         var entity = new Lesson
+         {
+            Name = name,
+            Description = description,
+            OwnerId = ownerId,
+            CategoryId = type.CategoryId,
+            TypeId = typeId,
+            Badge = badge,
+            Status = "",
+            StateId = (uint) StateEnum.Created
+         };
+
+         var added = await _store.Lessons.AddAsync(entity);
+         var saved = await _store.SaveChangesAsync();
+
+         return added.Entity;
+      }
+
       public async Task<IList<Lesson>> GetByTypePublishedAsync(uint typeId)
       {
          return await _store.Lessons
             .Include(Lesson => Lesson.Owner)
-            .Include(Lesson => Lesson.Status)
-         .Where(lesson => lesson.TypeId == typeId && lesson.Status.StateId == (uint)StateEnum.Published)
+         .Where(lesson => lesson.TypeId == typeId && lesson.StateId == (uint)StateEnum.Published)
          .ToListAsync();
       }
 
