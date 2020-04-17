@@ -37,6 +37,15 @@ namespace Server.Stores.Interfaces
          return added.Entity;
       }
 
+      public async Task<IList<Lesson>> GetByTypAllAsync(uint typeId)
+      {
+         return await _store.Lessons
+            .Include(lesson => lesson.Owner)
+            .Include(lesson => lesson.State)
+         .Where(lesson => lesson.TypeId == typeId)
+         .ToListAsync();
+      }
+
       public async Task<IList<Lesson>> GetByTypePublishedAsync(uint typeId)
       {
          return await _store.Lessons

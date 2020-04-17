@@ -13,6 +13,8 @@ interface LessonModel {
   name: string;
   ownerId: number;
   ownerName: string;
+  state: string | null;
+  badgeBase64: string;
 }
 
 interface LessonStoreModel {

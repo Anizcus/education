@@ -52,7 +52,7 @@ const actions: ActionTree<LessonStoreModel, {}> = {
       });
    },
    async getPublishedLessonsByType(context, model: IdServiceModel) {
-      return await LessonService.getPublishedLessonsByType(model)
+      return await LessonService.getAllLessonsByType(model)
          .then(response => {
             context.commit("insertLessons", response);
 

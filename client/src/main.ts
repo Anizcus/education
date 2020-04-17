@@ -23,7 +23,11 @@ import {
   Select,
   Dialog,
   Option,
-  Upload
+  Upload,
+  Image,
+  Divider,
+  Tabs,
+  TabPane
 } from "element-ui";
 
 Vue.config.productionTip = false;
@@ -48,6 +52,10 @@ Vue.use(Select);
 Vue.use(Dialog);
 Vue.use(Option);
 Vue.use(Upload);
+Vue.use(Image);
+Vue.use(Divider);
+Vue.use(Tabs);
+Vue.use(TabPane);
 
 new Vue({
   router: Router,

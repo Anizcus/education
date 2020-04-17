@@ -1,7 +1,7 @@
 <template>
   <el-row>
-    <el-button :plain="true" type="info" @click="dialogFormVisible = true">
-      Add new lesson
+    <el-button style="margin-bottom: 14px;" :plain="true" type="primary" @click="dialogFormVisible = true">
+      Add a new lesson
     </el-button>
 
     <el-dialog title="Create a lesson" :visible.sync="dialogFormVisible">

@@ -20,7 +20,12 @@ const LessonService = {
   },
   postLesson: (model: FormData): Promise<NameServiceModel> => {
     return Service.post("lesson/create", model);
-  }
+  },
+  getAllLessonsByType: (model: IdServiceModel): Promise<LessonModel[]> => {
+    return Service.get("lesson/all", {
+      params: model
+    });
+  },
 };
 
 export { LessonService };

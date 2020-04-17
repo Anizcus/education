@@ -71,6 +71,25 @@ namespace Server.Controllers
          return Ok(payload);
       }
 
+      [HttpGet("/lesson/all")]
+      public async Task<IActionResult> GetByTypeAll([FromQuery] RequestById request)
+      {
+         var lessons = await _lessonService.GetByTypeAllAsync(request.Id);
+
+         var payload = lessons.Select(
+           lesson => new LessonListPayload
+           {
+              Id = lesson.Id,
+              Name = lesson.Name,
+              OwnerId = lesson.OwnerId,
+              OwnerName = lesson.OwnerName,
+              State = lesson.State,
+              BadgeBase64 = $"data:image/png;base64,{System.Convert.ToBase64String(lesson.Badge)}"
+           }).ToList();
+
+         return Ok(payload);
+      }
+
       [HttpPost("/lesson/create")]
       public async Task<IActionResult> PostLesson([FromForm] LessonFormRequest request)
       {

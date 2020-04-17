@@ -6,5 +6,7 @@ namespace Server.Models.Payloads
       public string Name { get; set; }
       public uint OwnerId { get; set; }
       public string OwnerName { get; set; }
+      public string State { get; set; }
+      public string BadgeBase64 { get; set; }
    }
 }

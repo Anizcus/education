@@ -31,6 +31,21 @@ namespace Server.Services.Interfaces
          };
       }
 
+      public async Task<IList<LessonListAnswer>> GetByTypeAllAsync(uint typeId)
+      {
+         var lessons = await _lessonStore.GetByTypAllAsync(typeId);
+
+         return lessons.Select(
+            lesson => new LessonListAnswer {
+               Id = lesson.Id,
+               Name = lesson.Name,
+               OwnerId = lesson.Owner.Id,
+               OwnerName = lesson.Owner.Name,
+               State = lesson.State.Name,
+               Badge = lesson.Badge
+         }).ToList();
+      }
+
       public async Task<IList<LessonListAnswer>> GetByTypePublishedAsync(uint typeId)
       {
          var lessons = await _lessonStore.GetByTypePublishedAsync(typeId);
