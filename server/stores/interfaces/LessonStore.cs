@@ -37,6 +37,18 @@ namespace Server.Stores.Interfaces
          return added.Entity;
       }
 
+      public async Task<Lesson> GetAsync(uint id)
+      {
+         return await _store.Lessons
+            .Include(lesson => lesson.Assignments)
+            .Include(lesson => lesson.Category)
+            .Include(lesson => lesson.Owner)
+            .Include(lesson => lesson.State)
+            .Include(lesson => lesson.Type)
+         .Where(lesson => lesson.Id == id)
+         .FirstOrDefaultAsync();
+      }
+
       public async Task<IList<Lesson>> GetByTypAllAsync(uint typeId)
       {
          return await _store.Lessons
@@ -63,6 +75,29 @@ namespace Server.Stores.Interfaces
       {
          return await _store.Types.Where(type => type.CategoryId == categoryId)
             .ToListAsync();
+      }
+
+      public async Task<Lesson> PublishLessonAssignmentsAsync(uint lessonId, IList<Assignment> assignments)
+      {
+         var entity = await _store.Lessons
+            .Include(l => l.Assignments)
+         .Where(l => l.Id == lessonId).FirstOrDefaultAsync();
+
+         entity.StateId = (uint) StateEnum.Waiting;
+
+         foreach(var assignment in assignments) {
+            entity.Assignments.Add(assignment);
+         }
+
+         var updated = _store.Lessons.Update(entity);
+         var saved = await _store.SaveChangesAsync();
+
+         return updated.Entity;
+      }
+
+      public Task<Lesson> UpdateLessonStatusAsync(uint lessonId, uint stateId, string status)
+      {
+         throw new System.NotImplementedException();
       }
    }
 }

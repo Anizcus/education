@@ -1,7 +1,7 @@
 import { Service } from "./service";
 import { NameListServiceModel } from '@/models/services/name-list.service.model';
 import { IdServiceModel } from '@/models/services/id.service.model';
-import { LessonModel } from '@/models/stores/lesson.store.model';
+import { LessonModel, LessonListModel } from '@/models/stores/lesson.store.model';
 import { NameServiceModel } from '@/models/services/name.service.model';
 
 const LessonService = {
@@ -19,12 +19,20 @@ const LessonService = {
     });
   },
   postLesson: (model: FormData): Promise<NameServiceModel> => {
-    return Service.post("lesson/create", model);
+    return Service.post("lesson", model);
   },
-  getAllLessonsByType: (model: IdServiceModel): Promise<LessonModel[]> => {
+  getLesson: (model: IdServiceModel): Promise<LessonModel> => {
+    return Service.get("lesson", {
+      params: model
+    });
+  },
+  getAllLessonsByType: (model: IdServiceModel): Promise<LessonListModel[]> => {
     return Service.get("lesson/all", {
       params: model
     });
+  },
+  postLessonAssignments: (model: LessonModel): Promise<NameServiceModel> => {
+    return Service.post("lesson/assignment", model);
   },
 };
 

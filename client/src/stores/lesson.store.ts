@@ -1,5 +1,5 @@
 import { Module, ActionTree, GetterTree, MutationTree } from 'vuex';
-import { LessonStoreModel, CategoryModel, TypeModel, LessonModel } from '@/models/stores/lesson.store.model';
+import { LessonStoreModel, CategoryModel, TypeModel, LessonModel, LessonListModel, AssignmentModel } from '@/models/stores/lesson.store.model';
 import { LessonService } from '@/services/lesson.service';
 import { IdServiceModel } from '@/models/services/id.service.model';
 
@@ -8,7 +8,8 @@ const namespaced = true;
 const state: LessonStoreModel = {
    categories: [],
    types: [],
-   lessons: []
+   lessons: [],
+   lesson: { assignments: [] } as unknown  as LessonModel
 };
 
 const mutations: MutationTree<LessonStoreModel> = {
@@ -18,8 +19,25 @@ const mutations: MutationTree<LessonStoreModel> = {
    insertTypes(state, types: TypeModel[]) {
       state.types = types;
    },
-   insertLessons(state, lessons: LessonModel[]) {
+   insertLessons(state, lessons: LessonListModel[]) {
       state.lessons = lessons;
+   },
+   insertLesson(state, lesson: LessonModel) {
+      state.lesson = lesson;
+   },
+   insertLessonAssignment(state, model: AssignmentModel) {
+      state.lesson.assignments.push(model);
+   },
+   updateLessonAssignment(state, model: AssignmentModel) {
+      const id = model.id;
+
+      state.lesson.assignments[id].id = id;
+      state.lesson.assignments[id].description = model.description;
+      state.lesson.assignments[id].answer = model.answer;
+      state.lesson.assignments[id].experience = model.experience;
+   },
+   deleteLessonAssignment(state, index: number) {
+      state.lesson.assignments.splice(index, 1);
    }
 };
 
@@ -32,6 +50,9 @@ const getters: GetterTree<LessonStoreModel, {}> = {
    },
    lessons(state) {
       return state.lessons;
+   },
+   lesson(state) {
+      return state.lesson;
    }
 };
 
@@ -58,6 +79,30 @@ const actions: ActionTree<LessonStoreModel, {}> = {
 
             return response;
       });
+   },
+   async getLessonById(context, model: IdServiceModel) {
+      return await LessonService.getLesson(model)
+         .then(response => {
+            context.commit("insertLesson", response);
+
+            return response;
+      });
+   },
+   async postLessonAssignments(context) {
+      return await LessonService.postLessonAssignments(context.state.lesson)
+         .then(response => {
+            console.log(response);
+            return response;
+      });
+   },
+   createAssignment(context, model: any) {
+      context.commit("insertLessonAssignment", model);
+   },
+   updateAssignment(context, model: any) {
+      context.commit("updateLessonAssignment", model);
+   },
+   deleteAssignment(context, index: number) {
+      context.commit("deleteLessonAssignment", index);
    }
 };
 

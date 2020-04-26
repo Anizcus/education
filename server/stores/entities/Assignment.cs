@@ -9,6 +9,7 @@ namespace Server.Stores.Entities
       public uint Id { get; set; }
       public string Description { get; set; }
       public uint Experience { get; set; }
+      public string Answer { get; set; }
       public DateTimeOffset Created { get; set; }
       public DateTimeOffset? Updated { get; set; }
       public uint LessonId { get; set; }

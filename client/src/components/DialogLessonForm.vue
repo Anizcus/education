@@ -1,76 +1,83 @@
 <template>
-  <el-row>
-    <el-button style="margin-bottom: 14px;" :plain="true" type="primary" @click="dialogFormVisible = true">
-      Add a new lesson
-    </el-button>
-
-    <el-dialog title="Create a lesson" :visible.sync="dialogFormVisible">
-      <el-alert
-        v-if="error"
-        :title="error"
-        type="error"
-        :show-icon="true"
-        @close="onCloseAlert"
-      >
-      </el-alert>
-      <el-form :model="form" label-position="top">
-        <el-form-item label="Lesson name">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-row>
-          <el-col :span="18">
-            <el-form-item label="Lesson description">
-              <el-input
-                type="textarea"
-                v-model="form.description"
-                :rows="5"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="Badge" class="uploader">
-              <el-upload
-                action="undefined"
-                :drag="false"
-                :multiple="false"
-                :show-file-list="false"
-                :before-upload="handleUpload"
-              >
-                <img
-                  v-if="image"
-                  :src="getImageUrl()"
-                  width="100"
-                  height="100"
-                  style="margin-top: 14px;"
-                />
-                <i v-else class="el-icon-plus uploader-icon"></i>
-              </el-upload>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="onCancel">Cancel</el-button>
-        <el-button type="primary" @click="onAction"
-          >Create</el-button
-        >
-      </span>
-    </el-dialog>
-  </el-row>
+  <el-dialog :title="`${modalState} a lesson`" :visible="lessonModal">
+    <el-alert
+      v-if="error"
+      :title="error"
+      type="error"
+      :show-icon="true"
+      @close="onCloseAlert"
+    >
+    </el-alert>
+    <el-form :model="form" label-position="top">
+      <el-form-item label="Lesson name">
+        <el-input v-model="form.name"></el-input>
+      </el-form-item>
+      <el-row>
+        <el-col :span="18">
+          <el-form-item label="Lesson description">
+            <el-input
+              type="textarea"
+              v-model="form.description"
+              :rows="5"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="Badge" class="uploader">
+            <el-upload
+              action="undefined"
+              :drag="false"
+              :multiple="false"
+              :show-file-list="false"
+              :before-upload="handleUpload"
+            >
+              <img
+                v-if="image"
+                :src="getImageUrl()"
+                width="100"
+                height="100"
+                style="margin-top: 14px;"
+              />
+              <i v-else class="el-icon-plus uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="onCancel">Cancel</el-button>
+      <el-button type="primary" @click="onAction">{{modalState}}</el-button>
+    </span>
+  </el-dialog>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
 import { LessonService } from "../services/lesson.service";
+import { mapGetters, mapActions, ActionMethod } from "vuex";
 
-@Component
+@Component({
+  methods: {
+    ...mapActions("modal", {
+      setLessonModalVisible: "setLessonModalVisible",
+    }),
+  },
+  computed: {
+    ...mapGetters("modal", {
+      modalState: "modalState",
+      lessonModal: "lessonModalVisible",
+    })
+  }
+})
 class DialogLessonForm extends Vue {
+  private setLessonModalVisible!: ActionMethod;
   private form = {
     name: "",
     description: "",
   };
-  private dialogFormVisible = false;
+  private modalState!: string;
+  private lessonModal!: boolean;
   private image: string | Blob = "";
   private error = "";
   private formData = new FormData();
@@ -92,11 +99,11 @@ class DialogLessonForm extends Vue {
     }
 
     if (this.form.description.trim() === "") {
-      this.error = "Please fill a lesson description!"
+      this.error = "Please fill a lesson description!";
       return;
     }
 
-    this.formData.set("name", this.form.name)
+    this.formData.set("name", this.form.name);
     this.formData.set("description", this.form.description);
     this.formData.set("badge", this.image);
     this.formData.set("type", this.$route.params.id);
@@ -112,7 +119,11 @@ class DialogLessonForm extends Vue {
     this.form.name = "";
     this.form.description = "";
     this.image = "";
-    this.dialogFormVisible = false;
+    
+    this.setLessonModalVisible({
+      visible: false,
+      stateName: "Cancel"
+    })
   }
 }
 export default DialogLessonForm;

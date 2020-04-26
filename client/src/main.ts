@@ -27,7 +27,10 @@ import {
   Image,
   Divider,
   Tabs,
-  TabPane
+  TabPane,
+  Collapse,
+  InputNumber,
+  CollapseItem
 } from "element-ui";
 
 Vue.config.productionTip = false;
@@ -56,6 +59,9 @@ Vue.use(Image);
 Vue.use(Divider);
 Vue.use(Tabs);
 Vue.use(TabPane);
+Vue.use(Collapse);
+Vue.use(CollapseItem);
+Vue.use(InputNumber);
 
 new Vue({
   router: Router,

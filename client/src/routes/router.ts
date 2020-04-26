@@ -6,6 +6,7 @@ import LessonList from "../views/LessonList";
 import About from "../views/About.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
+import Lesson from "../views/Lesson.vue";
 
 Vue.use(Router);
 
@@ -25,6 +26,11 @@ const router = new Router({
       path: "/lesson/type/:id",
       name: "Lesson List",
       component: LessonList
+    },
+    {
+      path: "/lesson/:id",
+      name: "Lesson",
+      component: Lesson
     },
     {
       path: "/about",

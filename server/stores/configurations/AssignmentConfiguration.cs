@@ -25,6 +25,10 @@ namespace Server.Stores.Configurations
             .HasColumnType("varchar(256)")
             .IsRequired();
 
+         builder.Property(e => e.Answer)
+            .HasColumnName("answer")
+            .HasColumnType("varchar(64)");
+
          builder.Property(e => e.Created)
             .HasColumnName("create_time")
             .HasColumnType("timestamp")

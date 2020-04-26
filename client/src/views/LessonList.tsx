@@ -2,13 +2,15 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { VNode } from "vue/types/umd";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
-import { LessonModel } from "@/models/stores/lesson.store.model";
-import DialogLessonForm from "@/components/DialogLessonForm.vue";
+import { LessonListModel } from "@/models/stores/lesson.store.model";
 
 @Component({
   methods: {
     ...mapActions("lesson", {
       getLessons: "getPublishedLessonsByType",
+    }),
+    ...mapActions("modal", {
+      setLessonModalVisible: "setLessonModalVisible",
     }),
   },
   computed: {
@@ -16,13 +18,11 @@ import DialogLessonForm from "@/components/DialogLessonForm.vue";
       lessons: "lessons",
     }),
   },
-  components: {
-    "i-dialog-lesson-form": DialogLessonForm,
-  },
 })
 class LessonList extends Vue {
   private getLessons!: ActionMethod;
-  private lessons!: LessonModel[];
+  private setLessonModalVisible!: ActionMethod;
+  private lessons!: LessonListModel[];
   private loading = true;
   private dateOptions = {
     weekday: "long",
@@ -42,6 +42,13 @@ class LessonList extends Vue {
       .finally(() => {
         this.loading = false;
       });
+  }
+
+  private onLessonCreate() {
+    this.setLessonModalVisible({
+      visible: true,
+      stateName: "Create",
+    });
   }
 
   public render(): VNode {
@@ -71,7 +78,7 @@ class LessonList extends Vue {
       );
     }
 
-    const lessons = this.lessons.map((item: LessonModel) => {
+    const lessons = this.lessons.map((item: LessonListModel) => {
       return (
         <el-card shadow="hover" style="margin-bottom: 14px;">
           <el-row>
@@ -111,9 +118,9 @@ class LessonList extends Vue {
               ></div>
             </el-col>
             <el-col span={19}>
-              <span>
-                Lesson <i>{item.name}</i>
-              </span>
+              <router-link to={`/lesson/${item.id}`}>
+                <el-link type="primary" underline={false}>Lesson “<i>{item.name}</i>”</el-link>
+              </router-link>
               <el-divider>
                 <i class="el-icon-star-on"></i>
               </el-divider>
@@ -131,7 +138,14 @@ class LessonList extends Vue {
     return (
       <el-row>
         <el-col>
-          <i-dialog-lesson-form></i-dialog-lesson-form>
+        <el-button
+        style="margin-bottom: 14px;"
+        plain={true}
+        type="primary"
+        onClick={() => this.onLessonCreate()}
+      >
+        Add a new lesson
+      </el-button>
           <el-tabs type="card" stretch={true}>
             <el-tab-pane label="Published"></el-tab-pane>
             <el-tab-pane label={`Created (${lessons.length})`}>{lessons}</el-tab-pane>
