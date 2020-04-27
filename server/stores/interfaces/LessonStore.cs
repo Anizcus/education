@@ -95,9 +95,12 @@ namespace Server.Stores.Interfaces
          return updated.Entity;
       }
 
-      public Task<Lesson> UpdateLessonStatusAsync(uint lessonId, uint stateId, string status)
+      public async Task<Lesson> UpdateLessonStatusAsync(Lesson lesson)
       {
-         throw new System.NotImplementedException();
+         var updated = _store.Lessons.Update(lesson);
+         var saved = await _store.SaveChangesAsync();
+
+         return updated.Entity;
       }
    }
 }

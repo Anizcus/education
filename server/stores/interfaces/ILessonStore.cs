@@ -10,7 +10,7 @@ namespace Server.Stores.Interfaces {
       Task<IList<Lesson>> GetByTypePublishedAsync(uint typeId);
       Task<IList<Lesson>> GetByTypAllAsync(uint typeId);
       Task<Lesson> CreateLessonAsync(uint typeId, uint ownerId, string name, string description, byte[] badge);
-      Task<Lesson> UpdateLessonStatusAsync(uint lessonId, uint stateId, string status);
+      Task<Lesson> UpdateLessonStatusAsync(Lesson lesson);
       Task<Lesson> PublishLessonAssignmentsAsync(uint lessonId, IList<Assignment> assignments);
       Task<Lesson> GetAsync(uint id);
    }

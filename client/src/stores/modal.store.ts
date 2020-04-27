@@ -3,69 +3,94 @@ import { GetterTree, ActionTree, Module, MutationTree } from "vuex";
 const namespaced = true;
 
 interface ModalStoreModel {
-   assignmentModal: boolean;
-   lessonModal: boolean;
-   data?: object;
-   stateName: string;
+  assignmentModal: boolean;
+  lessonModal: boolean;
+  authorizeModal: boolean;
+  answerModal: boolean;
+  data?: object;
+  stateName: string;
 }
 
 interface ModalPayload {
-   visible: boolean;
-   data?: object;
-   stateName: string;
+  visible: boolean;
+  data?: object;
+  stateName: string;
 }
 
 const mutations: MutationTree<ModalStoreModel> = {
-   toggleAssignment(state, payload: ModalPayload) {
-      state.data = {... payload.data};
-      state.stateName = payload.stateName;
-      state.assignmentModal = payload.visible;
-   },
-   toggleLesson(state, payload: ModalPayload) {
-      state.data = {... payload.data};
-      state.stateName = payload.stateName;
-      state.lessonModal = payload.visible;
-      console.log(payload);
-   },
+  toggleAssignment(state, payload: ModalPayload) {
+    state.data = { ...payload.data };
+    state.stateName = payload.stateName;
+    state.assignmentModal = payload.visible;
+  },
+  toggleLesson(state, payload: ModalPayload) {
+    state.data = { ...payload.data };
+    state.stateName = payload.stateName;
+    state.lessonModal = payload.visible;
+  },
+  toggleAuthorize(state, payload: ModalPayload) {
+    state.data = { ...payload.data };
+    state.stateName = payload.stateName;
+    state.authorizeModal = payload.visible;
+  },
+  toggleAnswer(state, payload: ModalPayload) {
+    state.data = { ...payload.data };
+    state.stateName = payload.stateName;
+    state.answerModal = payload.visible;
+  }
 };
 
 const getters: GetterTree<ModalStoreModel, {}> = {
-   assignmentModalVisible(state) {
-      return state.assignmentModal;
-   },
-   lessonModalVisible(state) {
-      return state.lessonModal;
-   },
-   modalState(state) {
-      return state.stateName;
-   },
-   modalData(state) {
-      return state.data;
-   },
+  assignmentModalVisible(state) {
+    return state.assignmentModal;
+  },
+  lessonModalVisible(state) {
+    return state.lessonModal;
+  },
+  authorizeModalVisible(state) {
+    return state.authorizeModal;
+  },
+  answerModalVisible(state) {
+    return state.answerModal;
+  },
+  modalState(state) {
+    return state.stateName;
+  },
+  modalData(state) {
+    return state.data;
+  }
 };
 
 const actions: ActionTree<ModalStoreModel, {}> = {
-   setAssignmentModalVisible(context, payload: ModalPayload) {
-      context.commit("toggleAssignment", payload);
-   },
-   setLessonModalVisible(context, payload: ModalPayload) {
-      context.commit("toggleLesson", payload);
-   }
-}
+  setAssignmentModalVisible(context, payload: ModalPayload) {
+    context.commit("toggleAssignment", payload);
+  },
+  setLessonModalVisible(context, payload: ModalPayload) {
+    context.commit("toggleLesson", payload);
+  },
+  setAuthorizeModalVisible(context, payload: ModalPayload) {
+    context.commit("toggleAuthorize", payload);
+  },
+  setAnswerModalVisible(context, payload: ModalPayload) {
+    context.commit("toggleAnswer", payload);
+  }
+};
 
 const state: ModalStoreModel = {
-   assignmentModal: false,
-   lessonModal: false,
-   data: undefined,
-   stateName: "",
-}
+  assignmentModal: false,
+  lessonModal: false,
+  authorizeModal: false,
+  answerModal: false,
+  data: undefined,
+  stateName: ""
+};
 
 const modalStore: Module<ModalStoreModel, {}> = {
-   state,
-   getters,
-   actions,
-   mutations,
-   namespaced
+  state,
+  getters,
+  actions,
+  mutations,
+  namespaced
 };
 
 export default modalStore;

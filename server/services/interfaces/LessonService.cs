@@ -154,12 +154,36 @@ namespace Server.Services.Interfaces
 
          var update = await _lessonStore.PublishLessonAssignmentsAsync(
             lessonId, assignments.Select(assignment => new Assignment
+            {
+               Id = 0,
+               Description = assignment.Description,
+               Experience = assignment.Experience,
+               Answer = assignment.Answer
+            }).ToList());
+
+         return new NameAnswer
          {
-            Id = 0,
-            Description = assignment.Description,
-            Experience = assignment.Experience,
-            Answer = assignment.Answer
-         }).ToList());
+            Name = update.Name,
+            Id = update.Id
+         };
+      }
+
+      public async Task<NameAnswer> PostLessonStatusAsync(uint lessonId, bool isValid, string status)
+      {
+         var lesson = await _lessonStore.GetAsync(lessonId);
+
+         lesson.StateId = isValid ? (uint)Enums.StateEnum.Published : (uint)Enums.StateEnum.Rejected;
+         lesson.Status = status;
+
+         var update = await _lessonStore.UpdateLessonStatusAsync(lesson);
+
+         if (update == null)
+         {
+            return new NameAnswer
+            {
+               Error = "Failed to update lesson status"
+            };
+         }
 
          return new NameAnswer
          {

@@ -38,6 +38,12 @@ interface AssignmentModel {
   answer: string | null;
 }
 
+interface LessonStatusModel {
+  lessonId: number;
+  isValid: boolean;
+  status: string;
+}
+
 interface LessonStoreModel {
   categories: CategoryModel[];
   types: TypeModel[];
@@ -45,4 +51,12 @@ interface LessonStoreModel {
   lesson: LessonModel;
 }
 
-export { LessonStoreModel, CategoryModel, TypeModel, LessonModel, LessonListModel, AssignmentModel };
+export {
+  LessonStoreModel,
+  CategoryModel,
+  TypeModel,
+  LessonModel,
+  LessonListModel,
+  AssignmentModel,
+  LessonStatusModel
+};

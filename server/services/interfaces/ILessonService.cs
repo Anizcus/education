@@ -14,5 +14,6 @@ namespace Server.Services.Interfaces
       Task<NameAnswer> CreateLessonAsync(uint typeId, uint ownerId, string name, string description, byte[] badge);
       Task<LessonAnswer> GetAsync(uint id);
       Task<NameAnswer> PostLessonAssignmentAsync(uint lessonId, uint ownerId, string type, IList<AssignmentRequest> assignments);
+      Task<NameAnswer> PostLessonStatusAsync(uint lessonId, bool isValid, string status);
    }
 }

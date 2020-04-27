@@ -1,0 +1,83 @@
+<template>
+  <el-dialog
+    title="Answer a question"
+    :visible="answerModal"
+    @close="onClose"
+  >
+    <el-form :model="form" label-position="top">
+      <el-form-item :label="`Question: ${form.question}`">
+        <el-input
+          :clearable="true"
+          v-model="form.answer"
+        ></el-input>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="onCancel">Cancel</el-button>
+      <el-button type="success" @click="() => onAction()"
+        >{{modalState}}</el-button
+      >
+    </span>
+  </el-dialog>
+</template>
+
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+import { LessonService } from "../services/lesson.service";
+import { mapGetters, mapActions, ActionMethod } from "vuex";
+
+interface ModalData {
+  lessonId: number;
+}
+
+@Component({
+  methods: {
+    ...mapActions("lesson", {
+      postStatus: "postLessonStatus"
+    }),
+    ...mapActions("modal", {
+      setAnswerModalVisible: "setAnswerModalVisible"
+    })
+  },
+  computed: {
+    ...mapGetters("modal", {
+      answerModal: "answerModalVisible",
+      modalState: "modalState",
+      data: "modalData"
+    })
+  }
+})
+class DialogAnswerForm extends Vue {
+  private setAnswerModalVisible!: ActionMethod;
+  private postStatus!: ActionMethod;
+  private answerModal!: boolean;
+  private modalState!: string;
+  private data!: ModalData;
+  private form = {
+    answer: ""
+  };
+
+  private onClose() {
+    this.setAnswerModalVisible({
+      visible: false,
+      stateName: this.modalState
+    });
+  }
+
+  private onAction() {
+    this.setAnswerModalVisible({
+      visible: false,
+      stateName: this.modalState
+    });
+  }
+
+  private onCancel() {
+    this.setAnswerModalVisible({
+      visible: false,
+      stateName: this.modalState
+    });
+  }
+}
+export default DialogAnswerForm;
+</script>

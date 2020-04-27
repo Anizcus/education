@@ -65,38 +65,74 @@
                     <div>Experience ({{ assignment.experience }})</div>
                   </el-col>
                   <el-col :span="4">
-                    <el-button
+                    <el-button v-if="lesson.state == 'Created'"
                       :plain="true"
                       type="warning"
                       icon="el-icon-edit"
                       :circle="true"
                       size="mini"
+                      style="float: right;"
                       @click="() => onAssignmentEdit(index, assignment)"
                     ></el-button>
-                    <el-button
+                    <el-button v-if="lesson.state == 'Created'"
                       :plain="true"
                       type="danger"
                       icon="el-icon-delete"
                       :circle="true"
                       size="mini"
+                      style="margin-right: 10px; float: right;"
                       @click="() => onAssignmentDelete(index)"
+                    ></el-button>
+                    <el-button v-if="lesson.state == 'Published'"
+                      :plain="true"
+                      type="info"
+                      icon="el-icon-edit-outline"
+                      :circle="true"
+                      size="mini"
+                      style="float: right;"
+                      @click="() => onAnswerQuestion()"
                     ></el-button>
                   </el-col>
                 </el-row>
               </el-collapse-item>
             </el-collapse>
             <p>
-              <el-button
+              <el-button v-if="lesson.state == 'Created'"
                 @click="() => onAssignmentCreate()"
                 type="primary"
                 :plain="true"
                 style="float: left;"
                 >Add a question</el-button
               >
+              <el-button v-if="lesson.state == 'Waiting'"
+                @click="() => Reject()"
+                type="danger"
+                :plain="true"
+                style="float: left;"
+                >Reject</el-button
+              >
             </p>
             <p>
-              <el-button @click="Publish" type="success" :plain="true" style="float: right;"
+              <el-button v-if="lesson.state == 'Created'"
+                @click="() => Publish()"
+                type="success"
+                :plain="true"
+                style="float: right;"
                 >Publish</el-button
+              >
+              <el-button v-if="lesson.state == 'Waiting'"
+                @click="() => Approve()"
+                type="success"
+                :plain="true"
+                style="float: right;"
+                >Approve</el-button
+              >
+              <el-button v-if="lesson.state == 'Published'"
+                @click="() => false"
+                type="warning"
+                :plain="true"
+                style="float: right;"
+                >Start</el-button
               >
             </p>
           </el-col>
@@ -111,7 +147,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import {
   LessonModel,
-  AssignmentModel,
+  AssignmentModel
 } from "../models/stores/lesson.store.model";
 import { ActionMethod, mapGetters, mapActions } from "vuex";
 
@@ -123,17 +159,21 @@ import { ActionMethod, mapGetters, mapActions } from "vuex";
     }),
     ...mapActions("modal", {
       setAssignmentModalVisible: "setAssignmentModalVisible",
-    }),
+      setAuthorizeModalVisible: "setAuthorizeModalVisible",
+      setAnswerModalVisible: "setAnswerModalVisible"
+    })
   },
   computed: {
     ...mapGetters("lesson", {
-      lesson: "lesson",
-    }),
-  },
+      lesson: "lesson"
+    })
+  }
 })
 class Lesson extends Vue {
   private getLesson!: ActionMethod;
   private setAssignmentModalVisible!: ActionMethod;
+  private setAuthorizeModalVisible!: ActionMethod;
+  private setAnswerModalVisible!: ActionMethod;
   private postAssignments!: ActionMethod;
   private lesson!: LessonModel;
   private loading = true;
@@ -144,12 +184,12 @@ class Lesson extends Vue {
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false,
+    hour12: false
   };
 
   public mounted() {
     this.getLesson({ id: Number(this.$route.params.id) })
-      .then((res) => {
+      .then(res => {
         console.log(res);
         this.loading = false;
       })
@@ -161,7 +201,7 @@ class Lesson extends Vue {
   private onAssignmentCreate() {
     this.setAssignmentModalVisible({
       visible: true,
-      stateName: "Create",
+      stateName: "Create"
     });
   }
 
@@ -170,8 +210,8 @@ class Lesson extends Vue {
       visible: true,
       stateName: "Delete",
       data: {
-        index,
-      },
+        index
+      }
     });
   }
 
@@ -181,13 +221,41 @@ class Lesson extends Vue {
       stateName: "Update",
       data: {
         index,
-        ...assignment,
-      },
+        ...assignment
+      }
     });
   }
 
   private Publish() {
     this.postAssignments();
+  }
+
+  private Approve() {
+    this.setAuthorizeModalVisible({
+      visible: true,
+      stateName: "Approve",
+      data: {
+        lessonId: this.lesson.id
+      }
+    });
+  }
+
+  private Reject() {
+    console.log("les", this.lesson);
+    this.setAuthorizeModalVisible({
+      visible: true,
+      stateName: "Reject",
+      data: {
+        lessonId: this.lesson.id
+      }
+    });
+  }
+
+  private onAnswerQuestion() {
+    this.setAnswerModalVisible({
+      visible: true,
+      stateName: "Answer",
+    });
   }
 }
 

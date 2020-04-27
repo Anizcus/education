@@ -51,14 +51,20 @@ class LessonCategory extends Vue {
     }
 
     if (!this.categories.length) {
-      return <el-card shadow="hover" style={{ textAlign: "center" }}>No data</el-card>;
+      return (
+        <el-card shadow="hover" style={{ textAlign: "center" }}>
+          No data
+        </el-card>
+      );
     }
 
     const categories = this.categories.map((item: CategoryModel) => {
       return (
         <el-card shadow="hover" style="margin-bottom: 14px;">
           <router-link to={`/lesson/category/${item.id}`}>
-              <el-link type="primary" underline={false}>{item.name}</el-link>
+            <el-link type="primary" underline={false}>
+              {item.name}
+            </el-link>
           </router-link>
         </el-card>
       );

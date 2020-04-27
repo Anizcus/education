@@ -51,14 +51,20 @@ class LessonType extends Vue {
     }
 
     if (!this.types.length) {
-      return <el-card shadow="hover" style={{ textAlign: "center" }}>No data</el-card>;
+      return (
+        <el-card shadow="hover" style={{ textAlign: "center" }}>
+          No data
+        </el-card>
+      );
     }
 
     const types = this.types.map((item: TypeModel) => {
       return (
         <el-card shadow="hover" style="margin-bottom: 14px;">
           <router-link to={`/lesson/type/${item.id}`}>
-              <el-link type="primary" underline={false}>{item.name}</el-link>
+            <el-link type="primary" underline={false}>
+              {item.name}
+            </el-link>
           </router-link>
         </el-card>
       );

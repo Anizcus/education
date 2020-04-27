@@ -183,5 +183,33 @@ namespace Server.Controllers
 
          return Ok(payload);
       }
+
+      [HttpPost("/lesson/status")]
+      public async Task<IActionResult> PostLessonStatus([FromBody] StatusRequest request)
+      {
+         var lesson = await _lessonService.PostLessonStatusAsync(
+            request.LessonId, 
+            request.IsValid, 
+            request.Status
+         );
+
+         if (!String.IsNullOrEmpty(lesson.Error))
+         {
+            return BadRequest(
+               new ErrorPayload
+               {
+                  Error = lesson.Error
+               }
+            );
+         }
+
+         var payload = new NamePayload
+         {
+            Id = lesson.Id,
+            Name = lesson.Name
+         };
+
+         return Ok(payload);
+      }
    }
 }

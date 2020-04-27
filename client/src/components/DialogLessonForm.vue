@@ -46,7 +46,7 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="onCancel">Cancel</el-button>
-      <el-button type="primary" @click="onAction">{{modalState}}</el-button>
+      <el-button type="primary" @click="onAction">{{ modalState }}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -60,13 +60,13 @@ import { mapGetters, mapActions, ActionMethod } from "vuex";
 @Component({
   methods: {
     ...mapActions("modal", {
-      setLessonModalVisible: "setLessonModalVisible",
-    }),
+      setLessonModalVisible: "setLessonModalVisible"
+    })
   },
   computed: {
     ...mapGetters("modal", {
       modalState: "modalState",
-      lessonModal: "lessonModalVisible",
+      lessonModal: "lessonModalVisible"
     })
   }
 })
@@ -74,7 +74,7 @@ class DialogLessonForm extends Vue {
   private setLessonModalVisible!: ActionMethod;
   private form = {
     name: "",
-    description: "",
+    description: ""
   };
   private modalState!: string;
   private lessonModal!: boolean;
@@ -119,11 +119,11 @@ class DialogLessonForm extends Vue {
     this.form.name = "";
     this.form.description = "";
     this.image = "";
-    
+
     this.setLessonModalVisible({
       visible: false,
       stateName: "Cancel"
-    })
+    });
   }
 }
 export default DialogLessonForm;

@@ -26,9 +26,13 @@
       <el-main class="content">
         <router-view></router-view>
       </el-main>
-      <el-aside class="side-right">ASide</el-aside>
+      <el-aside class="side-right">
+        <el-menu :router="true" mode="vertical" class="menu">
+          <el-menu-item index="/profile">Profile</el-menu-item>
+        </el-menu>
+      </el-aside>
     </el-container>
-    <el-footer class="footer">Footer</el-footer>
+    <el-footer class="footer">Simple © Daniel Vrubel - 2020</el-footer>
   </el-container>
 </template>
 
@@ -80,11 +84,20 @@ body {
   height: 100%;
 }
 
+.side-right {
+  .menu {
+    text-align: right;
+    border-right: none;
+  }
+}
+
 .header {
   border-bottom: solid 1px #e6e6e6;
 }
 
 .footer {
   border-top: solid 1px #e6e6e6;
+  text-align: center;
+  padding: 10px;
 }
 </style>

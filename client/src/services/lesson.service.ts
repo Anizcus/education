@@ -1,19 +1,27 @@
 import { Service } from "./service";
-import { NameListServiceModel } from '@/models/services/name-list.service.model';
-import { IdServiceModel } from '@/models/services/id.service.model';
-import { LessonModel, LessonListModel } from '@/models/stores/lesson.store.model';
-import { NameServiceModel } from '@/models/services/name.service.model';
+import { NameListServiceModel } from "@/models/services/name-list.service.model";
+import { IdServiceModel } from "@/models/services/id.service.model";
+import {
+  LessonModel,
+  LessonListModel,
+  LessonStatusModel
+} from "@/models/stores/lesson.store.model";
+import { NameServiceModel } from "@/models/services/name.service.model";
 
 const LessonService = {
   getCategories: (): Promise<NameListServiceModel> => {
     return Service.get("lesson/categories");
   },
-  getTypesByCategory: (model: IdServiceModel): Promise<NameListServiceModel> => {
+  getTypesByCategory: (
+    model: IdServiceModel
+  ): Promise<NameListServiceModel> => {
     return Service.get("lesson/types", {
       params: model
     });
   },
-  getPublishedLessonsByType: (model: IdServiceModel): Promise<LessonModel[]> => {
+  getPublishedLessonsByType: (
+    model: IdServiceModel
+  ): Promise<LessonModel[]> => {
     return Service.get("lesson/published", {
       params: model
     });
@@ -34,6 +42,9 @@ const LessonService = {
   postLessonAssignments: (model: LessonModel): Promise<NameServiceModel> => {
     return Service.post("lesson/assignment", model);
   },
+  postLessonStatus: (model: LessonStatusModel): Promise<NameServiceModel> => {
+    return Service.post("lesson/status", model);
+  }
 };
 
 export { LessonService };
