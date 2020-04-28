@@ -37,6 +37,24 @@ namespace Server.Stores.Interfaces
          return added.Entity;
       }
 
+      public async Task<Lesson> GetLessonDataAsync(uint id)
+      {
+         var lesson = await _store.Lessons
+            .Include(lesson => lesson.Assignments)
+               .ThenInclude(assignment => assignment.AssignmentUsers)
+                  .ThenInclude(user => user.Progress)
+            .Include(lesson => lesson.Category)
+            .Include(lesson => lesson.Owner)
+            .Include(lesson => lesson.State)
+            .Include(lesson => lesson.Type)
+            .Include(lesson => lesson.LessonUsers)
+               .ThenInclude(user => user.Progress)
+         .Where(lesson => lesson.Id == id)
+         .FirstOrDefaultAsync();
+
+         return lesson;
+      }
+
       public async Task<Lesson> GetAsync(uint id)
       {
          return await _store.Lessons

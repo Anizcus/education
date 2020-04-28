@@ -17,6 +17,14 @@ namespace Server.Stores.Configurations
             .HasColumnName("id")
             .HasColumnType("int(10) unsigned");
 
+         builder.Property(e => e.Level)
+            .HasColumnName("level")
+            .HasColumnType("int(10) unsigned");
+
+         builder.Property(e => e.Experience)
+            .HasColumnName("experience")
+            .HasColumnType("int(10) unsigned");
+
          builder.Property(e => e.Name)
             .HasColumnName("name")
             .HasColumnType("varchar(64)")

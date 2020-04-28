@@ -28,6 +28,7 @@ interface LessonModel {
   type: string;
   status: string;
   category: string;
+  progress: string;
   assignments: AssignmentModel[];
 }
 
@@ -36,6 +37,7 @@ interface AssignmentModel {
   description: string;
   experience: number;
   answer: string | null;
+  progress: string;
 }
 
 interface LessonStatusModel {

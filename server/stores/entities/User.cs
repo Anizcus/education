@@ -7,6 +7,8 @@ namespace Server.Stores.Entities
    {
       #region properties
       public uint Id { get; set; }
+      public uint Level { get; set; }
+      public uint Experience { get; set; }
       public string Name { get; set; }
       public byte[] Password { get; set; }
       public byte[] Salt { get; set; }

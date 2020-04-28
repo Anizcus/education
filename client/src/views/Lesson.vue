@@ -38,7 +38,7 @@
             <el-row>
               <el-col :span="12">
                 <p>Lesson: {{ lesson.name }}</p>
-                <div>State: {{ lesson.state }}</div>
+                <div>State: {{ lesson.state }} {{ lesson.progress ? `(${lesson.progress})` : `` }}</div>
               </el-col>
               <el-col :span="12">
                 <p style="float: right;">Author: {{ lesson.ownerName }}</p>
@@ -57,7 +57,7 @@
               <el-collapse-item
                 v-for="(assignment, index) in lesson.assignments"
                 :key="`question-${index}`"
-                :title="`Question ${index + 1}`"
+                :title="`Question ${index + 1} ${assignment.progress ? `(${assignment.progress})` : `` }`"
               >
                 <el-row>
                   <el-col :span="20">
@@ -83,13 +83,12 @@
                       style="margin-right: 10px; float: right;"
                       @click="() => onAssignmentDelete(index)"
                     ></el-button>
-                    <el-button v-if="lesson.state == 'Published'"
+                    <el-button v-if="lesson.state == 'Published' && assignment.progress == 'Active'"
                       :plain="true"
                       type="info"
                       icon="el-icon-edit-outline"
-                      :circle="true"
+                      :circle="false"
                       size="mini"
-                      style="float: right;"
                       @click="() => onAnswerQuestion()"
                     ></el-button>
                   </el-col>
@@ -127,8 +126,8 @@
                 style="float: right;"
                 >Approve</el-button
               >
-              <el-button v-if="lesson.state == 'Published'"
-                @click="() => false"
+              <el-button v-if="lesson.state == 'Published' && lesson.progress == null"
+                @click="() => startLesson()"
                 type="warning"
                 :plain="true"
                 style="float: right;"
@@ -155,6 +154,7 @@ import { ActionMethod, mapGetters, mapActions } from "vuex";
   methods: {
     ...mapActions("lesson", {
       getLesson: "getLessonById",
+      startLesson: "startLesson",
       postAssignments: "postLessonAssignments"
     }),
     ...mapActions("modal", {
@@ -174,6 +174,7 @@ class Lesson extends Vue {
   private setAssignmentModalVisible!: ActionMethod;
   private setAuthorizeModalVisible!: ActionMethod;
   private setAnswerModalVisible!: ActionMethod;
+  private startLesson!: ActionMethod;
   private postAssignments!: ActionMethod;
   private lesson!: LessonModel;
   private loading = true;

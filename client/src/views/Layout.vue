@@ -2,7 +2,7 @@
   <el-container class="container">
     <el-header class="header">
       <el-row>
-        <el-col :span="6" :offset="18">
+        <el-col :span="5" :offset="19">
           <p v-if="!session">
             <router-link to="/user/login/" v-slot="{ href, route }">
               <el-link :href="href" type="primary">{{ route.name }}</el-link>
@@ -29,6 +29,7 @@
       <el-aside class="side-right">
         <el-menu :router="true" mode="vertical" class="menu">
           <el-menu-item index="/profile">Profile</el-menu-item>
+          <el-menu-item index="/users">Users</el-menu-item>
         </el-menu>
       </el-aside>
     </el-container>

@@ -39,6 +39,9 @@ const LessonService = {
       params: model
     });
   },
+  startLesson: (model: IdServiceModel): Promise<NameServiceModel> => {
+    return Service.post("lesson/start", model);
+  },
   postLessonAssignments: (model: LessonModel): Promise<NameServiceModel> => {
     return Service.post("lesson/assignment", model);
   },

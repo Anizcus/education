@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Server.Enums;
 using Server.Models.Requests;
 using Server.Services.Answers;
 using Server.Stores.Entities;
@@ -36,9 +37,9 @@ namespace Server.Services.Interfaces
          };
       }
 
-      public async Task<LessonAnswer> GetAsync(uint id)
+      public async Task<LessonAnswer> GetAsync(uint id, uint userId)
       {
-         var lesson = await _lessonStore.GetAsync(id);
+         var lesson = await _lessonStore.GetLessonDataAsync(id);
 
          if (lesson == null)
          {
@@ -60,12 +61,16 @@ namespace Server.Services.Interfaces
             Category = lesson.Category.Name,
             Type = lesson.Type.Name,
             Status = lesson.Status,
+            Progress = lesson.LessonUsers
+               .FirstOrDefault(user => user.UserId == userId)?.Progress.Name,
             Assignments = lesson.Assignments.Select(assignment => new AssignmentAnswer
             {
                Id = assignment.Id,
                Description = assignment.Description,
                Experience = assignment.Experience,
-               Answer = ""
+               Progress = assignment.AssignmentUsers
+                  .Where(user => user.UserId == userId)
+                  .FirstOrDefault()?.Progress.Name
             }).ToList()
          };
       }
@@ -126,7 +131,7 @@ namespace Server.Services.Interfaces
 
       public async Task<NameAnswer> PostLessonAssignmentAsync(uint lessonId, uint ownerId, string type, IList<AssignmentRequest> assignments)
       {
-         var lesson = await GetAsync(lessonId);
+         var lesson = await _lessonStore.GetAsync(lessonId);
 
          if (lesson == null)
          {
@@ -144,7 +149,7 @@ namespace Server.Services.Interfaces
             };
          }
 
-         if (lesson.Type != type)
+         if (lesson.Type.Name != type)
          {
             return new NameAnswer
             {
@@ -182,6 +187,44 @@ namespace Server.Services.Interfaces
             return new NameAnswer
             {
                Error = "Failed to update lesson status"
+            };
+         }
+
+         return new NameAnswer
+         {
+            Name = update.Name,
+            Id = update.Id
+         };
+      }
+
+      public async Task<NameAnswer> StartLessonAsync(uint lessonId, uint userId)
+      {
+         var lesson = await _lessonStore.GetAsync(lessonId);
+
+         lesson.LessonUsers = new List<UserLesson>();
+
+         lesson.LessonUsers.Add(new UserLesson {
+            LessonId = lessonId,
+            UserId = userId,
+            ProgressId = (uint) ProgressEnum.Active
+         });
+
+         foreach (var item in lesson.Assignments)
+         {
+            item.AssignmentUsers = new List<UserAssignment>();
+
+            item.AssignmentUsers.Add(new UserAssignment {
+               AssignmentId = item.Id,
+               UserId = userId,
+               ProgressId = (uint) ProgressEnum.Active
+            });
+         }
+
+         var update = await _lessonStore.UpdateLessonStatusAsync(lesson);
+
+         if (update == null) {
+            return new NameAnswer {
+               Error = "Failed to update assignments"
             };
          }
 

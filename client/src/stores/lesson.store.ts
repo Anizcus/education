@@ -109,6 +109,14 @@ const actions: ActionTree<LessonStoreModel, {}> = {
       }
     );
   },
+  async startLesson(context) {
+    return await LessonService.startLesson({ id: context.state.lesson.id }).then(
+      response => {
+        console.log(response);
+        return response;
+      }
+    );
+  },
   createAssignment(context, model: any) {
     context.commit("insertLessonAssignment", model);
   },

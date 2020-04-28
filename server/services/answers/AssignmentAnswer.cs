@@ -6,5 +6,6 @@ namespace Server.Services.Answers
       public string Description { get; set; }
       public uint Experience { get; set; }
       public string Answer { get; set; }
+      public string Progress { get; set; }
    }
 }

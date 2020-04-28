@@ -119,7 +119,8 @@ namespace Server.Controllers
       [HttpGet("/lesson")]
       public async Task<IActionResult> GetLesson([FromQuery] RequestById request)
       {
-         var lesson = await _lessonService.GetAsync(request.Id);
+         var user = HttpContext.User.Claims.ElementAt(0);
+         var lesson = await _lessonService.GetAsync(request.Id, uint.Parse(user.Value));
 
          if (!String.IsNullOrEmpty(lesson.Error))
          {
@@ -142,12 +143,13 @@ namespace Server.Controllers
             Description = lesson.Description,
             Type = lesson.Type,
             Status = lesson.Status,
+            Progress = lesson.Progress,
             Assignments = lesson.Assignments.Select(assignment => new AssignmentPayload
             {
                Id = assignment.Id,
                Description = assignment.Description,
                Experience = assignment.Experience,
-               Answer = ""
+               Progress = assignment.Progress,
             }).ToList(),
             BadgeBase64 = $"data:image/png;base64,{System.Convert.ToBase64String(lesson.Badge)}"
          };
@@ -191,6 +193,33 @@ namespace Server.Controllers
             request.LessonId, 
             request.IsValid, 
             request.Status
+         );
+
+         if (!String.IsNullOrEmpty(lesson.Error))
+         {
+            return BadRequest(
+               new ErrorPayload
+               {
+                  Error = lesson.Error
+               }
+            );
+         }
+
+         var payload = new NamePayload
+         {
+            Id = lesson.Id,
+            Name = lesson.Name
+         };
+
+         return Ok(payload);
+      }
+
+      [HttpPost("/lesson/start")]
+      public async Task<IActionResult> StartLesson([FromBody] RequestById request)
+      {
+         var user = HttpContext.User.Claims.ElementAt(0);
+         var lesson = await _lessonService.StartLessonAsync(
+            request.Id, uint.Parse(user.Value)
          );
 
          if (!String.IsNullOrEmpty(lesson.Error))

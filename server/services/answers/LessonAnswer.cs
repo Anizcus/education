@@ -14,6 +14,7 @@ namespace Server.Services.Answers
       public byte[] Badge { get; set; }
       public string Status { get; set; }
       public string Category { get; set; }
+      public string Progress { get; set; }
       public IList<AssignmentAnswer> Assignments { get; set; }
    }
 }
