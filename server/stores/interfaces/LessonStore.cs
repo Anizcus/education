@@ -120,5 +120,86 @@ namespace Server.Stores.Interfaces
 
          return updated.Entity;
       }
+
+      public async Task<Assignment> GetAssignment(uint id)
+      {
+         return await _store.Assignments
+            .Include(assignment => assignment.AssignmentUsers)
+               .ThenInclude(user => user.Progress)
+            .Include(assignment => assignment.AssignmentUsers)
+               .ThenInclude(user => user.User)
+            .Where(assignment => assignment.Id == id)
+            .FirstOrDefaultAsync();
+      }
+
+      public async Task<User> PostUserAsync(User user)
+      {
+         var updated = _store.Users.Update(user);
+         var saved = await _store.SaveChangesAsync();
+
+         return updated.Entity;
+      }
+
+      public async Task<IList<Assignment>> GetLessonAssignments(uint lessonId)
+      {
+         return await _store.Assignments
+            .Where(assignment => assignment.LessonId == lessonId)
+            .ToListAsync();
+      }
+
+      public async Task<UserLesson> GetUserLesson(uint lessonId, uint userId)
+      {
+         return await _store.UserLessons
+            .Include(lesson => lesson.User)
+            .Include(lesson => lesson.Lesson)
+            .Include(lesson => lesson.Progress)
+            .FirstOrDefaultAsync(lesson => lesson.LessonId == lessonId && lesson.UserId == userId);
+      }
+
+      public async Task<UserLesson> PostUserLesson(UserLesson lesson)
+      {
+         var updated = _store.UserLessons.Update(lesson);
+         var saved = await _store.SaveChangesAsync();
+
+         return updated.Entity;
+      }
+
+      public async Task<UserAssignment> PostUserAssignment(UserAssignment assignment)
+      {
+         var updated = _store.UserAssignments.Update(assignment);
+         var saved = await _store.SaveChangesAsync();
+
+         return updated.Entity;
+      }
+
+      public async Task<UserAssignment> GetUserAssignment(uint assignmentId, uint userId)
+      {
+         return await _store.UserAssignments
+            .Include(assignment => assignment.User)
+            .Include(assignment => assignment.Assignment)
+            .Include(assignment => assignment.Progress)
+            .FirstOrDefaultAsync(assignment => assignment.AssignmentId == assignmentId && assignment.UserId == userId);
+      }
+
+      public async Task<IList<UserAssignment>> GetUserAssignments(uint userId)
+      {
+         return await _store.UserAssignments
+            .Include(assignment => assignment.User)
+            .Include(assignment => assignment.Assignment)
+            .Include(assignment => assignment.Progress)
+            .Where(assignment => assignment.UserId == userId).ToListAsync();
+      }
+      public async Task<IList<UserAssignment>> GetUserAssignmentsBasedOnProgressAndLesson(uint userId, uint lessonId, uint progressId)
+      {
+         return await _store.UserAssignments
+            .Include(assignment => assignment.User)
+            .Include(assignment => assignment.Assignment)
+            .Include(assignment => assignment.Progress)
+            .Where(assignment => 
+               assignment.UserId == userId && 
+               assignment.Assignment.LessonId == lessonId && 
+               assignment.ProgressId == progressId)
+            .ToListAsync();
+      }
    }
 }

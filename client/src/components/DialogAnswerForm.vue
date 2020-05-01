@@ -1,22 +1,15 @@
 <template>
-  <el-dialog
-    title="Answer a question"
-    :visible="answerModal"
-    @close="onClose"
-  >
+  <el-dialog title="Answer a question" :visible="answerModal" @close="onClose">
     <el-form :model="form" label-position="top">
       <el-form-item :label="`Question: ${form.question}`">
-        <el-input
-          :clearable="true"
-          v-model="form.answer"
-        ></el-input>
+        <el-input :clearable="true" v-model="form.answer"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="onCancel">Cancel</el-button>
-      <el-button type="success" @click="() => onAction()"
-        >{{modalState}}</el-button
-      >
+      <el-button type="success" :loading="loading" @click="() => onAction()"
+        >{{ modalState }}
+      </el-button>
     </span>
   </el-dialog>
 </template>
@@ -28,54 +21,76 @@ import { LessonService } from "../services/lesson.service";
 import { mapGetters, mapActions, ActionMethod } from "vuex";
 
 interface ModalData {
+  assignmentId: number;
   lessonId: number;
 }
 
 @Component({
   methods: {
     ...mapActions("lesson", {
-      postStatus: "postLessonStatus"
+      postAnswer: "postAnswer",
+      getLesson: "getLesson",
     }),
     ...mapActions("modal", {
-      setAnswerModalVisible: "setAnswerModalVisible"
-    })
+      setAnswerModalVisible: "setAnswerModalVisible",
+    }),
   },
   computed: {
     ...mapGetters("modal", {
       answerModal: "answerModalVisible",
       modalState: "modalState",
-      data: "modalData"
-    })
-  }
+      data: "modalData",
+    }),
+  },
 })
 class DialogAnswerForm extends Vue {
   private setAnswerModalVisible!: ActionMethod;
-  private postStatus!: ActionMethod;
+  private postAnswer!: ActionMethod;
+  private getLesson!: ActionMethod;
   private answerModal!: boolean;
   private modalState!: string;
   private data!: ModalData;
   private form = {
-    answer: ""
+    answer: "",
   };
+  private loading = false;
 
   private onClose() {
     this.setAnswerModalVisible({
       visible: false,
-      stateName: this.modalState
+      stateName: this.modalState,
     });
   }
 
   private onAction() {
-    this.setAnswerModalVisible({
-      visible: false,
-      stateName: this.modalState
+    this.loading = true;
+    this.postAnswer({
+      assignmentId: this.data.assignmentId,
+      answer: this.form.answer,
+    }).then((res) => {
+      this.getLesson({ id: this.data.lessonId })
+        .then((res) => {
+          console.log(res);
+          this.loading = false;
+          this.setAnswerModalVisible({
+            visible: false,
+            stateName: this.modalState,
+          });
+        })
+        .catch(() => {
+          this.loading = false;
+          this.setAnswerModalVisible({
+            visible: false,
+            stateName: this.modalState,
+          });
+        });
     });
   }
 
   private onCancel() {
     this.setAnswerModalVisible({
       visible: false,
-      stateName: this.modalState
+      stateName: this.modalState,
     });
   }
 }

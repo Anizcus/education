@@ -3,6 +3,7 @@ import { UserStoreModel, SessionModel } from "@/models/stores/user.store.model";
 import { UserService } from "@/services/user.service";
 import { RegisterServiceModel } from "@/models/services/register.service.model";
 import { LoginServiceModel } from "@/models/services/login.service.model";
+import { Service } from '@/services/service';
 
 const namespaced = true;
 
@@ -49,6 +50,11 @@ const actions: ActionTree<UserStoreModel, {}> = {
   async login(context, model: LoginServiceModel) {
     return await UserService.login(model).then(response => {
       localStorage.setItem("session", response.session);
+
+      Service.defaults.headers = {
+        Authorization: `Bearer ${response.session}`
+      }
+
       context.commit("insert", response.user);
 
       return response.user;

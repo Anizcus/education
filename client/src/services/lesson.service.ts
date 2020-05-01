@@ -4,7 +4,8 @@ import { IdServiceModel } from "@/models/services/id.service.model";
 import {
   LessonModel,
   LessonListModel,
-  LessonStatusModel
+  LessonStatusModel,
+  AssignmentAnswer
 } from "@/models/stores/lesson.store.model";
 import { NameServiceModel } from "@/models/services/name.service.model";
 
@@ -47,7 +48,10 @@ const LessonService = {
   },
   postLessonStatus: (model: LessonStatusModel): Promise<NameServiceModel> => {
     return Service.post("lesson/status", model);
-  }
+  },
+  postAssignmentAnswer: (model: AssignmentAnswer): Promise<NameServiceModel> => {
+    return Service.post("lesson/assignment/answer", model);
+  },
 };
 
 export { LessonService };

@@ -6,7 +6,8 @@ import {
   LessonModel,
   LessonListModel,
   AssignmentModel,
-  LessonStatusModel
+  LessonStatusModel,
+  AssignmentAnswer
 } from "@/models/stores/lesson.store.model";
 import { LessonService } from "@/services/lesson.service";
 import { IdServiceModel } from "@/models/services/id.service.model";
@@ -111,6 +112,14 @@ const actions: ActionTree<LessonStoreModel, {}> = {
   },
   async startLesson(context) {
     return await LessonService.startLesson({ id: context.state.lesson.id }).then(
+      response => {
+        console.log(response);
+        return response;
+      }
+    );
+  },
+  async postAnswer(context, model: AssignmentAnswer) {
+    return await LessonService.postAssignmentAnswer(model).then(
       response => {
         console.log(response);
         return response;

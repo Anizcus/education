@@ -89,7 +89,7 @@
                       icon="el-icon-edit-outline"
                       :circle="false"
                       size="mini"
-                      @click="() => onAnswerQuestion()"
+                      @click="() => onAnswerQuestion(assignment.id)"
                     ></el-button>
                   </el-col>
                 </el-row>
@@ -252,10 +252,14 @@ class Lesson extends Vue {
     });
   }
 
-  private onAnswerQuestion() {
+  private onAnswerQuestion(assignmentId: number) {
     this.setAnswerModalVisible({
       visible: true,
       stateName: "Answer",
+      data: {
+        assignmentId,
+        lessonId: this.lesson.id
+      }
     });
   }
 }

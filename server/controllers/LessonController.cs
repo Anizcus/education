@@ -240,5 +240,33 @@ namespace Server.Controllers
 
          return Ok(payload);
       }
+
+      [HttpPost("/lesson/assignment/answer")]
+      public async Task<IActionResult> AssignmentAnswer([FromBody] AssignmentAnswerRequest request)
+      {
+         var user = HttpContext.User.Claims.ElementAt(0);
+         var assignment = await _lessonService.AssignmentAnswerAsync(
+            request.AssignmentId, uint.Parse(user.Value), request.Answer
+         );
+
+         if (!String.IsNullOrEmpty(assignment.Error))
+         {
+            return BadRequest(
+               new ErrorPayload
+               {
+                  Error = assignment.Error
+               }
+            );
+         }
+
+         var payload = new AssignmentAnswerPayload
+         {
+            AssignmentId = assignment.AssignmentId,
+            Message = assignment.Message,
+            Progress = assignment.Progress
+         };
+
+         return Ok(payload);
+      }
    }
 }

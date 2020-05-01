@@ -53,6 +53,11 @@ interface LessonStoreModel {
   lesson: LessonModel;
 }
 
+interface AssignmentAnswer {
+  assignmentId: number;
+  answer: boolean;
+}
+
 export {
   LessonStoreModel,
   CategoryModel,
@@ -60,5 +65,6 @@ export {
   LessonModel,
   LessonListModel,
   AssignmentModel,
-  LessonStatusModel
+  LessonStatusModel,
+  AssignmentAnswer
 };

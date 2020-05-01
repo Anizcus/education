@@ -17,6 +17,10 @@ namespace Server.Stores
       public DbSet<Assignment> Assignments { get; set; }
       public DbSet<Progress> Progresses { get; set; }
       #endregion
+      #region navigation
+      public DbSet<UserLesson> UserLessons { get; set; }
+      public DbSet<UserAssignment> UserAssignments { get; set; }
+      #endregion
       public Store(DbContextOptions options) : base(options) { }
       protected override void OnModelCreating(ModelBuilder modelBuilder)
       {

@@ -18,6 +18,75 @@ namespace Server.Services.Interfaces
          _lessonStore = lessonStore;
       }
 
+      public async Task<AssignmentAnswerStatus> AssignmentAnswerAsync(uint assignmentId, uint userId, string answer)
+      {
+         var userTask = await _lessonStore.GetUserAssignment(assignmentId, userId);
+
+         if (userTask == null) {
+            return new AssignmentAnswerStatus {
+               Error = "Assignment is not found"
+            };
+         }
+
+         if (userTask.ProgressId == (uint) ProgressEnum.Completed) {
+            return new AssignmentAnswerStatus {
+               Error = "Assignment is already completed!"
+            };
+         }
+
+         if (userTask.Assignment.Answer != answer) {
+            return new AssignmentAnswerStatus {
+               Error = "Assignment answer does not match!"
+            };
+         }
+
+         var user = userTask.User;
+         var level = user.Level;
+         var experience = user.Experience + userTask.Assignment.Experience;
+
+         while (experience >= level * 15) {
+            experience -= level * 15;
+            level++;
+         }
+
+         var difference = level - user.Level;
+         var message = difference > 0 
+            ? $"Correct! You have gained {difference} level(-s)!"
+            : $"Correct! You have gained {userTask.Assignment.Experience} experience!";
+
+         user.Level = level;
+         user.Experience = experience;
+
+         user = await _lessonStore.PostUserAsync(user);
+
+         userTask.ProgressId = (uint) ProgressEnum.Completed;
+
+         userTask = await _lessonStore.PostUserAssignment(userTask);
+
+         var lessonAssignments = await _lessonStore
+            .GetLessonAssignments(userTask.Assignment.LessonId);
+
+         var countCompleted = await _lessonStore
+            .GetUserAssignmentsBasedOnProgressAndLesson(
+               userId, 
+               userTask.Assignment.LessonId, 
+               (uint) ProgressEnum.Completed);
+         var countTotal = lessonAssignments.Count();
+
+         if (countCompleted.Count() == countTotal) {
+            var lesson = await _lessonStore.GetUserLesson(userTask.Assignment.LessonId, userId);
+
+            lesson.ProgressId = (uint) ProgressEnum.Completed;
+            lesson = await _lessonStore.PostUserLesson(lesson);
+         }
+
+         return new AssignmentAnswerStatus {
+            AssignmentId = assignmentId,
+            Message = message,
+            Progress = nameof(ProgressEnum.Completed)
+         };
+      }
+
       public async Task<NameAnswer> CreateLessonAsync(uint typeId, uint ownerId, string name, string description, byte[] badge)
       {
          var lesson = await _lessonStore.CreateLessonAsync(typeId, ownerId, name, description, badge);
