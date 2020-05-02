@@ -30,7 +30,11 @@ import {
   TabPane,
   Collapse,
   InputNumber,
-  CollapseItem
+  CollapseItem,
+  Progress,
+  Tooltip,
+  Table,
+  TableColumn
 } from "element-ui";
 
 Vue.config.productionTip = false;
@@ -62,6 +66,10 @@ Vue.use(TabPane);
 Vue.use(Collapse);
 Vue.use(CollapseItem);
 Vue.use(InputNumber);
+Vue.use(Progress);
+Vue.use(Tooltip);
+Vue.use(Table);
+Vue.use(TableColumn);
 
 new Vue({
   router: Router,

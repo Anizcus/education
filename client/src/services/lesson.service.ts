@@ -49,9 +49,11 @@ const LessonService = {
   postLessonStatus: (model: LessonStatusModel): Promise<NameServiceModel> => {
     return Service.post("lesson/status", model);
   },
-  postAssignmentAnswer: (model: AssignmentAnswer): Promise<NameServiceModel> => {
+  postAssignmentAnswer: (
+    model: AssignmentAnswer
+  ): Promise<NameServiceModel> => {
     return Service.post("lesson/assignment/answer", model);
-  },
+  }
 };
 
 export { LessonService };

@@ -28,9 +28,33 @@ namespace Server.Stores.Interfaces
             .FirstOrDefaultAsync(user => user.Id == id);
       }
 
+      public async Task<User> GetProfileAsync(uint id)
+      {
+         return await _store.Users
+            .Include(user => user.Role)
+            .Include(user => user.UserLessons)
+               .ThenInclude(userLesson => userLesson.Lesson)
+            .Include(user => user.UserLessons)
+               .ThenInclude(userLesson => userLesson.Lesson)
+                  .ThenInclude(lesson => lesson.Type)
+            .Include(user => user.UserLessons)
+               .ThenInclude(userLesson => userLesson.Lesson)
+                  .ThenInclude(lesson => lesson.Category)
+            .Include(user => user.UserLessons)
+               .ThenInclude(userLesson => userLesson.Lesson)
+                  .ThenInclude(lesson => lesson.Owner)
+            .Include(user => user.UserLessons)
+               .ThenInclude(userLesson => userLesson.Lesson)
+                  .ThenInclude(lesson => lesson.State)
+            .Include(user => user.UserLessons)
+               .ThenInclude(userLesson => userLesson.Progress)
+            .FirstOrDefaultAsync(user => user.Id == id);
+      }
+
       public async Task<IList<User>> GetAsync()
       {
          return await _store.Users
+            .Include(user => user.Role)
             .ToListAsync();
       }
 

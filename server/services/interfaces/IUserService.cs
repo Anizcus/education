@@ -12,5 +12,7 @@ namespace Server.Services.Interfaces
       Task<NameAnswer> SignUpAsync(string username, string password);
       Task<SessionAnswer> SignInAsync(string username, string password);
       Task<SessionAnswer> RestoreAsync(string session, string account);
+      Task<ProfileAnswer> GetProfileAsync(uint userId);
+      Task<IList<UserListAnswer>> GetAsync();
    }
 }

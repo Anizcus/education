@@ -1,10 +1,10 @@
 namespace Server.Services.Answers
 {
-   public class SessionAnswer: ErrorAnswer
+   public class UserListAnswer: ErrorAnswer
    {
       public uint Id { get; set; }
       public string Name { get; set; }
       public string Role { get; set; }
-      public string Session { get; set; }
+      public uint Level { get; set; }
    }
 }

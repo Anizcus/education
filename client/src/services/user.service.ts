@@ -4,6 +4,10 @@ import { IdServiceModel } from "@/models/services/id.service.model";
 import { LoginServiceModel } from "@/models/services/login.service.model";
 import { SessionServiceModel } from "@/models/services/session.service.model";
 import { RegisterServiceModel } from "@/models/services/register.service.model";
+import {
+  ProfileModel,
+  ProfileListModel
+} from "@/models/stores/user.store.model";
 
 const UserService = {
   get: (model: IdServiceModel): Promise<NameServiceModel> => {
@@ -23,6 +27,14 @@ const UserService = {
   },
   online: (): Promise<NameServiceModel> => {
     return Service.post("user/online");
+  },
+  getProfile: (model: IdServiceModel): Promise<ProfileModel> => {
+    return Service.get("user/profile", {
+      params: model
+    });
+  },
+  getUsers: (): Promise<ProfileListModel[]> => {
+    return Service.get("users");
   }
 };
 

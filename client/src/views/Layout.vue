@@ -28,7 +28,9 @@
       </el-main>
       <el-aside class="side-right">
         <el-menu :router="true" mode="vertical" class="menu">
-          <el-menu-item index="/profile">Profile</el-menu-item>
+          <el-menu-item v-if="session" :index="`/user/profile/${session.id}`"
+            >Profile</el-menu-item
+          >
           <el-menu-item index="/users">Users</el-menu-item>
         </el-menu>
       </el-aside>
@@ -40,7 +42,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { mapGetters, mapActions, ActionMethod } from "vuex";
+import { mapGetters } from "vuex";
 import { SessionModel } from "../models/stores/user.store.model";
 
 @Component({

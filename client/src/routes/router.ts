@@ -7,6 +7,8 @@ import About from "../views/About.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import Lesson from "../views/Lesson.vue";
+import Profile from "../views/Profile.vue";
+import Users from "../views/Users.vue";
 
 Vue.use(Router);
 
@@ -43,9 +45,19 @@ const router = new Router({
       component: Login
     },
     {
+      path: "/user/profile/:id",
+      name: "Profile",
+      component: Profile
+    },
+    {
       path: "/user/register",
       name: "Register",
       component: Register
+    },
+    {
+      path: "/users",
+      name: "Users",
+      component: Users
     }
   ]
 });

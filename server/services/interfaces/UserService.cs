@@ -253,5 +253,54 @@ namespace Server.Services.Interfaces
             Name = user.Name
          };
       }
+
+      public async Task<ProfileAnswer> GetProfileAsync(uint userId)
+      {
+         var user = await _userStore.GetProfileAsync(userId);
+
+         if (user == null) {
+            return new ProfileAnswer {
+               Error = "User not found!"
+            };
+         }
+
+         return new  ProfileAnswer {
+            Id = user.Id,
+            Name = user.Name,
+            NextExperience = (user.Level + 1) * 15,
+            Level = user.Level,
+            Role = user.Role.Name,
+            Experience = user.Experience,
+            Lessons = user.UserLessons.Select(lesson => new LessonAnswer{
+               Id = lesson.Lesson.Id,
+               Name = lesson.Lesson.Name,
+               Description = lesson.Lesson.Description,
+               OwnerId = lesson.Lesson.OwnerId,
+               OwnerName = lesson.Lesson.Owner.Name,
+               Type = lesson.Lesson.Type.Name,
+               State = lesson.Lesson.State.Name,
+               Badge = lesson.Lesson.Badge, 
+               Status = lesson.Lesson.Status,
+               Category = lesson.Lesson.Category.Name,
+               Progress = lesson.Progress.Name
+            }).ToList()
+         };
+      }
+
+      public async Task<IList<UserListAnswer>> GetAsync()
+      {
+         var users = await _userStore.GetAsync();
+
+         if (users == null) {
+            return new List<UserListAnswer>();
+         }
+
+         return users.Select(user => new UserListAnswer {
+            Id = user.Id,
+            Name = user.Name,
+            Role = user.Role.Name,
+            Level = user.Level
+         }).ToList();
+      }
    }
 }

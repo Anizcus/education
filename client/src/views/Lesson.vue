@@ -38,7 +38,10 @@
             <el-row>
               <el-col :span="12">
                 <p>Lesson: {{ lesson.name }}</p>
-                <div>State: {{ lesson.state }} {{ lesson.progress ? `(${lesson.progress})` : `` }}</div>
+                <div>
+                  State: {{ lesson.state }}
+                  {{ lesson.progress ? `(${lesson.progress})` : `` }}
+                </div>
               </el-col>
               <el-col :span="12">
                 <p style="float: right;">Author: {{ lesson.ownerName }}</p>
@@ -57,7 +60,11 @@
               <el-collapse-item
                 v-for="(assignment, index) in lesson.assignments"
                 :key="`question-${index}`"
-                :title="`Question ${index + 1} ${assignment.progress ? `(${assignment.progress})` : `` }`"
+                :title="
+                  `Question ${index + 1} ${
+                    assignment.progress ? `(${assignment.progress})` : ``
+                  }`
+                "
               >
                 <el-row>
                   <el-col :span="20">
@@ -65,7 +72,8 @@
                     <div>Experience ({{ assignment.experience }})</div>
                   </el-col>
                   <el-col :span="4">
-                    <el-button v-if="lesson.state == 'Created'"
+                    <el-button
+                      v-if="lesson.state == 'Created'"
                       :plain="true"
                       type="warning"
                       icon="el-icon-edit"
@@ -74,7 +82,8 @@
                       style="float: right;"
                       @click="() => onAssignmentEdit(index, assignment)"
                     ></el-button>
-                    <el-button v-if="lesson.state == 'Created'"
+                    <el-button
+                      v-if="lesson.state == 'Created'"
                       :plain="true"
                       type="danger"
                       icon="el-icon-delete"
@@ -83,27 +92,33 @@
                       style="margin-right: 10px; float: right;"
                       @click="() => onAssignmentDelete(index)"
                     ></el-button>
-                    <el-button v-if="lesson.state == 'Published' && assignment.progress == 'Active'"
+                    <el-button
+                      v-if="
+                        lesson.state == 'Published' &&
+                          assignment.progress == 'Active'
+                      "
                       :plain="true"
                       type="info"
                       icon="el-icon-edit-outline"
                       :circle="false"
                       size="mini"
-                      @click="() => onAnswerQuestion(assignment.id)"
+                      @click="() => onAnswerQuestion(assignment)"
                     ></el-button>
                   </el-col>
                 </el-row>
               </el-collapse-item>
             </el-collapse>
             <p>
-              <el-button v-if="lesson.state == 'Created'"
+              <el-button
+                v-if="lesson.state == 'Created'"
                 @click="() => onAssignmentCreate()"
                 type="primary"
                 :plain="true"
                 style="float: left;"
                 >Add a question</el-button
               >
-              <el-button v-if="lesson.state == 'Waiting'"
+              <el-button
+                v-if="lesson.state == 'Waiting'"
                 @click="() => Reject()"
                 type="danger"
                 :plain="true"
@@ -112,21 +127,24 @@
               >
             </p>
             <p>
-              <el-button v-if="lesson.state == 'Created'"
+              <el-button
+                v-if="lesson.state == 'Created'"
                 @click="() => Publish()"
                 type="success"
                 :plain="true"
                 style="float: right;"
                 >Publish</el-button
               >
-              <el-button v-if="lesson.state == 'Waiting'"
+              <el-button
+                v-if="lesson.state == 'Waiting'"
                 @click="() => Approve()"
                 type="success"
                 :plain="true"
                 style="float: right;"
                 >Approve</el-button
               >
-              <el-button v-if="lesson.state == 'Published' && lesson.progress == null"
+              <el-button
+                v-if="lesson.state == 'Published' && lesson.progress == null"
                 @click="() => startLesson()"
                 type="warning"
                 :plain="true"
@@ -190,8 +208,7 @@ class Lesson extends Vue {
 
   public mounted() {
     this.getLesson({ id: Number(this.$route.params.id) })
-      .then(res => {
-        console.log(res);
+      .then(() => {
         this.loading = false;
       })
       .catch(() => {
@@ -252,12 +269,13 @@ class Lesson extends Vue {
     });
   }
 
-  private onAnswerQuestion(assignmentId: number) {
+  private onAnswerQuestion(model: AssignmentModel) {
     this.setAnswerModalVisible({
       visible: true,
       stateName: "Answer",
       data: {
-        assignmentId,
+        assignmentId: model.id,
+        question: model.description,
         lessonId: this.lesson.id
       }
     });

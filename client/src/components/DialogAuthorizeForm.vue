@@ -15,8 +15,10 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="onCancel">Cancel</el-button>
-      <el-button :type="modalState == 'Approve' ? 'success' : 'danger'" @click="() => onAction(modalState == 'Approve')"
-        >{{modalState}}</el-button
+      <el-button
+        :type="modalState == 'Approve' ? 'success' : 'danger'"
+        @click="() => onAction(modalState == 'Approve')"
+        >{{ modalState }}</el-button
       >
     </span>
   </el-dialog>
@@ -25,7 +27,6 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { LessonService } from "../services/lesson.service";
 import { mapGetters, mapActions, ActionMethod } from "vuex";
 
 interface ModalData {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,21 @@ namespace Server.Controllers
                Name = user.Name
             }
          );
+      }
+
+      [HttpGet("/users")]
+      public async Task<IActionResult> Get()
+      {
+         var users = await _userService.GetAsync();
+
+         var payload = users.Select(user => new UserListPayload{
+            Id = user.Id,
+            Name = user.Name,
+            Role = user.Role,
+            Level = user.Level
+         }).ToList();
+
+         return Ok(payload);
       }
 
       [AllowAnonymous]
@@ -119,6 +135,48 @@ namespace Server.Controllers
             {
                Id = user.Id,
                Name = user.Name
+            }
+         );
+      }
+
+      [HttpGet("/user/profile")]
+      public async Task<IActionResult> Profile([FromQuery] RequestById request)
+      {
+         var user = await _userService.GetProfileAsync(request.Id);
+
+         if (!String.IsNullOrEmpty(user.Error))
+         {
+            return BadRequest(
+               new ErrorPayload
+               {
+                  Error = user.Error
+               }
+            );
+         }
+
+         return Ok(
+            new ProfilePayload
+            {
+               Id = user.Id,
+               Name = user.Name,
+               Level = user.Level,
+               Experience = user.Experience,
+               NextExperience = user.NextExperience,
+               Role = user.Role,
+               Lessons = user.Lessons.Select(lesson => new LessonPayload
+               {
+                  OwnerId = lesson.OwnerId,
+                  OwnerName = lesson.OwnerName,
+                  State = lesson.State,
+                  Id = lesson.Id,
+                  Name = lesson.Name,
+                  Category = lesson.Category,
+                  Description = lesson.Description,
+                  Type = lesson.Type,
+                  Status = lesson.Status,
+                  Progress = lesson.Progress,
+                  BadgeBase64 = $"data:image/png;base64,{System.Convert.ToBase64String(lesson.Badge)}"
+               }).ToList()
             }
          );
       }

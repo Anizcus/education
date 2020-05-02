@@ -103,33 +103,29 @@ const actions: ActionTree<LessonStoreModel, {}> = {
     );
   },
   async postLessonStatus(context, model: LessonStatusModel) {
-    return await LessonService.postLessonStatus(model).then(
-      response => {
-        console.log(response);
-        return response;
-      }
-    );
+    return await LessonService.postLessonStatus(model).then(response => {
+      console.log(response);
+      return response;
+    });
   },
   async startLesson(context) {
-    return await LessonService.startLesson({ id: context.state.lesson.id }).then(
-      response => {
-        console.log(response);
-        return response;
-      }
-    );
+    return await LessonService.startLesson({
+      id: context.state.lesson.id
+    }).then(response => {
+      console.log(response);
+      return response;
+    });
   },
   async postAnswer(context, model: AssignmentAnswer) {
-    return await LessonService.postAssignmentAnswer(model).then(
-      response => {
-        console.log(response);
-        return response;
-      }
-    );
+    return await LessonService.postAssignmentAnswer(model).then(response => {
+      console.log(response);
+      return response;
+    });
   },
-  createAssignment(context, model: any) {
+  createAssignment(context, model: AssignmentModel) {
     context.commit("insertLessonAssignment", model);
   },
-  updateAssignment(context, model: any) {
+  updateAssignment(context, model: AssignmentModel) {
     context.commit("updateLessonAssignment", model);
   },
   deleteAssignment(context, index: number) {
