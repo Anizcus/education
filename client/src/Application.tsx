@@ -5,6 +5,7 @@ import DialogAssignmentForm from "./components/DialogAssignmentForm.vue";
 import DialogLessonForm from "./components/DialogLessonForm.vue";
 import DialogAuthorizeForm from "./components/DialogAuthorizeForm.vue";
 import DialogAnswerForm from "./components/DialogAnswerForm.vue";
+import DialogConfirmForm from "./components/DialogConfirmForm.vue";
 import { VNode } from "vue/types/umd";
 import { mapActions, ActionMethod } from "vuex";
 
@@ -14,7 +15,8 @@ import { mapActions, ActionMethod } from "vuex";
     "i-dialog-assignment-form": DialogAssignmentForm,
     "i-dialog-authorize-form": DialogAuthorizeForm,
     "i-dialog-lesson-form": DialogLessonForm,
-    "i-dialog-answer-form": DialogAnswerForm
+    "i-dialog-answer-form": DialogAnswerForm,
+    "i-dialog-confirm-form": DialogConfirmForm
   },
   methods: {
     ...mapActions("user", {
@@ -56,6 +58,7 @@ class Application extends Vue {
           <i-dialog-lesson-form></i-dialog-lesson-form>
           <i-dialog-authorize-form></i-dialog-authorize-form>
           <i-dialog-answer-form></i-dialog-answer-form>
+          <i-dialog-confirm-form></i-dialog-confirm-form>
           <i-layout></i-layout>
         </div>
       );
