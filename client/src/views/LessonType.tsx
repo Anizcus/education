@@ -23,9 +23,6 @@ class LessonType extends Vue {
 
   public mounted() {
     this.getTypes({ id: Number(this.$route.params.id) })
-      .then(res => {
-        console.log(res);
-      })
       .finally(() => {
         this.loading = false;
       });

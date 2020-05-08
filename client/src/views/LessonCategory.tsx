@@ -23,9 +23,6 @@ class LessonCategory extends Vue {
 
   public mounted() {
     this.getCategories()
-      .then(res => {
-        console.log(res);
-      })
       .finally(() => {
         this.loading = false;
       });

@@ -6,6 +6,7 @@
     <el-row>
       <el-col :span="12" style="padding-right: 10px;">
         <p>Profile page of {{ profile.name }}</p>
+        <p>Role - {{ profile.role }}</p>
         <p>Level: {{ profile.level }}</p>
         <el-progress
           :text-inside="true"
@@ -131,7 +132,6 @@ class Profile extends Vue {
   }
 
   private goToLesson(lessonId: string) {
-    console.log("clicked", lessonId);
     this.$router.push({ name: "Lesson", params: { id: lessonId } });
   }
 }

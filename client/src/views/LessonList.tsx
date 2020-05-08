@@ -36,9 +36,6 @@ class LessonList extends Vue {
 
   public mounted() {
     this.getLessons({ id: Number(this.$route.params.id) })
-      .then(res => {
-        console.log(res);
-      })
       .finally(() => {
         this.loading = false;
       });

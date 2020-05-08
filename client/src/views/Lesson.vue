@@ -145,7 +145,7 @@
               >
               <el-button
                 v-if="lesson.state == 'Published' && lesson.progress == null"
-                @click="() => startLesson()"
+                @click="() => onStartLesson()"
                 type="warning"
                 :plain="true"
                 style="float: right;"
@@ -208,7 +208,7 @@ class Lesson extends Vue {
     hour12: false
   };
 
-  public mounted() {
+  private initialize() {
     this.getLesson({ id: Number(this.$route.params.id) })
       .then(() => {
         this.loading = false;
@@ -216,6 +216,29 @@ class Lesson extends Vue {
       .catch(() => {
         this.loading = false;
       });
+  }
+
+  public mounted() {
+    this.initialize();
+  }
+
+  public onStartLesson() {
+    this.setConfirmModalVisible({
+      visible: true,
+      stateName: "Confirm",
+      data: {
+        title: "Confirm start",
+        message: "Are you sure want to start this lesson?",
+        onAction: () => {
+          return this.startLesson()
+            .then(() => {
+              this.initialize();
+              return Promise.resolve();
+            })
+            .catch(() => Promise.reject())
+        }
+      }
+    });
   }
 
   private onAssignmentCreate() {
@@ -255,7 +278,10 @@ class Lesson extends Vue {
         message: "Are you sure want to publish this lesson?",
         onAction: () => {
           return this.postAssignments()
-            .then(() => Promise.resolve())
+            .then(() => {
+              this.initialize();
+              return Promise.resolve();
+            })
             .catch(() => Promise.reject())
         }
       }
@@ -273,7 +299,6 @@ class Lesson extends Vue {
   }
 
   private Reject() {
-    console.log("les", this.lesson);
     this.setAuthorizeModalVisible({
       visible: true,
       stateName: "Reject",

@@ -97,14 +97,12 @@ const actions: ActionTree<LessonStoreModel, {}> = {
   async postLessonAssignments(context) {
     return await LessonService.postLessonAssignments(context.state.lesson).then(
       response => {
-        console.log(response);
         return response;
       }
     );
   },
   async postLessonStatus(context, model: LessonStatusModel) {
     return await LessonService.postLessonStatus(model).then(response => {
-      console.log(response);
       return response;
     });
   },
@@ -112,13 +110,11 @@ const actions: ActionTree<LessonStoreModel, {}> = {
     return await LessonService.startLesson({
       id: context.state.lesson.id
     }).then(response => {
-      console.log(response);
       return response;
     });
   },
   async postAnswer(context, model: AssignmentAnswer) {
     return await LessonService.postAssignmentAnswer(model).then(response => {
-      console.log(response);
       return response;
     });
   },
