@@ -6,6 +6,7 @@ interface ModalStoreModel {
   assignmentModal: boolean;
   lessonModal: boolean;
   authorizeModal: boolean;
+  confirmModal: boolean;
   answerModal: boolean;
   data?: object;
   stateName: string;
@@ -37,6 +38,11 @@ const mutations: MutationTree<ModalStoreModel> = {
     state.data = { ...payload.data };
     state.stateName = payload.stateName;
     state.answerModal = payload.visible;
+  },
+  toggleConfirm(state, payload: ModalPayload) {
+    state.data = { ...payload.data };
+    state.stateName = payload.stateName;
+    state.confirmModal = payload.visible;
   }
 };
 
@@ -52,6 +58,9 @@ const getters: GetterTree<ModalStoreModel, {}> = {
   },
   answerModalVisible(state) {
     return state.answerModal;
+  },
+  confirmModalVisible(state) {
+    return state.confirmModal;
   },
   modalState(state) {
     return state.stateName;
@@ -73,11 +82,15 @@ const actions: ActionTree<ModalStoreModel, {}> = {
   },
   setAnswerModalVisible(context, payload: ModalPayload) {
     context.commit("toggleAnswer", payload);
+  },
+  setConfirmModalVisible(context, payload: ModalPayload) {
+    context.commit("toggleConfirm", payload);
   }
 };
 
 const state: ModalStoreModel = {
   assignmentModal: false,
+  confirmModal: false,
   lessonModal: false,
   authorizeModal: false,
   answerModal: false,

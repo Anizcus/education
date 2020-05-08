@@ -178,7 +178,8 @@ import { ActionMethod, mapGetters, mapActions } from "vuex";
     ...mapActions("modal", {
       setAssignmentModalVisible: "setAssignmentModalVisible",
       setAuthorizeModalVisible: "setAuthorizeModalVisible",
-      setAnswerModalVisible: "setAnswerModalVisible"
+      setAnswerModalVisible: "setAnswerModalVisible",
+      setConfirmModalVisible: "setConfirmModalVisible"
     })
   },
   computed: {
@@ -192,6 +193,7 @@ class Lesson extends Vue {
   private setAssignmentModalVisible!: ActionMethod;
   private setAuthorizeModalVisible!: ActionMethod;
   private setAnswerModalVisible!: ActionMethod;
+  private setConfirmModalVisible!: ActionMethod;
   private startLesson!: ActionMethod;
   private postAssignments!: ActionMethod;
   private lesson!: LessonModel;
@@ -245,6 +247,19 @@ class Lesson extends Vue {
   }
 
   private Publish() {
+    this.setConfirmModalVisible({
+      visible: true,
+      stateName: "Confirm",
+      data: {
+        title: "Confirm publish",
+        message: "Are you sure want to publish this lesson?",
+        onAction: () => {
+          return this.postAssignments()
+            .then(() => Promise.resolve())
+            .catch(() => Promise.reject())
+        }
+      }
+    });
     this.postAssignments();
   }
 
