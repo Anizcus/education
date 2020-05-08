@@ -46,7 +46,8 @@ namespace Server.Controllers
             }
          );
       }
-
+      
+      [AllowAnonymous]
       [HttpGet("/users")]
       public async Task<IActionResult> Get()
       {

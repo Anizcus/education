@@ -21,6 +21,7 @@ namespace Server.Controllers
          _lessonService = lessonService;
       }
 
+      [AllowAnonymous]
       [HttpGet("/lesson/categories")]
       public async Task<IActionResult> GetCategories()
       {
@@ -38,6 +39,7 @@ namespace Server.Controllers
          return Ok(payload);
       }
 
+      [AllowAnonymous]
       [HttpGet("/lesson/types")]
       public async Task<IActionResult> GetTypesByCategory([FromQuery] RequestById request)
       {
