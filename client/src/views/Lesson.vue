@@ -260,7 +260,6 @@ class Lesson extends Vue {
         }
       }
     });
-    this.postAssignments();
   }
 
   private Approve() {
