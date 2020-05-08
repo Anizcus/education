@@ -45,7 +45,8 @@ namespace Server.Stores.Configurations
             new Permission { Name = $"{ lesson }.{ nameof(PermissionEnum.Lesson.View) }", Id = (uint) PermissionEnum.Lesson.View },
             new Permission { Name = $"{ lesson }.{ nameof(PermissionEnum.Lesson.Create) }", Id = (uint) PermissionEnum.Lesson.Create },
             new Permission { Name = $"{ lesson }.{ nameof(PermissionEnum.Lesson.Update) }", Id = (uint) PermissionEnum.Lesson.Update },
-            new Permission { Name = $"{ lesson }.{ nameof(PermissionEnum.Lesson.Delete) }", Id = (uint) PermissionEnum.Lesson.Delete }
+            new Permission { Name = $"{ lesson }.{ nameof(PermissionEnum.Lesson.Delete) }", Id = (uint) PermissionEnum.Lesson.Delete },
+            new Permission { Name = $"{ lesson }.{ nameof(PermissionEnum.Lesson.Authorize) }", Id = (uint) PermissionEnum.Lesson.Authorize }
          );
       }
    }

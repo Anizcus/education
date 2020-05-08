@@ -59,7 +59,10 @@ namespace Server.Stores.Configurations
             new RolePermission { RoleId = (uint)RoleEnum.Student, PermissionId = (uint)PermissionEnum.User.View },
             new RolePermission { RoleId = (uint)RoleEnum.Student, PermissionId = (uint)PermissionEnum.User.Create },
             new RolePermission { RoleId = (uint)RoleEnum.Student, PermissionId = (uint)PermissionEnum.User.Update },
-            new RolePermission { RoleId = (uint)RoleEnum.Student, PermissionId = (uint)PermissionEnum.User.Delete }
+            new RolePermission { RoleId = (uint)RoleEnum.Student, PermissionId = (uint)PermissionEnum.User.Delete },
+            new RolePermission { RoleId = (uint)RoleEnum.Administrator, PermissionId = (uint)PermissionEnum.Lesson.Authorize },
+            new RolePermission { RoleId = (uint)RoleEnum.Teacher, PermissionId = (uint)PermissionEnum.Lesson.Update },
+            new RolePermission { RoleId = (uint)RoleEnum.Teacher, PermissionId = (uint)PermissionEnum.Lesson.Create }
          );
       }
    }

@@ -9,7 +9,8 @@ namespace Server.Enums
 
       public enum Lesson : uint
       {
-         View = 11, Create, Update, Delete
+         View = 11, Create, Update, Delete,
+         Authorize
       }
    }
 }
