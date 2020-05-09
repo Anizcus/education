@@ -175,36 +175,49 @@ class LessonList extends Vue {
     const rejected = this.lessons
       .filter(item => item.state === "Rejected")
       .map(this.renderItem);
+    const owned = this.profile && this.lessons
+      .filter(item => item.ownerId === this.profile.id)
+      .map(this.renderItem) || '';
 
-    const tabCreated = this.profile.role !== 'Teacher' ? (
+    const tabCreated = this.profile.role !== 'Student' ? (
         <el-tab-pane label={`Created (${created.length})`}>
           {created}
         </el-tab-pane>)
       : '';
 
-    const tabWaiting = this.profile.role !== 'Student' ? (
+    const tabWaiting = this.profile.role === 'Administrator' ? (
         <el-tab-pane label={`Waiting (${waiting.length})`}>
           {waiting}
         </el-tab-pane>)
       : '';
 
-    const tabRejected = this.profile.role !== 'Student' ? (
+    const tabRejected = this.profile.role === 'Administrator' ? (
         <el-tab-pane label={`Rejected (${rejected.length})`}>
           {rejected}
         </el-tab-pane>)
       : '';
+
+    const tabOwned = this.profile.role === 'Teacher' ? (
+        <el-tab-pane label={`Owned (${owned.length})`}>
+          {owned}
+        </el-tab-pane>)
+      : '';
+
+    const tabPublished = (
+      <el-tab-pane label={`Published (${published.length})`}>
+        {published}
+      </el-tab-pane>);
 
     return (
       <el-row>
         <el-col>
           {addLessonButton}
           <el-tabs type="card" stretch={true}>
-            <el-tab-pane label={`Published (${published.length})`}>
-              {published}
-            </el-tab-pane>
+            {tabPublished}
             {tabCreated}
             {tabWaiting}
             {tabRejected}
+            {tabOwned}
           </el-tabs>
         </el-col>
       </el-row>
