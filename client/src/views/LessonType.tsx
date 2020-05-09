@@ -50,7 +50,7 @@ class LessonType extends Vue {
     if (!this.types.length) {
       return (
         <el-card shadow="hover" style={{ textAlign: "center" }}>
-          No data
+          No types detected
         </el-card>
       );
     }

@@ -1,15 +1,25 @@
 <template>
   <el-row>
     <el-col>
-      <el-form :model="form" :rules="rule" ref="form">
+      <el-form label-position="top" :model="form" :rules="rule" ref="form">
         <el-form-item label="Username" prop="username">
           <el-input v-model="form.username"></el-input>
         </el-form-item>
         <el-form-item label="Password" prop="password">
-          <el-input v-model="form.password"></el-input>
+          <el-input v-model="form.password" :show-password="true"></el-input>
         </el-form-item>
         <el-form-item label="Confirm password" prop="confirm">
-          <el-input v-model="form.confirm"></el-input>
+          <el-input v-model="form.confirm" :show-password="true"></el-input>
+        </el-form-item>
+        <el-form-item label="Role" prop="role">
+          <el-select style="width: 100%;" :loading="roleLoading" :clearable="true" v-model="form.role" placeholder="Select a role">
+            <el-option
+              v-for="role in roles"
+              :key="role.id"
+              :label="role.name"
+              :value="role.id">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit" :loading="loading">
@@ -26,23 +36,34 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { FormRefModel } from "../models/refs/form.ref.model";
 import { RegisterFormModel } from "../models/forms/register.form.model";
-import { mapActions, ActionMethod } from "vuex";
+import { mapActions, ActionMethod, mapGetters } from "vuex";
+import { NameServiceModel } from "../models/services/name.service.model";
 
 @Component({
   methods: {
     ...mapActions("user", {
-      register: "register"
+      register: "register",
+      getRoles: "getRoles"
+    })
+  },
+  computed: {
+    ...mapGetters("user", {
+      roles: "roles"
     })
   }
 })
 class Register extends Vue {
   private register!: ActionMethod;
+  private getRoles!: ActionMethod;
   private form: RegisterFormModel = {
     username: "",
     password: "",
-    confirm: ""
+    confirm: "",
+    role: ""
   };
   private loading = false;
+  private roleLoading = true;
+  private roles!: NameServiceModel[];
   private rule = {
     username: [
       { required: true, message: "Please input username", trigger: "blur" }
@@ -80,12 +101,19 @@ class Register extends Vue {
         },
         trigger: "blur"
       }
-    ]
+    ],
+    role: [{ required: true, message: "Please select a role!", trigger: "blur" }]
   };
 
   public $refs!: {
     form: FormRefModel;
   };
+
+  public mounted() {
+    this.getRoles({forRegistration: true})
+      .then(() => this.roleLoading = false)
+      .catch(() => this.roleLoading = false);
+  }
 
   private onSubmit() {
     if (this.loading) {
@@ -99,7 +127,8 @@ class Register extends Vue {
       .then(() =>
         this.register({
           username: this.form.username,
-          password: this.form.password
+          password: this.form.password,
+          role: Number(this.form.role)
         })
       )
       .then(response => {

@@ -9,7 +9,7 @@ namespace Server.Services.Interfaces
    {
       Task<NameAnswer> GetAsync(uint id);
       Task<NameAnswer> GetAsync(IEnumerable<Claim> claims);
-      Task<NameAnswer> SignUpAsync(string username, string password);
+      Task<NameAnswer> SignUpAsync(string username, string password, uint role);
       Task<SessionAnswer> SignInAsync(string username, string password);
       Task<SessionAnswer> RestoreAsync(string session, string account);
       Task<ProfileAnswer> GetProfileAsync(uint userId);

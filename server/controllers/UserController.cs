@@ -65,13 +65,15 @@ namespace Server.Controllers
 
       [AllowAnonymous]
       [HttpGet("/user/roles")]
-      public async Task<IActionResult> GetRoles()
+      public async Task<IActionResult> GetRoles([FromQuery] RoleRequest request)
       {
-         var users = await _userService.GetAsync();
+         var roles = request.ForRegistration 
+            ? await _userService.GetRolesForRegisterAsync()
+            : await _userService.GetRolesAsync();
 
-         var payload = users.Select(user => new NamePayload{
-            Id = user.Id,
-            Name = user.Name,
+         var payload = roles.Select(role => new NamePayload{
+            Id = role.Id,
+            Name = role.Name,
          }).ToList();
 
          return Ok(payload);
@@ -81,7 +83,7 @@ namespace Server.Controllers
       [HttpPost("/user/signup")]
       public async Task<IActionResult> SignUp([FromBody] RequestSignUp request)
       {
-         var user = await _userService.SignUpAsync(request.Username, request.Password);
+         var user = await _userService.SignUpAsync(request.Username, request.Password, request.Role);
 
          if (!String.IsNullOrEmpty(user.Error))
          {

@@ -12,7 +12,7 @@
               <el-link :href="href" type="primary">{{ route.name }}</el-link>
             </router-link>
           </p>
-          <p v-else>Hello {{ session.name }} (<el-link href="/" @click="() => logout()">Logout</el-link>)!</p>
+          <p v-else>Hello {{ session.name }} (<el-link @click="() => logout()">Logout</el-link>)!</p>
         </el-col>
       </el-row>
     </el-header>

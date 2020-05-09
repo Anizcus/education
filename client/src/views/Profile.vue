@@ -2,6 +2,15 @@
   <div v-if="loading">
     <el-button :loading="loading" type="info" :circle="true"></el-button>
   </div>
+  <div v-else-if="!Object.keys(profile).length" @click="nani">
+    <el-alert
+      title="You must be logged in to view other users!"
+      type="error"
+      :show-icon="true"
+      :closable="false"
+    >
+    </el-alert>
+  </div>
   <div v-else>
     <el-row>
       <el-col :span="12" style="padding-right: 10px;">
@@ -129,6 +138,10 @@ class Profile extends Vue {
       .catch(() => {
         this.loading = false;
       });
+  }
+
+  private nani(){
+     console.log(this.profile)
   }
 
   private goToLesson(lessonId: string) {

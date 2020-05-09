@@ -3,7 +3,7 @@ import Component from "vue-class-component";
 import { VNode } from "vue/types/umd";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
 import { LessonListModel } from "@/models/stores/lesson.store.model";
-import { ProfileModel } from '@/models/stores/user.store.model';
+import { ProfileModel, SessionModel } from '@/models/stores/user.store.model';
 
 @Component({
   methods: {
@@ -12,6 +12,9 @@ import { ProfileModel } from '@/models/stores/user.store.model';
     }),
     ...mapActions("modal", {
       setLessonModalVisible: "setLessonModalVisible"
+    }),
+    ...mapActions("user", {
+      getProfile: "getProfile"
     })
   },
   computed: {
@@ -19,15 +22,18 @@ import { ProfileModel } from '@/models/stores/user.store.model';
       lessons: "lessons"
     }),
     ...mapGetters("user", {
-      profile: "profile"
+      profile: "profile",
+      session: "session"
     })
   }
 })
 class LessonList extends Vue {
   private getLessons!: ActionMethod;
   private setLessonModalVisible!: ActionMethod;
+  private getProfile!: ActionMethod;
   private lessons!: LessonListModel[];
   private profile!: ProfileModel;
+  private session!: SessionModel;
   private loading = true;
   private dateOptions = {
     weekday: "long",
@@ -44,6 +50,9 @@ class LessonList extends Vue {
       .finally(() => {
         this.loading = false;
       });
+    if (!this.profile && this.session) {
+      this.getProfile({ id: this.session.id});
+    }
   }
 
   private onLessonCreate() {
@@ -143,7 +152,7 @@ class LessonList extends Vue {
       </el-button>
     ) : '';
 
-    if (!this.lessons.length) {
+    if (!this.lessons || !this.lessons.length) {
       return (
         <el-row>
           {addLessonButton}
@@ -167,6 +176,24 @@ class LessonList extends Vue {
       .filter(item => item.state === "Rejected")
       .map(this.renderItem);
 
+    const tabCreated = this.profile.role !== 'Teacher' ? (
+        <el-tab-pane label={`Created (${created.length})`}>
+          {created}
+        </el-tab-pane>)
+      : '';
+
+    const tabWaiting = this.profile.role !== 'Student' ? (
+        <el-tab-pane label={`Waiting (${waiting.length})`}>
+          {waiting}
+        </el-tab-pane>)
+      : '';
+
+    const tabRejected = this.profile.role !== 'Student' ? (
+        <el-tab-pane label={`Rejected (${rejected.length})`}>
+          {rejected}
+        </el-tab-pane>)
+      : '';
+
     return (
       <el-row>
         <el-col>
@@ -175,15 +202,9 @@ class LessonList extends Vue {
             <el-tab-pane label={`Published (${published.length})`}>
               {published}
             </el-tab-pane>
-            <el-tab-pane label={`Created (${created.length})`}>
-              {created}
-            </el-tab-pane>
-            <el-tab-pane label={`Waiting (${waiting.length})`}>
-              {waiting}
-            </el-tab-pane>
-            <el-tab-pane label={`Rejected (${rejected.length})`}>
-              {rejected}
-            </el-tab-pane>
+            {tabCreated}
+            {tabWaiting}
+            {tabRejected}
           </el-tabs>
         </el-col>
       </el-row>

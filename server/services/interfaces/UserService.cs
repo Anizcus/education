@@ -96,7 +96,7 @@ namespace Server.Services.Interfaces
          };
       }
 
-      public async Task<NameAnswer> SignUpAsync(string username, string password)
+      public async Task<NameAnswer> SignUpAsync(string username, string password, uint role)
       {
          if (String.IsNullOrEmpty(username) || username.Length > 64)
          {
@@ -132,7 +132,8 @@ namespace Server.Services.Interfaces
          {
             Name = username,
             Salt = salt,
-            Password = hash
+            Password = hash,
+            RoleId = role
          };
 
          user = await _userStore.CreateAsync(user);
@@ -309,10 +310,12 @@ namespace Server.Services.Interfaces
          if (_userStore.Any()) {
             var roles = await _userStore.GetRolesAsync();
 
-            return roles.Select(role => new NameAnswer {
-               Id = role.Id,
-               Name = role.Name
-            }).ToList();
+            return roles
+               .Where(role => role.Id != (uint) RoleEnum.Administrator)
+               .Select(role => new NameAnswer {
+                  Id = role.Id,
+                  Name = role.Name
+               }).ToList();
          } else {
             var administrator = new NameAnswer {
                Id = (uint) RoleEnum.Administrator,

@@ -4,5 +4,6 @@ namespace Server.Models.Requests
    {
       public string Username { get; set; }
       public string Password { get; set; }
+      public uint Role { get; set; }
    }
 }

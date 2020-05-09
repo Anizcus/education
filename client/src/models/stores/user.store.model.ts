@@ -1,4 +1,5 @@
 import { LessonModel } from "./lesson.store.model";
+import { NameServiceModel } from '../services/name.service.model';
 
 interface SessionModel {
   id: number;
@@ -27,6 +28,7 @@ interface UserStoreModel {
   session?: SessionModel;
   profile?: ProfileModel;
   users: ProfileListModel[];
+  roles: NameServiceModel[];
 }
 
 export { UserStoreModel, SessionModel, ProfileModel, ProfileListModel };

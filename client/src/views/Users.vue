@@ -21,23 +21,28 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { mapActions, ActionMethod } from "vuex";
 import { ProfileListModel } from "../models/stores/user.store.model";
+import { NameServiceModel } from "../models/services/name.service.model";
 
 @Component({
   methods: {
     ...mapActions("user", {
-      getUsers: "getUsers"
+      getUsers: "getUsers",
+      getRoles: "getRoles",
     })
   }
 })
 class Users extends Vue {
   private getUsers!: ActionMethod;
+  private getRoles!: ActionMethod;
   private users: ProfileListModel[] = [];
+  private roles: NameServiceModel[] = [];
   private loading = true;
 
   public mounted() {
-    this.getUsers()
-      .then((response: ProfileListModel[]) => {
-        this.users = response;
+    Promise.all([this.getUsers(), this.getRoles({forRegistration: false})])
+      .then(([users, roles]) => {
+        this.users = users;
+        this.roles = roles;
         this.loading = false;
       })
       .catch(() => {
