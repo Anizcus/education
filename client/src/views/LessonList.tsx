@@ -179,25 +179,25 @@ class LessonList extends Vue {
       .filter(item => item.ownerId === this.profile.id)
       .map(this.renderItem) || '';
 
-    const tabCreated = this.profile.role !== 'Student' ? (
+    const tabCreated = this.profile && this.profile.role !== 'Student' ? (
         <el-tab-pane label={`Created (${created.length})`}>
           {created}
         </el-tab-pane>)
       : '';
 
-    const tabWaiting = this.profile.role === 'Administrator' ? (
+    const tabWaiting = this.profile && this.profile.role === 'Administrator' ? (
         <el-tab-pane label={`Waiting (${waiting.length})`}>
           {waiting}
         </el-tab-pane>)
       : '';
 
-    const tabRejected = this.profile.role === 'Administrator' ? (
+    const tabRejected = this.profile && this.profile.role === 'Administrator' ? (
         <el-tab-pane label={`Rejected (${rejected.length})`}>
           {rejected}
         </el-tab-pane>)
       : '';
 
-    const tabOwned = this.profile.role === 'Teacher' ? (
+    const tabOwned = this.profile && this.profile.role === 'Teacher' ? (
         <el-tab-pane label={`Owned (${owned.length})`}>
           {owned}
         </el-tab-pane>)
