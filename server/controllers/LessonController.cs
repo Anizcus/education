@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Server.Attributes;
+using Server.Enums;
 using Server.Models.Payloads;
 using Server.Models.Requests;
 using Server.Services.Interfaces;
@@ -188,6 +190,7 @@ namespace Server.Controllers
          return Ok(payload);
       }
 
+      [Permission((uint)PermissionEnum.Lesson.Authorize)]
       [HttpPost("/lesson/status")]
       public async Task<IActionResult> PostLessonStatus([FromBody] StatusRequest request)
       {
