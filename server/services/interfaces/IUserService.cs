@@ -14,5 +14,7 @@ namespace Server.Services.Interfaces
       Task<SessionAnswer> RestoreAsync(string session, string account);
       Task<ProfileAnswer> GetProfileAsync(uint userId);
       Task<IList<UserListAnswer>> GetAsync();
+      Task<IList<NameAnswer>> GetRolesAsync();
+      Task<IList<NameAnswer>> GetRolesForRegisterAsync();
    }
 }

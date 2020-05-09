@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Server.Enums;
 using Server.Services.Answers;
 using Server.Stores.Entities;
 using Server.Stores.Interfaces;
@@ -300,6 +301,36 @@ namespace Server.Services.Interfaces
             Name = user.Name,
             Role = user.Role.Name,
             Level = user.Level
+         }).ToList();
+      }
+
+      public async Task<IList<NameAnswer>> GetRolesForRegisterAsync()
+      {
+         if (_userStore.Any()) {
+            var roles = await _userStore.GetRolesAsync();
+
+            return roles.Select(role => new NameAnswer {
+               Id = role.Id,
+               Name = role.Name
+            }).ToList();
+         } else {
+            var administrator = new NameAnswer {
+               Id = (uint) RoleEnum.Administrator,
+               Name = nameof(RoleEnum.Administrator)
+            };
+
+            var list = new List<NameAnswer> { administrator };
+
+            return list;
+         }
+      }
+
+      public async Task<IList<NameAnswer>> GetRolesAsync() {
+          var roles = await _userStore.GetRolesAsync();
+
+         return roles.Select(role => new NameAnswer {
+            Id = role.Id,
+            Name = role.Name
          }).ToList();
       }
    }

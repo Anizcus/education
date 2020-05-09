@@ -78,5 +78,15 @@ namespace Server.Stores.Interfaces
             .FirstOrDefault()
             .ToList();
       }
+
+      public bool Any()
+      {
+         return _store.Users.Any();
+      }
+
+      public async Task<IList<Role>> GetRolesAsync()
+      {
+         return await _store.Roles.ToListAsync();
+      }
    }
 }

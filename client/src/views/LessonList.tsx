@@ -3,6 +3,7 @@ import Component from "vue-class-component";
 import { VNode } from "vue/types/umd";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
 import { LessonListModel } from "@/models/stores/lesson.store.model";
+import { ProfileModel } from '@/models/stores/user.store.model';
 
 @Component({
   methods: {
@@ -16,6 +17,9 @@ import { LessonListModel } from "@/models/stores/lesson.store.model";
   computed: {
     ...mapGetters("lesson", {
       lessons: "lessons"
+    }),
+    ...mapGetters("user", {
+      profile: "profile"
     })
   }
 })
@@ -23,6 +27,7 @@ class LessonList extends Vue {
   private getLessons!: ActionMethod;
   private setLessonModalVisible!: ActionMethod;
   private lessons!: LessonListModel[];
+  private profile!: ProfileModel;
   private loading = true;
   private dateOptions = {
     weekday: "long",
@@ -127,9 +132,21 @@ class LessonList extends Vue {
       );
     }
 
+    const addLessonButton = this.profile 
+      && this.profile.role === 'Teacher' ? (
+        <el-button
+        style="margin-bottom: 14px;"
+        plain={true}
+        type="primary"
+        onClick={() => this.onLessonCreate()}>
+        <span>Add a new lesson</span>
+      </el-button>
+    ) : '';
+
     if (!this.lessons.length) {
       return (
         <el-row>
+          {addLessonButton}
           <el-card shadow="hover" style={{ textAlign: "center" }}>
             No data
           </el-card>
@@ -153,14 +170,7 @@ class LessonList extends Vue {
     return (
       <el-row>
         <el-col>
-          <el-button
-            style="margin-bottom: 14px;"
-            plain={true}
-            type="primary"
-            onClick={() => this.onLessonCreate()}
-          >
-            Add a new lesson
-          </el-button>
+          {addLessonButton}
           <el-tabs type="card" stretch={true}>
             <el-tab-pane label={`Published (${published.length})`}>
               {published}

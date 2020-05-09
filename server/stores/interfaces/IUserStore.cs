@@ -11,5 +11,7 @@ namespace Server.Stores.Interfaces {
       Task<User> CreateAsync(User entity);
       Task<IList<Permission>> GetPermissionsAsync(uint id);
       Task<User> GetProfileAsync(uint userId);
+      Task<IList<Role>> GetRolesAsync();
+      bool Any();
    }
 }

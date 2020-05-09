@@ -64,6 +64,20 @@ namespace Server.Controllers
       }
 
       [AllowAnonymous]
+      [HttpGet("/user/roles")]
+      public async Task<IActionResult> GetRoles()
+      {
+         var users = await _userService.GetAsync();
+
+         var payload = users.Select(user => new NamePayload{
+            Id = user.Id,
+            Name = user.Name,
+         }).ToList();
+
+         return Ok(payload);
+      }
+
+      [AllowAnonymous]
       [HttpPost("/user/signup")]
       public async Task<IActionResult> SignUp([FromBody] RequestSignUp request)
       {

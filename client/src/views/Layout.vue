@@ -12,7 +12,7 @@
               <el-link :href="href" type="primary">{{ route.name }}</el-link>
             </router-link>
           </p>
-          <p v-else>Hello {{ session.name }}!</p>
+          <p v-else>Hello {{ session.name }} (<el-link href="/" @click="() => logout()">Logout</el-link>)!</p>
         </el-col>
       </el-row>
     </el-header>
@@ -42,7 +42,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions, ActionMethod } from "vuex";
 import { SessionModel } from "../models/stores/user.store.model";
 
 @Component({
@@ -50,10 +50,16 @@ import { SessionModel } from "../models/stores/user.store.model";
     ...mapGetters("user", {
       session: "session"
     })
+  },
+  methods: {
+    ...mapActions("user", {
+      logout: "logout"
+    })
   }
 })
 class Main extends Vue {
   private session!: SessionModel;
+  private logout!: ActionMethod;
 }
 export default Main;
 </script>
