@@ -12,7 +12,7 @@
               <el-link :href="href" type="primary">{{ route.name }}</el-link>
             </router-link>
           </p>
-          <p v-else>Hello {{ session.name }} (<el-link @click="() => logout()">Logout</el-link>)!</p>
+          <p v-else>Hello {{ session.name }} (<el-link @click="() => onLogout()">Logout</el-link>)!</p>
         </el-col>
       </el-row>
     </el-header>
@@ -60,6 +60,11 @@ import { SessionModel } from "../models/stores/user.store.model";
 class Main extends Vue {
   private session!: SessionModel;
   private logout!: ActionMethod;
+
+  private onLogout() {
+    this.logout();
+    this.$router.push({ name: 'Lesson Category' });
+  }
 }
 export default Main;
 </script>
