@@ -4,7 +4,7 @@ namespace Server.Enums
    {
       public enum User : uint
       {
-         View = 1, Create, Update, Delete
+         View = 1, Create, Update, Delete, Modify
       }
 
       public enum Lesson : uint

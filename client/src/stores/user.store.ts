@@ -11,7 +11,7 @@ import { LoginServiceModel } from "@/models/services/login.service.model";
 import { Service } from "@/services/service";
 import { IdServiceModel } from "@/models/services/id.service.model";
 import { NameServiceModel } from '@/models/services/name.service.model';
-import { RoleRequestModel } from '@/models/services/role.request.model';
+import { RoleRequestModel, ModifyUserRequestModel } from '@/models/services/role.request.model';
 
 const namespaced = true;
 
@@ -34,10 +34,10 @@ const mutations: MutationTree<UserStoreModel> = {
     state.profile = { ...profile };
   },
   insertUsers(state, profileList: ProfileListModel[]) {
-    state.users = { ...profileList };
+    state.users = [ ...profileList ];
   },
   insertRoles(state, roleList: NameServiceModel[]) {
-    state.roles = { ...roleList };
+    state.roles = [ ...roleList ];
   }
 };
 
@@ -107,6 +107,13 @@ const actions: ActionTree<UserStoreModel, {}> = {
   async getRoles(context, model: RoleRequestModel) {
     return await UserService.getRoles(model).then(response => {
       context.commit("insertRoles", response);
+
+      return response;
+    });
+  },
+  async modifyStatus(context, model: ModifyUserRequestModel) {
+    return await UserService.postUserModify(model).then(response => {
+      context.dispatch("getUsers");
 
       return response;
     });

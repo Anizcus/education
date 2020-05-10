@@ -85,6 +85,13 @@ namespace Server.Services.Interfaces
             };
          }
 
+         if (user.Blocked == true) {
+            return new SessionAnswer
+            {
+               Error = "Sorry, but you are blocked by administrator."
+            };
+         }
+
          var permissions = await _userStore.GetPermissionsAsync(user.RoleId);
          var token = CreateToken(user, permissions);
 
@@ -260,20 +267,24 @@ namespace Server.Services.Interfaces
       {
          var user = await _userStore.GetProfileAsync(userId);
 
-         if (user == null) {
-            return new ProfileAnswer {
+         if (user == null)
+         {
+            return new ProfileAnswer
+            {
                Error = "User not found!"
             };
          }
 
-         return new  ProfileAnswer {
+         return new ProfileAnswer
+         {
             Id = user.Id,
             Name = user.Name,
             NextExperience = (user.Level + 1) * 15,
             Level = user.Level,
             Role = user.Role.Name,
             Experience = user.Experience,
-            Lessons = user.UserLessons.Select(lesson => new LessonAnswer{
+            Lessons = user.UserLessons.Select(lesson => new LessonAnswer
+            {
                Id = lesson.Lesson.Id,
                Name = lesson.Lesson.Name,
                Description = lesson.Lesson.Description,
@@ -281,7 +292,7 @@ namespace Server.Services.Interfaces
                OwnerName = lesson.Lesson.Owner.Name,
                Type = lesson.Lesson.Type.Name,
                State = lesson.Lesson.State.Name,
-               Badge = lesson.Lesson.Badge, 
+               Badge = lesson.Lesson.Badge,
                Status = lesson.Lesson.Status,
                Category = lesson.Lesson.Category.Name,
                Progress = lesson.Progress.Name
@@ -293,11 +304,13 @@ namespace Server.Services.Interfaces
       {
          var users = await _userStore.GetAsync();
 
-         if (users == null) {
+         if (users == null)
+         {
             return new List<UserListAnswer>();
          }
 
-         return users.Select(user => new UserListAnswer {
+         return users.Select(user => new UserListAnswer
+         {
             Id = user.Id,
             Name = user.Name,
             Role = user.Role.Name,
@@ -307,18 +320,23 @@ namespace Server.Services.Interfaces
 
       public async Task<IList<NameAnswer>> GetRolesForRegisterAsync()
       {
-         if (_userStore.Any()) {
+         if (_userStore.Any())
+         {
             var roles = await _userStore.GetRolesAsync();
 
             return roles
-               .Where(role => role.Id != (uint) RoleEnum.Administrator)
-               .Select(role => new NameAnswer {
+               .Where(role => role.Id != (uint)RoleEnum.Administrator)
+               .Select(role => new NameAnswer
+               {
                   Id = role.Id,
                   Name = role.Name
                }).ToList();
-         } else {
-            var administrator = new NameAnswer {
-               Id = (uint) RoleEnum.Administrator,
+         }
+         else
+         {
+            var administrator = new NameAnswer
+            {
+               Id = (uint)RoleEnum.Administrator,
                Name = nameof(RoleEnum.Administrator)
             };
 
@@ -328,13 +346,39 @@ namespace Server.Services.Interfaces
          }
       }
 
-      public async Task<IList<NameAnswer>> GetRolesAsync() {
-          var roles = await _userStore.GetRolesAsync();
+      public async Task<IList<NameAnswer>> GetRolesAsync()
+      {
+         var roles = await _userStore.GetRolesAsync();
 
-         return roles.Select(role => new NameAnswer {
+         return roles.Select(role => new NameAnswer
+         {
             Id = role.Id,
             Name = role.Name
          }).ToList();
+      }
+
+      public async Task<NameAnswer> PostModifyUserStatusAsync(uint userId, uint role, bool isBlocked)
+      {
+         var user = await _userStore.GetAsync(userId);
+
+         user.RoleId = role;
+         user.Blocked = isBlocked;
+
+         var updated = await _userStore.UpdateAsync(user);
+
+         if (updated == null)
+         {
+            return new NameAnswer
+            {
+               Error = "Failed to update user status."
+            };
+         }
+
+         return new NameAnswer
+         {
+            Id = updated.Id,
+            Name = updated.Name
+         };
       }
    }
 }

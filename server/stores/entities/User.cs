@@ -10,6 +10,7 @@ namespace Server.Stores.Entities
       public uint Level { get; set; }
       public uint Experience { get; set; }
       public string Name { get; set; }
+      public bool Blocked { get; set; }
       public byte[] Password { get; set; }
       public byte[] Salt { get; set; }
       public DateTimeOffset Created { get; set; }

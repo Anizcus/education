@@ -88,5 +88,13 @@ namespace Server.Stores.Interfaces
       {
          return await _store.Roles.ToListAsync();
       }
+
+      public async Task<User> UpdateAsync(User user)
+      {
+         var updated = _store.Users.Update(user);
+         var saved = await _store.SaveChangesAsync();
+
+         return updated.Entity;
+      }
    }
 }

@@ -8,7 +8,7 @@ import {
   ProfileModel,
   ProfileListModel
 } from "@/models/stores/user.store.model";
-import { RoleRequestModel } from '@/models/services/role.request.model';
+import { RoleRequestModel, ModifyUserRequestModel } from '@/models/services/role.request.model';
 
 const UserService = {
   get: (model: IdServiceModel): Promise<NameServiceModel> => {
@@ -40,6 +40,11 @@ const UserService = {
   getRoles: (model: RoleRequestModel): Promise<NameServiceModel[]> => {
     return Service.get("user/roles", {
       params: model
+    });
+  },
+  postUserModify(model: ModifyUserRequestModel) {
+    return Service.post("user/modify/status", {
+      ...model
     });
   }
 };

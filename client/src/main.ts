@@ -34,7 +34,8 @@ import {
   Progress,
   Tooltip,
   Table,
-  TableColumn
+  TableColumn,
+  Switch
 } from "element-ui";
 
 Vue.config.productionTip = false;
@@ -70,6 +71,7 @@ Vue.use(Progress);
 Vue.use(Tooltip);
 Vue.use(Table);
 Vue.use(TableColumn);
+Vue.use(Switch);
 
 new Vue({
   router: Router,

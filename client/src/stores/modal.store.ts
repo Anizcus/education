@@ -8,6 +8,7 @@ interface ModalStoreModel {
   authorizeModal: boolean;
   confirmModal: boolean;
   answerModal: boolean;
+  manageUserModal: boolean;
   data?: object;
   stateName: string;
 }
@@ -43,6 +44,11 @@ const mutations: MutationTree<ModalStoreModel> = {
     state.data = { ...payload.data };
     state.stateName = payload.stateName;
     state.confirmModal = payload.visible;
+  },
+  toggleManageUser(state, payload: ModalPayload) {
+    state.data = { ...payload.data };
+    state.stateName = payload.stateName;
+    state.manageUserModal = payload.visible;
   }
 };
 
@@ -61,6 +67,9 @@ const getters: GetterTree<ModalStoreModel, {}> = {
   },
   confirmModalVisible(state) {
     return state.confirmModal;
+  },
+  manageUserModalVisible(state) {
+    return state.manageUserModal;
   },
   modalState(state) {
     return state.stateName;
@@ -85,6 +94,9 @@ const actions: ActionTree<ModalStoreModel, {}> = {
   },
   setConfirmModalVisible(context, payload: ModalPayload) {
     context.commit("toggleConfirm", payload);
+  },
+  setManageUserModalVisible(context, payload: ModalPayload) {
+    context.commit("toggleManageUser", payload);
   }
 };
 
@@ -94,6 +106,7 @@ const state: ModalStoreModel = {
   lessonModal: false,
   authorizeModal: false,
   answerModal: false,
+  manageUserModal: false,
   data: undefined,
   stateName: ""
 };

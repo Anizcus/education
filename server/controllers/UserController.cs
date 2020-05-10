@@ -156,6 +156,47 @@ namespace Server.Controllers
          );
       }
 
+      [Permission((uint) PermissionEnum.User.Modify)]
+      [HttpPost("/user/modify/status")]
+      public async Task<IActionResult> ModifyUser([FromBody] ModifyUserRequest request)
+      {
+         var user = HttpContext.User.Claims.ElementAt(0);
+
+         if (uint.Parse(user.Value) == request.UserId) {
+            return BadRequest(
+               new ErrorPayload
+               {
+                  Error = "You can't modify yourself!"
+               }
+            );
+         }
+
+         var status = await _userService
+            .PostModifyUserStatusAsync(
+               request.UserId, 
+               request.RoleId, 
+               request.IsBlocked
+         );
+
+         if (!String.IsNullOrEmpty(status.Error))
+         {
+            return BadRequest(
+               new ErrorPayload
+               {
+                  Error = status.Error
+               }
+            );
+         }
+
+         return Ok(
+            new NamePayload
+            {
+               Id = status.Id,
+               Name = status.Name
+            }
+         );
+      }
+
       [HttpGet("/user/profile")]
       public async Task<IActionResult> Profile([FromQuery] RequestById request)
       {

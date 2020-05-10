@@ -15,6 +15,7 @@ namespace Server.Services.Interfaces
       Task<ProfileAnswer> GetProfileAsync(uint userId);
       Task<IList<UserListAnswer>> GetAsync();
       Task<IList<NameAnswer>> GetRolesAsync();
+      Task<NameAnswer> PostModifyUserStatusAsync(uint userId, uint role, bool isBlocked);
       Task<IList<NameAnswer>> GetRolesForRegisterAsync();
    }
 }

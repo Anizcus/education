@@ -25,6 +25,10 @@ namespace Server.Stores.Configurations
             .HasColumnName("experience")
             .HasColumnType("int(10) unsigned");
 
+         builder.Property(e => e.Blocked)
+            .HasColumnName("blocked")
+            .HasColumnType("boolean");
+
          builder.Property(e => e.Name)
             .HasColumnName("name")
             .HasColumnType("varchar(64)")
