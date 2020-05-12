@@ -36,12 +36,14 @@ import { mapActions, ActionMethod } from "vuex";
 @Component({
   methods: {
     ...mapActions("user", {
-      login: "login"
-    })
+      login: "login",
+      getProfile: "getProfile"
+    }),
   }
 })
 class Login extends Vue {
   private login!: ActionMethod;
+  private getProfile!: ActionMethod;
   private form: LoginFormModel = {
     username: "",
     password: ""
@@ -87,7 +89,13 @@ class Login extends Vue {
       .then(user => {
         this.alert.message = `You have successfully logged in as ${user.name}!`;
         this.alert.type = "success";
-        this.loading = false;
+        this.getProfile({ id: user.id})
+          .then(() => {
+            this.loading = false;
+          })
+          .catch(() => {
+            this.loading = false;
+          });
       })
       .catch(error => {
         this.alert.message = error ?? error.response.data.error;

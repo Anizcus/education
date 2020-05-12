@@ -2,7 +2,7 @@
   <div v-if="loading">
     <el-button :loading="loading" type="info" :circle="true"></el-button>
   </div>
-  <div v-else-if="!Object.keys(profile).length" @click="nani">
+  <div v-else-if="!session" @click="nani">
     <el-alert
       title="You must be logged in to view other users!"
       type="error"
@@ -121,7 +121,8 @@ import { ProfileModel } from "../models/stores/user.store.model";
   },
   computed: {
     ...mapGetters("user", {
-      profile: "profile"
+      profile: "profile",
+      session: "session"
     })
   }
 })

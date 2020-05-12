@@ -69,13 +69,16 @@ class Users extends Vue {
     Promise.all([
       this.getUsers(), 
       this.getRoles({forRegistration: false}), 
-      this.getProfile({ id: this.session.id})
     ]).then(() => {
         this.loading = false;
       })
       .catch(() => {
         this.loading = false;
     });
+
+    if (this.session) {
+      this.getProfile({ id: this.session.id});
+    }
   }
 
   private onProfileClick(index: number) {
