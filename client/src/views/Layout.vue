@@ -2,16 +2,14 @@
   <el-container class="container">
     <el-header class="header">
       <el-row>
-        <el-col :span="5" :offset="19">
-          <p v-if="!session">
-            <router-link to="/user/login/" v-slot="{ href, route }">
-              <el-link :href="href" type="primary">{{ route.name }}</el-link>
-            </router-link>
-            <span> or </span>
-            <router-link to="/user/register/" v-slot="{ href, route }">
-              <el-link :href="href" type="primary">{{ route.name }}</el-link>
-            </router-link>
-          </p>
+        <el-col :span="14" :offset="5">
+          <i-search-lesson></i-search-lesson>
+        </el-col>
+        <el-col :span="4" :offset="1">
+          <el-button-group v-if="!session">
+            <el-button icon="el-icon-user" type="primary">Login</el-button>
+            <el-button icon="el-icon-key" type="primary">Register</el-button>
+          </el-button-group>
           <p v-else>Hello {{ session.name }} (<el-link @click="() => onLogout()">Logout</el-link>)!</p>
         </el-col>
       </el-row>
@@ -44,6 +42,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { mapGetters, mapActions, ActionMethod } from "vuex";
 import { SessionModel } from "../models/stores/user.store.model";
+import SearchLessonComponent from "../components/SearchLessonComponent.vue";
 
 @Component({
   computed: {
@@ -55,6 +54,9 @@ import { SessionModel } from "../models/stores/user.store.model";
     ...mapActions("user", {
       logout: "logout"
     })
+  },
+  components: {
+    "i-search-lesson": SearchLessonComponent
   }
 })
 class Main extends Vue {
@@ -64,6 +66,14 @@ class Main extends Vue {
   private onLogout() {
     this.logout();
     this.$router.push({ name: 'Lesson Category' });
+  }
+
+  private onLogin() {
+    this.$router.push({ name: 'Login' });
+  }
+
+  private onRegister() {
+    this.$router.push({ name: 'Register' });
   }
 }
 export default Main;

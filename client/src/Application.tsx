@@ -31,7 +31,9 @@ class Application extends Vue {
   private loading = true;
 
   public mounted() {
-    this.isOnline().finally(() => {
+    this.isOnline()
+    .catch((error) => console.error(error))
+    .finally(() => {
       this.loading = false;
     });
   }

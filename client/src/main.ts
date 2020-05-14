@@ -35,7 +35,8 @@ import {
   Tooltip,
   Table,
   TableColumn,
-  Switch
+  Switch,
+  ButtonGroup
 } from "element-ui";
 
 Vue.config.productionTip = false;
@@ -72,6 +73,7 @@ Vue.use(Tooltip);
 Vue.use(Table);
 Vue.use(TableColumn);
 Vue.use(Switch);
+Vue.use(ButtonGroup);
 
 new Vue({
   router: Router,
