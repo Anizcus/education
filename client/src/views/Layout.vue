@@ -7,30 +7,68 @@
         </el-col>
         <el-col :span="4" :offset="1">
           <el-button-group v-if="!session">
-            <el-button icon="el-icon-user" type="primary">Login</el-button>
-            <el-button icon="el-icon-key" type="primary">Register</el-button>
+            <el-button 
+              icon="el-icon-user" 
+              type="primary" 
+              @click="() => onLogin()"
+            >Login</el-button>
+            <el-button 
+              icon="el-icon-key" 
+              type="primary" 
+              @click="() => onRegister()"
+            >Register</el-button>
           </el-button-group>
-          <p v-else>Hello {{ session.name }} (<el-link @click="() => onLogout()">Logout</el-link>)!</p>
+          <el-button-group v-else>
+            <el-tooltip :content="session.name" placement="bottom">
+              <el-button 
+                icon="el-icon-user" 
+                type="primary"
+                class="user-button"
+                @click="() => onProfile()"
+              >{{ session.name }}</el-button>
+            </el-tooltip>
+            <el-tooltip content="Logout" placement="bottom">
+              <el-button 
+                icon="el-icon-close" 
+                type="primary" 
+                @click="() => onLogout()"
+              ></el-button>
+            </el-tooltip>
+          </el-button-group>
         </el-col>
       </el-row>
     </el-header>
     <el-container class="wrapper">
-      <el-aside>
-        <el-menu :router="true" default-active="/" mode="vertical" class="menu">
-          <el-menu-item index="/">Home</el-menu-item>
-          <el-menu-item index="/about">About</el-menu-item>
-        </el-menu>
+      <el-aside class="side-left">
+        <el-button 
+          icon="el-icon-s-home" 
+          type="default"
+          class="menu-button"
+          @click="() => onHome()"
+        >Home</el-button>
+        <el-button 
+          icon="el-icon-info" 
+          type="default" 
+          class="menu-button"
+          @click="() => onAbout()"
+        >About</el-button>
       </el-aside>
       <el-main class="content">
         <router-view></router-view>
       </el-main>
       <el-aside class="side-right">
-        <el-menu :router="true" mode="vertical" class="menu">
-          <el-menu-item v-if="session" :index="`/user/profile/${session.id}`"
-            >Profile</el-menu-item
-          >
-          <el-menu-item index="/users">Users</el-menu-item>
-        </el-menu>
+        <el-button 
+          icon="el-icon-user-solid" 
+          type="default"
+          class="menu-button"
+          @click="() => onProfile()"
+        >Profile</el-button>
+        <el-button 
+          icon="el-icon-s-custom" 
+          type="default" 
+          class="menu-button"
+          @click="() => onUsers()"
+        >Users</el-button>
       </el-aside>
     </el-container>
     <el-footer class="footer">Simple © Daniel Vrubel - 2020</el-footer>
@@ -75,6 +113,22 @@ class Main extends Vue {
   private onRegister() {
     this.$router.push({ name: 'Register' });
   }
+
+  private onProfile() {
+    this.$router.push({ name: "Profile", params: { id: this.session.id.toString() } });
+  }
+
+  private onHome() {
+    this.$router.push({ name: 'Lesson Category' });
+  }
+
+  private onAbout() {
+    this.$router.push({ name: "About" });
+  }
+
+  private onUsers() {
+    this.$router.push({ name: 'Users' });
+  }
 }
 export default Main;
 </script>
@@ -102,17 +156,20 @@ body {
 
 .side-right {
   border-left: solid 1px #e6e6e6;
+  padding: 10px;
 }
 
-.menu {
-  height: 100%;
+.menu-button {
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  display: block;
+  margin-left: 0px !important;
 }
 
-.side-right {
-  .menu {
-    text-align: right;
-    border-right: none;
-  }
+.side-left {
+  border-right: solid 1px #e6e6e6;
+  padding: 10px;
 }
 
 .header {
@@ -123,5 +180,12 @@ body {
   border-top: solid 1px #e6e6e6;
   text-align: center;
   padding: 10px;
+}
+
+.user-button {
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  white-space: nowrap;
+  width: 150px;
 }
 </style>

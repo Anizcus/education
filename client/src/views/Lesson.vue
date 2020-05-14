@@ -2,30 +2,39 @@
   <el-card shadow="hover" style="margin-bottom: 14px;">
     <el-row>
       <el-col :span="4">
-        <el-image
-          :src="lesson.badgeBase64"
-          alt="Badge"
-          style="width: 100px; height: 100px"
-        >
-          <div
-            slot="error"
-            style="
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              width: 100%;
-              height: 100%;
-              background: #f5f7fa;
-              color: #909399;
-              font-size: 30px;"
+        <div class="container">
+          <el-image
+            :src="lesson.badgeBase64"
+            alt="Badge"
+            style="width: 100px; height: 100px"
           >
-            <i class="el-icon-picture-outline"></i>
-          </div>
-        </el-image>
-        <el-divider> </el-divider>
-        <div class="text-center">{{ lesson.category }}</div>
-        <el-divider> </el-divider>
-        <div class="text-center">{{ lesson.type }}</div>
+            <div
+              slot="error"
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+                background: #f5f7fa;
+                color: #909399;
+                font-size: 30px;"
+            >
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </el-image>
+          <el-divider> </el-divider>
+          <div class="text-center">{{ lesson.category }}</div>
+          <el-divider> </el-divider>
+          <div class="text-center">{{ lesson.type }}</div>
+          <el-divider> </el-divider>
+          <el-button
+            v-if="lesson.state == 'Created'"
+            :plain="true"
+            type="warning"
+            icon="el-icon-edit"
+          >Edit</el-button>
+        </div>
       </el-col>
       <el-col :span="1" style="height: 300px;">
         <div
@@ -68,18 +77,18 @@
               >
                 <el-row>
                   <el-col :span="20">
-                    <div>{{ assignment.description }}</div>
-                    <div>Experience ({{ assignment.experience }})</div>
+                    <h3>{{ assignment.description }}</h3>
+                    <p>Experience ({{ assignment.experience }})</p>
                   </el-col>
                   <el-col :span="4">
+                    <el-button-group>
                     <el-button
                       v-if="lesson.state == 'Created'"
                       :plain="true"
                       type="warning"
                       icon="el-icon-edit"
                       :circle="true"
-                      size="mini"
-                      style="float: right;"
+                      size="small"
                       @click="() => onAssignmentEdit(index, assignment)"
                     ></el-button>
                     <el-button
@@ -88,10 +97,10 @@
                       type="danger"
                       icon="el-icon-delete"
                       :circle="true"
-                      size="mini"
-                      style="margin-right: 10px; float: right;"
+                      size="small"
                       @click="() => onAssignmentDelete(index)"
                     ></el-button>
+                    </el-button-group>
                     <el-button
                       v-if="
                         lesson.state == 'Published' &&
@@ -101,7 +110,7 @@
                       type="info"
                       icon="el-icon-edit-outline"
                       :circle="false"
-                      size="mini"
+                      size="small"
                       @click="() => onAnswerQuestion(assignment)"
                     ></el-button>
                   </el-col>
@@ -328,5 +337,11 @@ export default Lesson;
 .text-center {
   text-align: center;
   width: 100px;
+}
+
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 </style>
