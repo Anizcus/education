@@ -99,6 +99,7 @@ namespace Server.Services.Interfaces
          {
             Id = user.Id,
             Name = user.Name,
+            Role = user.Role.Name,
             Session = WriteToken(token)
          };
       }
@@ -232,7 +233,7 @@ namespace Server.Services.Interfaces
          return _tokenHandler.WriteToken(token);
       }
 
-      public async Task<NameAnswer> GetAsync(IEnumerable<Claim> claims)
+      public async Task<SessionAnswer> GetAsync(IEnumerable<Claim> claims)
       {
          var subject = claims
             .Where(c => c.Type == ClaimTypes.NameIdentifier)
@@ -240,9 +241,9 @@ namespace Server.Services.Interfaces
 
          if (subject == null)
          {
-            return new NameAnswer
+            return new SessionAnswer
             {
-               Error = "Session has no subject"
+               Error = "You are not logged in!"
             };
          }
 
@@ -250,16 +251,17 @@ namespace Server.Services.Interfaces
 
          if (user == null)
          {
-            return new NameAnswer
+            return new SessionAnswer
             {
                Error = "User does not exist!"
             };
          }
 
-         return new NameAnswer
+         return new SessionAnswer
          {
             Id = user.Id,
-            Name = user.Name
+            Name = user.Name,
+            Role = user.Role.Name
          };
       }
 

@@ -57,7 +57,7 @@
         <router-view></router-view>
       </el-main>
       <el-aside class="side-right">
-        <el-button 
+        <el-button v-if="session"
           icon="el-icon-user-solid" 
           type="default"
           class="menu-button"
@@ -103,31 +103,48 @@ class Main extends Vue {
 
   private onLogout() {
     this.logout();
-    this.$router.push({ name: 'Lesson Category' });
+
+    if (this.$route.name !== 'Lesson Category'){
+      this.$router.push({ name: "Lesson Category" });
+    }
   }
 
   private onLogin() {
-    this.$router.push({ name: 'Login' });
+    if (this.$route.name !== 'Login'){
+      this.$router.push({ name: "Login" });
+    }
   }
 
   private onRegister() {
-    this.$router.push({ name: 'Register' });
+    if (this.$route.name !== 'Register'){
+      this.$router.push({ name: "Register" });
+    }
   }
 
   private onProfile() {
-    this.$router.push({ name: "Profile", params: { id: this.session.id.toString() } });
+    const id = this.session.id.toString();
+
+    if (this.$route.name !== 'Profile' || this.$route.name === 'Profile' && this.$route.params.id !== id){
+      this.$router.push({ name: "Profile", params: { id } });
+    }
   }
 
   private onHome() {
-    this.$router.push({ name: 'Lesson Category' });
+    if (this.$route.name !== 'Lesson Category'){
+      this.$router.push({ name: "Lesson Category" });
+    }
   }
 
   private onAbout() {
-    this.$router.push({ name: "About" });
+    if (this.$route.name !== 'About'){
+      this.$router.push({ name: "About" });
+    }
   }
 
   private onUsers() {
-    this.$router.push({ name: 'Users' });
+    if (this.$route.name !== 'Users'){
+      this.$router.push({ name: 'Users' });
+    }
   }
 }
 export default Main;

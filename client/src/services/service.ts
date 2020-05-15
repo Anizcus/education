@@ -15,6 +15,8 @@ Service.interceptors.response.use(
   error => {
     if (error.request.status == 401) {
       Store.dispatch("user/logout");
+
+      return Promise.reject("You are not logged in!");
     } else {
       return Promise.reject(error);
     }

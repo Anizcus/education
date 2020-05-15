@@ -16,7 +16,7 @@
       <el-table-column prop="level" label="Level" width="180"></el-table-column>
       <el-table-column prop="role" label="Role"> </el-table-column>
       <el-table-column
-        v-if="profile && profile.role === 'Administrator'"
+        v-if="session && session.role === 'Administrator'"
         label="Operations"
         width="180">
         <template slot-scope="scope">
@@ -38,8 +38,7 @@ import { NameServiceModel } from "../models/services/name.service.model";
   methods: {
     ...mapActions("user", {
       getUsers: "getUsers",
-      getRoles: "getRoles",
-      getProfile: "getProfile"
+      getRoles: "getRoles"
     }),
     ...mapActions("modal", {
       setManageUserModalVisible: "setManageUserModalVisible"
@@ -47,7 +46,6 @@ import { NameServiceModel } from "../models/services/name.service.model";
   },
   computed: {
     ...mapGetters("user", {
-      profile: "profile",
       users: "users",
       roles: "roles",
       session: "session"
@@ -57,11 +55,9 @@ import { NameServiceModel } from "../models/services/name.service.model";
 class Users extends Vue {
   private getUsers!: ActionMethod;
   private getRoles!: ActionMethod;
-  private getProfile!: ActionMethod;
   private setManageUserModalVisible!: ActionMethod;
   private users!: Array<ProfileListModel>;
   private roles!: NameServiceModel[];
-  private profile!: ProfileModel;
   private session!: SessionModel;
   private loading = true;
 
@@ -75,10 +71,6 @@ class Users extends Vue {
       .catch(() => {
         this.loading = false;
     });
-
-    if (this.session) {
-      this.getProfile({ id: this.session.id});
-    }
   }
 
   private onProfileClick(index: number) {

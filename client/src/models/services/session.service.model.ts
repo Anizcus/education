@@ -1,7 +1,7 @@
-import { NameServiceModel } from "./name.service.model";
-
 interface SessionServiceModel {
-  user: NameServiceModel;
+  id: number;
+  name: string;
+  role: string;
   session: string;
 }
 

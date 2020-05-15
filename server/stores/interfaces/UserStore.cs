@@ -25,6 +25,7 @@ namespace Server.Stores.Interfaces
       public async Task<User> GetAsync(uint id)
       {
          return await _store.Users
+            .Include(user => user.Role)
             .FirstOrDefaultAsync(user => user.Id == id);
       }
 
@@ -61,6 +62,7 @@ namespace Server.Stores.Interfaces
       public async Task<User> GetAsync(string name)
       {
          return await _store.Users
+            .Include(user => user.Role)
             .FirstOrDefaultAsync(user => user.Name == name);
       }
 

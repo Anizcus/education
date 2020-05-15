@@ -3,7 +3,7 @@ import Component from "vue-class-component";
 import { VNode } from "vue/types/umd";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
 import { LessonListModel } from "@/models/stores/lesson.store.model";
-import { ProfileModel, SessionModel } from '@/models/stores/user.store.model';
+import { SessionModel } from '@/models/stores/user.store.model';
 
 @Component({
   methods: {
@@ -12,9 +12,6 @@ import { ProfileModel, SessionModel } from '@/models/stores/user.store.model';
     }),
     ...mapActions("modal", {
       setLessonModalVisible: "setLessonModalVisible"
-    }),
-    ...mapActions("user", {
-      getProfile: "getProfile"
     })
   },
   computed: {
@@ -22,7 +19,6 @@ import { ProfileModel, SessionModel } from '@/models/stores/user.store.model';
       lessons: "lessons"
     }),
     ...mapGetters("user", {
-      profile: "profile",
       session: "session"
     })
   }
@@ -30,9 +26,7 @@ import { ProfileModel, SessionModel } from '@/models/stores/user.store.model';
 class LessonList extends Vue {
   private getLessons!: ActionMethod;
   private setLessonModalVisible!: ActionMethod;
-  private getProfile!: ActionMethod;
   private lessons!: LessonListModel[];
-  private profile!: ProfileModel;
   private session!: SessionModel;
   private loading = true;
   private dateOptions = {
@@ -50,9 +44,6 @@ class LessonList extends Vue {
       .finally(() => {
         this.loading = false;
       });
-    if (!this.profile && this.session) {
-      this.getProfile({ id: this.session.id});
-    }
   }
 
   private onLessonCreate() {
@@ -141,8 +132,8 @@ class LessonList extends Vue {
       );
     }
 
-    const addLessonButton = this.profile 
-      && this.profile.role === 'Teacher' ? (
+    const addLessonButton = this.session 
+      && this.session.role === 'Teacher' ? (
         <el-button
         style="margin-bottom: 14px;"
         plain={true}
@@ -175,29 +166,29 @@ class LessonList extends Vue {
     const rejected = this.lessons
       .filter(item => item.state === "Rejected")
       .map(this.renderItem);
-    const owned = this.profile && this.lessons
-      .filter(item => item.ownerId === this.profile.id)
+    const owned = this.session && this.lessons
+      .filter(item => item.ownerId === this.session.id)
       .map(this.renderItem) || '';
 
-    const tabCreated = this.profile && this.profile.role !== 'Student' ? (
+    const tabCreated = this.session && this.session.role !== 'Student' ? (
         <el-tab-pane label={`Created (${created.length})`}>
           {created}
         </el-tab-pane>)
       : '';
 
-    const tabWaiting = this.profile && this.profile.role === 'Administrator' ? (
+    const tabWaiting = this.session && this.session.role === 'Administrator' ? (
         <el-tab-pane label={`Waiting (${waiting.length})`}>
           {waiting}
         </el-tab-pane>)
       : '';
 
-    const tabRejected = this.profile && this.profile.role === 'Administrator' ? (
+    const tabRejected = this.session && this.session.role === 'Administrator' ? (
         <el-tab-pane label={`Rejected (${rejected.length})`}>
           {rejected}
         </el-tab-pane>)
       : '';
 
-    const tabOwned = this.profile && this.profile.role === 'Teacher' ? (
+    const tabOwned = this.session && this.session.role === 'Teacher' ? (
         <el-tab-pane label={`Owned (${owned.length})`}>
           {owned}
         </el-tab-pane>)

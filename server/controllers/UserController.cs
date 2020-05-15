@@ -122,11 +122,9 @@ namespace Server.Controllers
          return Ok(
             new SessionPayload
             {
-               User = new NamePayload
-               {
-                  Id = user.Id,
-                  Name = user.Name
-               },
+               Id = user.Id,
+               Name = user.Name,
+               Role = user.Role,
                Session = user.Session
             }
          );
@@ -148,10 +146,12 @@ namespace Server.Controllers
          }
 
          return Ok(
-            new NamePayload
+            new SessionPayload
             {
                Id = user.Id,
-               Name = user.Name
+               Name = user.Name,
+               Role = user.Role,
+               Session = "You are logged in!"
             }
          );
       }

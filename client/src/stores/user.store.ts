@@ -65,11 +65,16 @@ const actions: ActionTree<UserStoreModel, {}> = {
   async online(context) {
     const session = localStorage.getItem("session");
     if (session) {
-      return await UserService.online().then(response => {
+      return await UserService.online()
+      .then((response: SessionModel) => {
         context.commit("insert", response);
+
+        return response;
       });
     } else {
-      return Promise.reject();
+      context.commit("remove");
+
+      return Promise.reject("You are not logged in!");
     }
   },
 
@@ -78,16 +83,20 @@ const actions: ActionTree<UserStoreModel, {}> = {
   },
 
   async login(context, model: LoginServiceModel) {
-    return await UserService.login(model).then(response => {
+    return await UserService.login(model)
+    .then(response => {
       localStorage.setItem("session", response.session);
+      context.commit("insert", {
+        id: response.id,
+        name: response.name,
+        role: response.role
+      });
 
       Service.defaults.headers = {
         Authorization: `Bearer ${response.session}`
       };
 
-      context.commit("insert", response.user);
-
-      return response.user;
+      return response;
     });
   },
   async getProfile(context, model: IdServiceModel) {

@@ -2,7 +2,7 @@
   <div v-if="loading">
     <el-button :loading="loading" type="info" :circle="true"></el-button>
   </div>
-  <div v-else-if="!session" @click="nani">
+  <div v-else-if="!session">
     <el-alert
       title="You must be logged in to view other users!"
       type="error"
@@ -111,7 +111,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { mapActions, mapGetters, ActionMethod } from "vuex";
-import { ProfileModel } from "../models/stores/user.store.model";
+import { ProfileModel, SessionModel } from "../models/stores/user.store.model";
 
 @Component({
   methods: {
@@ -129,9 +129,16 @@ import { ProfileModel } from "../models/stores/user.store.model";
 class Profile extends Vue {
   private getProfile!: ActionMethod;
   private profile!: ProfileModel;
+  private session!: SessionModel;
   private loading = true;
 
-  public mounted() {
+  public created() {
+    this.onProfile();
+    
+    this.$watch('$route', () => this.onProfile());
+  }
+
+  private onProfile() {
     this.getProfile({ id: Number(this.$route.params.id) })
       .then(() => {
         this.loading = false;
@@ -141,12 +148,8 @@ class Profile extends Vue {
       });
   }
 
-  private nani(){
-     console.log(this.profile)
-  }
-
   private goToLesson(lessonId: string) {
-    this.$router.push({ name: "Lesson", params: { id: lessonId } });
+    this.$router.replace({ name: "Lesson", params: { id: lessonId } });
   }
 }
 

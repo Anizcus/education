@@ -6,7 +6,8 @@ import { SessionServiceModel } from "@/models/services/session.service.model";
 import { RegisterServiceModel } from "@/models/services/register.service.model";
 import {
   ProfileModel,
-  ProfileListModel
+  ProfileListModel,
+  SessionModel
 } from "@/models/stores/user.store.model";
 import { RoleRequestModel, ModifyUserRequestModel } from '@/models/services/role.request.model';
 
@@ -26,7 +27,7 @@ const UserService = {
       ...model
     });
   },
-  online: (): Promise<NameServiceModel> => {
+  online: (): Promise<SessionModel> => {
     return Service.post("user/online");
   },
   getProfile: (model: IdServiceModel): Promise<ProfileModel> => {
