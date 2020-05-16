@@ -10,28 +10,28 @@ namespace Server.Controllers
 {
    [Authorize]
    [ApiController]
-   public class TypeController : ControllerBase
+   public class CategoryController : ControllerBase
    {
       private readonly IAdminService _adminService;
-      public TypeController(IAdminService adminService) {
+      public CategoryController(IAdminService adminService) {
          _adminService = adminService;
       }
 
       [AllowAnonymous]
-      [HttpGet("/type/all")]
+      [HttpGet("/category/all")]
       public async Task<IActionResult> Get() 
       {
-         var types = await _adminService.GetGroupAsync();
+         var categories = await _adminService.GetCategoriesAsync();
 
-         return Ok(types);
+         return Ok(categories);
       }
 
-      [HttpPost("/type")]
-      public async Task<IActionResult> CreateType([FromBody] RequestTypeCreate request) 
+      [HttpPost("/category")]
+      public async Task<IActionResult> CreateType([FromBody] RequestNameCreate request) 
       {
-         var types = await _adminService.CreateTypeAsync(request.Id, request.Name);
+         var category = await _adminService.CreateCategoryAsync(request.Name);
 
-         return Ok(types);
+         return Ok(category);
       }
 
    }

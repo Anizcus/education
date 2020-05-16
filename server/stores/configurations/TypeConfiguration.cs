@@ -45,12 +45,6 @@ namespace Server.Stores.Configurations
                .WithMany(r => r.Types)
             .HasForeignKey(u => u.CategoryId)
             .HasConstraintName("FOREIGN_TYPE_CATEGORY_ID");
-
-         builder.HasData(
-            new Type { Name = nameof(TypeEnum.English), Id = (uint) TypeEnum.English, CategoryId = (uint) CategoryEnum.Language },
-            new Type { Name = nameof(TypeEnum.Math), Id = (uint) TypeEnum.Math, CategoryId = (uint) CategoryEnum.Science },
-            new Type { Name = nameof(TypeEnum.Russian), Id = (uint) TypeEnum.Russian, CategoryId = (uint) CategoryEnum.Language }
-         );
       }
    }
 }

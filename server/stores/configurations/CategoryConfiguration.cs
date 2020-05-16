@@ -33,12 +33,6 @@ namespace Server.Stores.Configurations
             .HasColumnType("timestamp")
             .HasDefaultValueSql("NULL ON UPDATE CURRENT_TIMESTAMP")
             .ValueGeneratedOnUpdate();
-
-         builder.HasData(
-            new Category { Name = nameof(CategoryEnum.Language), Id = (uint) CategoryEnum.Language },
-            new Category { Name = nameof(CategoryEnum.Programming), Id = (uint) CategoryEnum.Programming },
-            new Category { Name = nameof(CategoryEnum.Science), Id = (uint) CategoryEnum.Science }
-         );
       }
    }
 }

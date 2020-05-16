@@ -19,5 +19,23 @@ namespace Server.Stores.Interfaces
             .Include(type => type.Category)
             .ToListAsync();
       }
+
+      public async Task<Type> CreateAsync(uint categoryId, string name) {
+         var type = new Type {
+            CategoryId = categoryId,
+            Name = name
+         };
+
+         var created = await _store.Types.AddAsync(type);
+         var saved = await _store.SaveChangesAsync();
+
+         return created.Entity;
+      }
+
+      public async Task<Type> GetAsync(string name)
+      {
+         return await _store.Types
+            .FirstOrDefaultAsync(type => type.Name == name);
+      }
    }
 }

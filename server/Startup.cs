@@ -49,10 +49,11 @@ namespace Server
          services.AddScoped<IUserStore, UserStore>();
          services.AddScoped<ILessonStore, LessonStore>();
          services.AddScoped<ITypeStore, TypeStore>();
+         services.AddScoped<ICategoryStore, CategoryStore>();
 
          services.AddScoped<IUserService, UserService>();
          services.AddScoped<ILessonService, LessonService>();
-         services.AddScoped<ITypeService, TypeService>();
+         services.AddScoped<IAdminService, AdminService>();
          
          services.AddAuthentication(
             option =>
