@@ -60,27 +60,28 @@ import { mapGetters, mapActions, ActionMethod } from "vuex";
 @Component({
   methods: {
     ...mapActions("modal", {
-      setLessonModalVisible: "setLessonModalVisible"
-    })
+      setLessonModalVisible: "setLessonModalVisible",
+    }),
   },
   computed: {
     ...mapGetters("modal", {
       modalState: "modalState",
-      lessonModal: "lessonModalVisible"
-    })
-  }
+      lessonModal: "lessonModalVisible",
+    }),
+  },
 })
 class DialogLessonForm extends Vue {
   private setLessonModalVisible!: ActionMethod;
   private form = {
     name: "",
-    description: ""
+    description: "",
   };
   private modalState!: string;
   private lessonModal!: boolean;
   private image: string | Blob = "";
   private error = "";
   private formData = new FormData();
+  private loading = false;
 
   private handleUpload(file: File) {
     if (file.type === "image/png") {
@@ -103,12 +104,26 @@ class DialogLessonForm extends Vue {
       return;
     }
 
+    this.loading = true;
+
     this.formData.set("name", this.form.name);
     this.formData.set("description", this.form.description);
     this.formData.set("badge", this.image);
     this.formData.set("type", this.$route.params.id);
 
-    LessonService.postLesson(this.formData);
+    LessonService.postLesson(this.formData)
+      .then(() => {
+        this.loading = false;
+        this.setLessonModalVisible({
+          visible: false,
+          data: undefined,
+          stateName: "Close",
+        });
+      })
+      .catch((error) => {
+        this.loading = false;
+        this.error = error;
+      });
   }
 
   private onCloseAlert() {
@@ -122,7 +137,8 @@ class DialogLessonForm extends Vue {
 
     this.setLessonModalVisible({
       visible: false,
-      stateName: "Cancel"
+      data: undefined,
+      stateName: "Cancel",
     });
   }
 }

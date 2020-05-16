@@ -63,6 +63,7 @@ class DialogAuthorizeForm extends Vue {
   private onClose() {
     this.setAuthorizeModalVisible({
       visible: false,
+      data: undefined,
       stateName: this.modalState
     });
   }
@@ -76,6 +77,7 @@ class DialogAuthorizeForm extends Vue {
 
     this.setAuthorizeModalVisible({
       visible: false,
+      data: undefined,
       stateName: this.modalState
     });
   }
@@ -83,6 +85,7 @@ class DialogAuthorizeForm extends Vue {
   private onCancel() {
     this.setAuthorizeModalVisible({
       visible: false,
+      data: undefined,
       stateName: this.modalState
     });
   }

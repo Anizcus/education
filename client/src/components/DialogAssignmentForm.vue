@@ -98,6 +98,7 @@ class DialogAssignmentForm extends Vue {
 
     this.setAssignmentModalVisible({
       visible: false,
+      data: undefined,
       modalState: "Action"
     });
   }
@@ -105,6 +106,7 @@ class DialogAssignmentForm extends Vue {
   private onCancel() {
     this.setAssignmentModalVisible({
       visible: false,
+      data: undefined,
       modalState: "Cancel"
     });
 

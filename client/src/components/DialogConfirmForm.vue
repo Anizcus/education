@@ -49,6 +49,7 @@ class DialogConfirmForm extends Vue {
   private onClose() {
     this.setConfirmModalVisible({
       visible: false,
+      data: undefined,
       stateName: this.modalState
     });
   }
@@ -61,6 +62,7 @@ class DialogConfirmForm extends Vue {
         this.loading = false;
         this.setConfirmModalVisible({
           visible: false,
+          data: undefined,
           stateName: this.modalState
         });
       })
@@ -72,6 +74,7 @@ class DialogConfirmForm extends Vue {
   private onCancel() {
     this.setConfirmModalVisible({
       visible: false,
+      data: undefined,
       stateName: this.modalState
     });
   }

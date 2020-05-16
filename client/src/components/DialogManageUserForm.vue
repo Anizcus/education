@@ -106,16 +106,16 @@ class DialogManageUserForm extends Vue {
     })
       .then(() => {
         this.buttonLoading = false;
+        this.setManageUserModalVisible({
+          visible: false,
+          data: undefined,
+          stateName: this.modalState
+        });
       })
       .catch(error => {
         this.error = error;
         this.buttonLoading = false;
       });
-
-    this.setManageUserModalVisible({
-      visible: false,
-      stateName: this.modalState
-    });
   }
 
   private onCloseAlert() {

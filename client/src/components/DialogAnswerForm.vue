@@ -58,6 +58,7 @@ class DialogAnswerForm extends Vue {
   private onClose() {
     this.setAnswerModalVisible({
       visible: false,
+      data: undefined,
       stateName: this.modalState
     });
   }
@@ -74,6 +75,7 @@ class DialogAnswerForm extends Vue {
             this.loading = false;
             this.setAnswerModalVisible({
               visible: false,
+              data: undefined,
               stateName: this.modalState
             });
           })
@@ -81,6 +83,7 @@ class DialogAnswerForm extends Vue {
             this.loading = false;
             this.setAnswerModalVisible({
               visible: false,
+              data: undefined,
               stateName: this.modalState
             });
           });
@@ -93,6 +96,7 @@ class DialogAnswerForm extends Vue {
   private onCancel() {
     this.setAnswerModalVisible({
       visible: false,
+      data: undefined,
       stateName: this.modalState
     });
   }
