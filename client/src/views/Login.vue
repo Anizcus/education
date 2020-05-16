@@ -38,7 +38,7 @@ import { mapActions, ActionMethod } from "vuex";
     ...mapActions("user", {
       login: "login",
       getProfile: "getProfile"
-    }),
+    })
   }
 })
 class Login extends Vue {

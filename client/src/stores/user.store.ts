@@ -10,8 +10,11 @@ import { RegisterServiceModel } from "@/models/services/register.service.model";
 import { LoginServiceModel } from "@/models/services/login.service.model";
 import { Service } from "@/services/service";
 import { IdServiceModel } from "@/models/services/id.service.model";
-import { NameServiceModel } from '@/models/services/name.service.model';
-import { RoleRequestModel, ModifyUserRequestModel } from '@/models/services/role.request.model';
+import { NameServiceModel } from "@/models/services/name.service.model";
+import {
+  RoleRequestModel,
+  ModifyUserRequestModel
+} from "@/models/services/role.request.model";
 
 const namespaced = true;
 
@@ -34,10 +37,10 @@ const mutations: MutationTree<UserStoreModel> = {
     state.profile = { ...profile };
   },
   insertUsers(state, profileList: ProfileListModel[]) {
-    state.users = [ ...profileList ];
+    state.users = [...profileList];
   },
   insertRoles(state, roleList: NameServiceModel[]) {
-    state.roles = [ ...roleList ];
+    state.roles = [...roleList];
   }
 };
 
@@ -65,8 +68,7 @@ const actions: ActionTree<UserStoreModel, {}> = {
   async online(context) {
     const session = localStorage.getItem("session");
     if (session) {
-      return await UserService.online()
-      .then((response: SessionModel) => {
+      return await UserService.online().then((response: SessionModel) => {
         context.commit("insert", response);
 
         return response;
@@ -83,8 +85,7 @@ const actions: ActionTree<UserStoreModel, {}> = {
   },
 
   async login(context, model: LoginServiceModel) {
-    return await UserService.login(model)
-    .then(response => {
+    return await UserService.login(model).then(response => {
       localStorage.setItem("session", response.session);
       context.commit("insert", {
         id: response.id,

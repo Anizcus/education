@@ -10,16 +10,18 @@
       :clearable="true"
     >
       <el-option-group
-      v-for="group in groups"
-      :key="group.id"
-      :label="group.label">
-      <el-option
-        v-for="option in group.options"
-        :key="option.id"
-        :label="option.name"
-        :value="option.id">
-      </el-option>
-    </el-option-group>
+        v-for="group in groups"
+        :key="group.id"
+        :label="group.label"
+      >
+        <el-option
+          v-for="option in group.options"
+          :key="option.id"
+          :label="option.name"
+          :value="option.id"
+        >
+        </el-option>
+      </el-option-group>
     </el-select>
     <el-button
       class="i-button"
@@ -27,32 +29,33 @@
       slot="append"
       type="warning"
       icon="el-icon-search"
-    >Search</el-button>
+      >Search</el-button
+    >
   </el-input>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { TypeService, NameGroupModel } from "../services/type.service";
+import { AdminService, NameGroupModel } from "../services/admin.service";
 
 @Component
 class SearchLessonComponent extends Vue {
   private input = "";
   private select = "";
-   private groups: NameGroupModel[] = [];
-   private loading = true;
+  private groups: NameGroupModel[] = [];
+  private loading = true;
 
-   public mounted() {
-      TypeService.getTypes()
+  public created() {
+    AdminService.getTypes()
       .then((groups: NameGroupModel[]) => {
-         this.groups = groups;
-         this.loading = false;
+        this.groups = groups;
+        this.loading = false;
       })
-      .catch((error) => {
-         this.loading = false;
-      })
-   }
+      .catch(error => {
+        this.loading = false;
+      });
+  }
 }
 
 export default SearchLessonComponent;
@@ -60,20 +63,24 @@ export default SearchLessonComponent;
 
 <style lang="scss">
 .i-input {
-   .el-select {
-      width: 150px;
-   }
+  .el-select {
+    width: 150px;
+  }
 
   .el-input-group__prepend {
     background-color: #fff;
   }
 
   .el-input-group__append {
-      background: #E6A23C;
-      border-color: #E6A23C;
-      color: #FFF;
-      width: 75px;
-   }
+    background: #e6a23c;
+    border-color: #e6a23c;
+    color: #fff;
+    width: 75px;
+  }
+}
+
+.i-button {
+  width: 100%;
 }
 
 .el-input-group__append > .i-button {

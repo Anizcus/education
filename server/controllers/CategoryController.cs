@@ -21,7 +21,7 @@ namespace Server.Controllers
       [HttpGet("/category/all")]
       public async Task<IActionResult> Get() 
       {
-         var categories = await _adminService.GetCategoriesAsync();
+         var categories = await _adminService.GetGroupCategoryBasedAsync();
 
          return Ok(categories);
       }

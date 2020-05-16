@@ -12,12 +12,19 @@
           <el-input v-model="form.confirm" :show-password="true"></el-input>
         </el-form-item>
         <el-form-item label="Role" prop="role">
-          <el-select style="width: 100%;" :loading="roleLoading" :clearable="true" v-model="form.role" placeholder="Select a role">
+          <el-select
+            style="width: 100%;"
+            :loading="roleLoading"
+            :clearable="true"
+            v-model="form.role"
+            placeholder="Select a role"
+          >
             <el-option
               v-for="role in roles"
               :key="role.id"
               :label="role.name"
-              :value="role.id">
+              :value="role.id"
+            >
             </el-option>
           </el-select>
         </el-form-item>
@@ -102,7 +109,9 @@ class Register extends Vue {
         trigger: "blur"
       }
     ],
-    role: [{ required: true, message: "Please select a role!", trigger: "blur" }]
+    role: [
+      { required: true, message: "Please select a role!", trigger: "blur" }
+    ]
   };
 
   public $refs!: {
@@ -110,9 +119,9 @@ class Register extends Vue {
   };
 
   public mounted() {
-    this.getRoles({forRegistration: true})
-      .then(() => this.roleLoading = false)
-      .catch(() => this.roleLoading = false);
+    this.getRoles({ forRegistration: true })
+      .then(() => (this.roleLoading = false))
+      .catch(() => (this.roleLoading = false));
   }
 
   private onSubmit() {

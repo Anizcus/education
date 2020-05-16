@@ -3,7 +3,7 @@ import Component from "vue-class-component";
 import { VNode } from "vue/types/umd";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
 import { LessonListModel } from "@/models/stores/lesson.store.model";
-import { SessionModel } from '@/models/stores/user.store.model';
+import { SessionModel } from "@/models/stores/user.store.model";
 
 @Component({
   methods: {
@@ -40,10 +40,9 @@ class LessonList extends Vue {
   };
 
   public mounted() {
-    this.getLessons({ id: Number(this.$route.params.id) })
-      .finally(() => {
-        this.loading = false;
-      });
+    this.getLessons({ id: Number(this.$route.params.id) }).finally(() => {
+      this.loading = false;
+    });
   }
 
   private onLessonCreate() {
@@ -132,16 +131,19 @@ class LessonList extends Vue {
       );
     }
 
-    const addLessonButton = this.session 
-      && this.session.role === 'Teacher' ? (
+    const addLessonButton =
+      this.session && this.session.role === "Teacher" ? (
         <el-button
-        style="margin-bottom: 14px;"
-        plain={true}
-        type="primary"
-        onClick={() => this.onLessonCreate()}>
-        <span>Add a new lesson</span>
-      </el-button>
-    ) : '';
+          style="margin-bottom: 14px;"
+          plain={true}
+          type="primary"
+          onClick={() => this.onLessonCreate()}
+        >
+          <span>Add a new lesson</span>
+        </el-button>
+      ) : (
+        ""
+      );
 
     if (!this.lessons || !this.lessons.length) {
       return (
@@ -166,38 +168,52 @@ class LessonList extends Vue {
     const rejected = this.lessons
       .filter(item => item.state === "Rejected")
       .map(this.renderItem);
-    const owned = this.session && this.lessons
-      .filter(item => item.ownerId === this.session.id)
-      .map(this.renderItem) || '';
+    const owned =
+      (this.session &&
+        this.lessons
+          .filter(item => item.ownerId === this.session.id)
+          .map(this.renderItem)) ||
+      "";
 
-    const tabCreated = this.session && this.session.role !== 'Student' ? (
+    const tabCreated =
+      this.session && this.session.role !== "Student" ? (
         <el-tab-pane label={`Created (${created.length})`}>
           {created}
-        </el-tab-pane>)
-      : '';
+        </el-tab-pane>
+      ) : (
+        ""
+      );
 
-    const tabWaiting = this.session && this.session.role === 'Administrator' ? (
+    const tabWaiting =
+      this.session && this.session.role === "Administrator" ? (
         <el-tab-pane label={`Waiting (${waiting.length})`}>
           {waiting}
-        </el-tab-pane>)
-      : '';
+        </el-tab-pane>
+      ) : (
+        ""
+      );
 
-    const tabRejected = this.session && this.session.role === 'Administrator' ? (
+    const tabRejected =
+      this.session && this.session.role === "Administrator" ? (
         <el-tab-pane label={`Rejected (${rejected.length})`}>
           {rejected}
-        </el-tab-pane>)
-      : '';
+        </el-tab-pane>
+      ) : (
+        ""
+      );
 
-    const tabOwned = this.session && this.session.role === 'Teacher' ? (
-        <el-tab-pane label={`Owned (${owned.length})`}>
-          {owned}
-        </el-tab-pane>)
-      : '';
+    const tabOwned =
+      this.session && this.session.role === "Teacher" ? (
+        <el-tab-pane label={`Owned (${owned.length})`}>{owned}</el-tab-pane>
+      ) : (
+        ""
+      );
 
     const tabPublished = (
       <el-tab-pane label={`Published (${published.length})`}>
         {published}
-      </el-tab-pane>);
+      </el-tab-pane>
+    );
 
     return (
       <el-row>

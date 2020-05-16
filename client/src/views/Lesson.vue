@@ -33,7 +33,8 @@
             :plain="true"
             type="warning"
             icon="el-icon-edit"
-          >Edit</el-button>
+            >Edit</el-button
+          >
         </div>
       </el-col>
       <el-col :span="1" style="height: 300px;">
@@ -82,24 +83,24 @@
                   </el-col>
                   <el-col :span="4">
                     <el-button-group>
-                    <el-button
-                      v-if="lesson.state == 'Created'"
-                      :plain="true"
-                      type="warning"
-                      icon="el-icon-edit"
-                      :circle="true"
-                      size="small"
-                      @click="() => onAssignmentEdit(index, assignment)"
-                    ></el-button>
-                    <el-button
-                      v-if="lesson.state == 'Created'"
-                      :plain="true"
-                      type="danger"
-                      icon="el-icon-delete"
-                      :circle="true"
-                      size="small"
-                      @click="() => onAssignmentDelete(index)"
-                    ></el-button>
+                      <el-button
+                        v-if="lesson.state == 'Created'"
+                        :plain="true"
+                        type="warning"
+                        icon="el-icon-edit"
+                        :circle="true"
+                        size="small"
+                        @click="() => onAssignmentEdit(index, assignment)"
+                      ></el-button>
+                      <el-button
+                        v-if="lesson.state == 'Created'"
+                        :plain="true"
+                        type="danger"
+                        icon="el-icon-delete"
+                        :circle="true"
+                        size="small"
+                        @click="() => onAssignmentDelete(index)"
+                      ></el-button>
                     </el-button-group>
                     <el-button
                       v-if="
@@ -244,7 +245,7 @@ class Lesson extends Vue {
               this.initialize();
               return Promise.resolve();
             })
-            .catch(() => Promise.reject())
+            .catch(() => Promise.reject());
         }
       }
     });
@@ -291,7 +292,7 @@ class Lesson extends Vue {
               this.initialize();
               return Promise.resolve();
             })
-            .catch(() => Promise.reject())
+            .catch(() => Promise.reject());
         }
       }
     });

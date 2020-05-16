@@ -32,7 +32,8 @@ namespace Server.Services.Interfaces
 
          var type = await _typeStore.GetAsync(typeName);
 
-         if (type != null) {
+         if (type != null)
+         {
             answer.Error = "Type name already exists!";
 
             return answer;
@@ -48,7 +49,7 @@ namespace Server.Services.Interfaces
          }
 
          var option = default(NameAnswer);
-         
+
          answer.Id = category.Id;
          answer.Label = category.Name;
          option.Id = type.Id;
@@ -75,7 +76,7 @@ namespace Server.Services.Interfaces
          }).ToList();
       }
 
-      public async Task<IList<NameGroupAnswer>> GetGroupAsync()
+      public async Task<IList<NameGroupAnswer>> GetGroupTypeBasedAsync()
       {
          var types = await _typeStore.GetAsync();
 
@@ -98,6 +99,28 @@ namespace Server.Services.Interfaces
                }).ToList()
             }
          ).OrderBy(item => item.Id).ToList();
+      }
+
+      public async Task<IList<NameGroupAnswer>> GetGroupCategoryBasedAsync()
+      {
+         var categories = await _categoryStore
+            .GetAsync();
+
+         if (categories == null)
+         {
+            return new List<NameGroupAnswer>();
+         }
+
+         return categories.Select(category => new NameGroupAnswer
+         {
+            Id = category.Id,
+            Label = category.Name,
+            Options = category.Types.Select(type => new NameAnswer
+            {
+               Id = type.Id,
+               Name = type.Name
+            }).ToList()
+         }).OrderBy(item => item.Id).ToList();
       }
 
       public async Task<IList<NameAnswer>> GetCategoriesAsync()
@@ -123,7 +146,8 @@ namespace Server.Services.Interfaces
          var category = await _categoryStore
             .GetAsync(name);
 
-         if (category != null) {
+         if (category != null)
+         {
             answer.Error = "Category does not exist!";
 
             return answer;

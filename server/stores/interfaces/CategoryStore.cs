@@ -29,18 +29,21 @@ namespace Server.Stores.Interfaces
       public async Task<IList<Category>> GetAsync()
       {
          return await _store.Categories
+            .Include(category => category.Types)
             .ToListAsync();
       }
 
       public async Task<Category> GetAsync(uint id)
       {
          return await _store.Categories
+            .Include(category => category.Types)
             .FirstOrDefaultAsync(category => category.Id == id);
       }
 
       public async Task<Category> GetAsync(string name)
       {
          return await _store.Categories
+            .Include(category => category.Types)
             .FirstOrDefaultAsync(category => category.Name == name);
       }
    }

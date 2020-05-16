@@ -3,14 +3,12 @@
     <el-button :loading="loading" type="info" :circle="true"></el-button>
   </div>
   <div v-else>
-    <el-table
-      :data="users || []"
-      style="width: 100%"
-      row-key="id"
-    >
+    <el-table :data="users || []" style="width: 100%" row-key="id">
       <el-table-column prop="name" label="Name" width="180">
         <template slot-scope="scope">
-          <el-link @click="() => onProfileClick(scope.$index)">{{scope.row.name}}</el-link>
+          <el-link @click="() => onProfileClick(scope.$index)">{{
+            scope.row.name
+          }}</el-link>
         </template>
       </el-table-column>
       <el-table-column prop="level" label="Level" width="180"></el-table-column>
@@ -18,9 +16,15 @@
       <el-table-column
         v-if="session && session.role === 'Administrator'"
         label="Operations"
-        width="180">
+        width="180"
+      >
         <template slot-scope="scope">
-          <el-button type="primary" @click="() => onModify(scope.$index)" size="small">Modify</el-button>
+          <el-button
+            type="primary"
+            @click="() => onModify(scope.$index)"
+            size="small"
+            >Modify</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -31,7 +35,11 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
-import { ProfileListModel, ProfileModel, SessionModel } from "../models/stores/user.store.model";
+import {
+  ProfileListModel,
+  ProfileModel,
+  SessionModel
+} from "../models/stores/user.store.model";
 import { NameServiceModel } from "../models/services/name.service.model";
 
 @Component({
@@ -62,25 +70,25 @@ class Users extends Vue {
   private loading = true;
 
   public mounted() {
-    Promise.all([
-      this.getUsers(), 
-      this.getRoles({forRegistration: false}), 
-    ]).then(() => {
+    Promise.all([this.getUsers(), this.getRoles({ forRegistration: false })])
+      .then(() => {
         this.loading = false;
       })
       .catch(() => {
         this.loading = false;
-    });
+      });
   }
 
   private onProfileClick(index: number) {
-    this.$router.push({ name: "Profile", params: { id: this.users[index].id.toString() } });
+    this.$router.push({
+      name: "Profile",
+      params: { id: this.users[index].id.toString() }
+    });
   }
 
   private onModify(index: number) {
-    const roleList = [... this.roles];
-    const roleId = roleList
-      .find(item => item.name === this.users[index].role)!
+    const roleList = [...this.roles];
+    const roleId = roleList.find(item => item.name === this.users[index].role)!
       .id;
 
     this.setManageUserModalVisible({

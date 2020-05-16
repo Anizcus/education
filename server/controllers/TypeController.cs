@@ -21,7 +21,7 @@ namespace Server.Controllers
       [HttpGet("/type/all")]
       public async Task<IActionResult> Get() 
       {
-         var types = await _adminService.GetGroupAsync();
+         var types = await _adminService.GetGroupTypeBasedAsync();
 
          return Ok(types);
       }

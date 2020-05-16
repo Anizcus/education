@@ -1,6 +1,10 @@
 <template>
-  <el-dialog :title="`${(data && data.title) || ''}`" :visible="confirmModal" @close="onClose">
-    <p>{{ `${(data && data.message) || ''}` }}</p>
+  <el-dialog
+    :title="`${(data && data.title) || ''}`"
+    :visible="confirmModal"
+    @close="onClose"
+  >
+    <p>{{ `${(data && data.message) || ""}` }}</p>
     <span slot="footer" class="dialog-footer">
       <el-button @click="onCancel">Cancel</el-button>
       <el-button type="success" :loading="loading" @click="() => onAction()"
@@ -60,7 +64,9 @@ class DialogConfirmForm extends Vue {
           stateName: this.modalState
         });
       })
-      .catch(() => {this.loading = false;});
+      .catch(() => {
+        this.loading = false;
+      });
   }
 
   private onCancel() {

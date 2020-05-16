@@ -1,5 +1,5 @@
 import { LessonModel } from "./lesson.store.model";
-import { NameServiceModel } from '../services/name.service.model';
+import { NameServiceModel } from "../services/name.service.model";
 
 interface SessionModel {
   id: number;

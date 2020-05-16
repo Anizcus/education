@@ -22,10 +22,9 @@ class LessonType extends Vue {
   private loading = true;
 
   public mounted() {
-    this.getTypes({ id: Number(this.$route.params.id) })
-      .finally(() => {
-        this.loading = false;
-      });
+    this.getTypes({ id: Number(this.$route.params.id) }).finally(() => {
+      this.loading = false;
+    });
   }
 
   public render(): VNode {

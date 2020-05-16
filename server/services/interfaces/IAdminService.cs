@@ -8,7 +8,8 @@ namespace Server.Services.Interfaces
    {
       Task<IList<NameAnswer>> GetTypesAsync();
       Task<IList<NameAnswer>> GetCategoriesAsync();
-      Task<IList<NameGroupAnswer>> GetGroupAsync();
+      Task<IList<NameGroupAnswer>> GetGroupTypeBasedAsync();
+      Task<IList<NameGroupAnswer>> GetGroupCategoryBasedAsync();
       Task<NameGroupAnswer> CreateTypeAsync(uint categoryId, string typeName);
       Task<NameAnswer> CreateCategoryAsync(string name);
    }

@@ -134,8 +134,8 @@ class Profile extends Vue {
 
   public created() {
     this.onProfile();
-    
-    this.$watch('$route', () => this.onProfile());
+
+    this.$watch("$route", () => this.onProfile());
   }
 
   private onProfile() {

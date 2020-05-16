@@ -6,6 +6,7 @@ import DialogLessonForm from "./components/DialogLessonForm.vue";
 import DialogAuthorizeForm from "./components/DialogAuthorizeForm.vue";
 import DialogAnswerForm from "./components/DialogAnswerForm.vue";
 import DialogConfirmForm from "./components/DialogConfirmForm.vue";
+import DialogNameForm from "./components/DialogNameForm.vue";
 import DialogManageUserForm from "./components/DialogManageUserForm.vue";
 import { VNode } from "vue/types/umd";
 import { mapActions, ActionMethod } from "vuex";
@@ -18,7 +19,8 @@ import { mapActions, ActionMethod } from "vuex";
     "i-dialog-lesson-form": DialogLessonForm,
     "i-dialog-answer-form": DialogAnswerForm,
     "i-dialog-confirm-form": DialogConfirmForm,
-    "i-dialog-manage-user-form": DialogManageUserForm
+    "i-dialog-manage-user-form": DialogManageUserForm,
+    "i-dialog-name-form": DialogNameForm
   },
   methods: {
     ...mapActions("user", {
@@ -32,10 +34,10 @@ class Application extends Vue {
 
   public mounted() {
     this.isOnline()
-    .catch((error) => console.error(error))
-    .finally(() => {
-      this.loading = false;
-    });
+      .catch(error => console.error(error))
+      .finally(() => {
+        this.loading = false;
+      });
   }
 
   public render(): VNode {
@@ -64,6 +66,7 @@ class Application extends Vue {
           <i-dialog-answer-form></i-dialog-answer-form>
           <i-dialog-confirm-form></i-dialog-confirm-form>
           <i-dialog-manage-user-form></i-dialog-manage-user-form>
+          <i-dialog-name-form></i-dialog-name-form>
           <i-layout></i-layout>
         </div>
       );

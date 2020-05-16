@@ -9,6 +9,7 @@ import Register from "../views/Register.vue";
 import Lesson from "../views/Lesson.vue";
 import Profile from "../views/Profile.vue";
 import Users from "../views/Users.vue";
+import Admin from "../views/Admin.vue";
 
 Vue.use(Router);
 
@@ -58,6 +59,11 @@ const router = new Router({
       path: "/users",
       name: "Users",
       component: Users
+    },
+    {
+      path: "/admin",
+      name: "Admin",
+      component: Admin
     }
   ]
 });

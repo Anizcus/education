@@ -1,5 +1,9 @@
 <template>
-  <el-dialog @open="() => onOpen()" :title="`${modalState} ${data && data.name} status`" :visible="manageUserModal">
+  <el-dialog
+    @open="() => onOpen()"
+    :title="`${modalState} ${data && data.name} status`"
+    :visible="manageUserModal"
+  >
     <el-alert
       v-if="error"
       :title="error"
@@ -10,12 +14,18 @@
     </el-alert>
     <el-form :model="form" label-position="top">
       <el-form-item label="Role" prop="role" v-if="data && data.roles">
-        <el-select style="width: 100%;" :clearable="true" v-model="form.role" placeholder="Select a role">
+        <el-select
+          style="width: 100%;"
+          :clearable="true"
+          v-model="form.role"
+          placeholder="Select a role"
+        >
           <el-option
             v-for="role in data.roles"
             :key="role.id"
             :label="role.name"
-            :value="role.id">
+            :value="role.id"
+          >
           </el-option>
         </el-select>
       </el-form-item>
@@ -23,13 +33,16 @@
         <el-switch
           v-model="form.isBlocked"
           active-text="User will be blocked"
-          inactive-text="User is not blocked">
+          inactive-text="User is not blocked"
+        >
         </el-switch>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="onCancel">Cancel</el-button>
-      <el-button :loading="buttonLoading" type="primary" @click="onAction">{{ modalState }}</el-button>
+      <el-button :loading="buttonLoading" type="primary" @click="onAction">{{
+        modalState
+      }}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -67,7 +80,7 @@ interface ManageUserForm {
       modalState: "modalState",
       manageUserModal: "manageUserModalVisible",
       data: "modalData"
-    }),
+    })
   }
 })
 class DialogManageUserForm extends Vue {
@@ -90,12 +103,14 @@ class DialogManageUserForm extends Vue {
       userId: this.data.id,
       roleId: this.form.role,
       isBlocked: this.form.isBlocked
-    }).then(() => {
-      this.buttonLoading = false;
-    }).catch((error) => {
-      this.error = error;
-      this.buttonLoading = false;
-    });
+    })
+      .then(() => {
+        this.buttonLoading = false;
+      })
+      .catch(error => {
+        this.error = error;
+        this.buttonLoading = false;
+      });
 
     this.setManageUserModalVisible({
       visible: false,

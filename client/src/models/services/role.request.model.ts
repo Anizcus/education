@@ -1,11 +1,11 @@
 interface RoleRequestModel {
-   forRegistration: boolean;
+  forRegistration: boolean;
 }
 
 interface ModifyUserRequestModel {
-   userId: number;
-   isBlocked: boolean;
-   roleId: number;
+  userId: number;
+  isBlocked: boolean;
+  roleId: number;
 }
 
-export { RoleRequestModel, ModifyUserRequestModel }
+export { RoleRequestModel, ModifyUserRequestModel };

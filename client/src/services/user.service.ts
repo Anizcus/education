@@ -9,7 +9,10 @@ import {
   ProfileListModel,
   SessionModel
 } from "@/models/stores/user.store.model";
-import { RoleRequestModel, ModifyUserRequestModel } from '@/models/services/role.request.model';
+import {
+  RoleRequestModel,
+  ModifyUserRequestModel
+} from "@/models/services/role.request.model";
 
 const UserService = {
   get: (model: IdServiceModel): Promise<NameServiceModel> => {

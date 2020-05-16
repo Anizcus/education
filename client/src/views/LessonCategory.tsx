@@ -22,10 +22,9 @@ class LessonCategory extends Vue {
   private loading = true;
 
   public mounted() {
-    this.getCategories()
-      .finally(() => {
-        this.loading = false;
-      });
+    this.getCategories().finally(() => {
+      this.loading = false;
+    });
   }
 
   public render(): VNode {
