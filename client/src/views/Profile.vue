@@ -1,7 +1,14 @@
 <template>
-  <div v-if="loading">
+  <el-container
+    v-if="loading"
+    style="
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    "
+  >
     <el-button :loading="loading" type="info" :circle="true"></el-button>
-  </div>
+  </el-container>
   <div v-else-if="!session">
     <el-alert
       title="You must be logged in to view other users!"

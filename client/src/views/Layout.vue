@@ -82,8 +82,8 @@
           icon="el-icon-set-up"
           type="default"
           class="menu-button"
-          @click="() => onAdmin()"
-          >Admin Area</el-button
+          @click="() => onConfiguration()"
+          >Configuration</el-button
         >
       </el-aside>
     </el-container>
@@ -117,9 +117,9 @@ class Main extends Vue {
   private session!: SessionModel;
   private logout!: ActionMethod;
 
-  private onAdmin() {
-    if (this.$route.name !== "Admin") {
-      this.$router.push({ name: "Admin" });
+  private onConfiguration() {
+    if (this.$route.name !== "Configuration") {
+      this.$router.push({ name: "Configuration" });
     }
   }
 

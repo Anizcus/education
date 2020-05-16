@@ -1,12 +1,22 @@
 <template>
+  <el-container
+    v-if="loading"
+    style="
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    "
+  >
+    <el-button :loading="loading" type="info" :circle="true"></el-button>
+  </el-container>
   <el-table
+    v-else
     :data="
       groups.filter(
-        group =>
+        (group) =>
           !search || group.label.toLowerCase().includes(search.toLowerCase())
       )
     "
-    :loading="loading"
     empty-text="No data!"
   >
     <el-table-column type="expand">
@@ -78,11 +88,11 @@ import { mapActions, ActionMethod } from "vuex";
 @Component({
   methods: {
     ...mapActions("modal", {
-      setNameModalVisible: "setNameModalVisible"
-    })
-  }
+      setNameModalVisible: "setNameModalVisible",
+    }),
+  },
 })
-class Admin extends Vue {
+class Configuration extends Vue {
   private setNameModalVisible!: ActionMethod;
   private groups: NameGroupModel[] = [];
   private search = "";
@@ -115,9 +125,9 @@ class Admin extends Vue {
         onAction: (id: number, name: string) =>
           AdminService.updateCategory({
             id,
-            name
-          }).then(() => this.initialize())
-      }
+            name,
+          }).then(() => this.initialize()),
+      },
     });
   }
 
@@ -131,9 +141,9 @@ class Admin extends Vue {
         onAction: (id: number, name: string) =>
           AdminService.createCategory({
             id,
-            name
-          }).then(() => this.initialize())
-      }
+            name,
+          }).then(() => this.initialize()),
+      },
     });
   }
 
@@ -149,9 +159,9 @@ class Admin extends Vue {
         onAction: (id: number, name: string) =>
           AdminService.updateType({
             id,
-            name
-          }).then(() => this.initialize())
-      }
+            name,
+          }).then(() => this.initialize()),
+      },
     });
   }
 
@@ -167,11 +177,11 @@ class Admin extends Vue {
         onAction: (id: number, name: string) =>
           AdminService.createType({
             id,
-            name
-          }).then(() => this.initialize())
-      }
+            name,
+          }).then(() => this.initialize()),
+      },
     });
   }
 }
-export default Admin;
+export default Configuration;
 </script>

@@ -75,15 +75,10 @@ export default SearchLessonComponent;
     background: #e6a23c;
     border-color: #e6a23c;
     color: #fff;
-    width: 75px;
   }
 }
 
-.i-button {
-  width: 100%;
-}
-
 .el-input-group__append > .i-button {
-  width: 75px;
+  width: 100px;
 }
 </style>

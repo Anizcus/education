@@ -1,7 +1,14 @@
 <template>
-  <div v-if="loading">
+  <el-container
+    v-if="loading"
+    style="
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    "
+  >
     <el-button :loading="loading" type="info" :circle="true"></el-button>
-  </div>
+  </el-container>
   <div v-else>
     <el-table :data="users || []" style="width: 100%" row-key="id">
       <el-table-column prop="name" label="Name" width="180">
@@ -38,7 +45,7 @@ import { mapActions, ActionMethod, mapGetters } from "vuex";
 import {
   ProfileListModel,
   ProfileModel,
-  SessionModel
+  SessionModel,
 } from "../models/stores/user.store.model";
 import { NameServiceModel } from "../models/services/name.service.model";
 
@@ -46,19 +53,19 @@ import { NameServiceModel } from "../models/services/name.service.model";
   methods: {
     ...mapActions("user", {
       getUsers: "getUsers",
-      getRoles: "getRoles"
+      getRoles: "getRoles",
     }),
     ...mapActions("modal", {
-      setManageUserModalVisible: "setManageUserModalVisible"
-    })
+      setManageUserModalVisible: "setManageUserModalVisible",
+    }),
   },
   computed: {
     ...mapGetters("user", {
       users: "users",
       roles: "roles",
-      session: "session"
-    })
-  }
+      session: "session",
+    }),
+  },
 })
 class Users extends Vue {
   private getUsers!: ActionMethod;
@@ -82,14 +89,15 @@ class Users extends Vue {
   private onProfileClick(index: number) {
     this.$router.push({
       name: "Profile",
-      params: { id: this.users[index].id.toString() }
+      params: { id: this.users[index].id.toString() },
     });
   }
 
   private onModify(index: number) {
     const roleList = [...this.roles];
-    const roleId = roleList.find(item => item.name === this.users[index].role)!
-      .id;
+    const roleId = roleList.find(
+      (item) => item.name === this.users[index].role
+    )!.id;
 
     this.setManageUserModalVisible({
       visible: true,
@@ -98,8 +106,8 @@ class Users extends Vue {
         id: this.users[index].id,
         name: this.users[index].name,
         roles: roleList,
-        role: roleId
-      }
+        role: roleId,
+      },
     });
   }
 }
