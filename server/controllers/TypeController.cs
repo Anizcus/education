@@ -29,9 +29,17 @@ namespace Server.Controllers
       [HttpPost("/type")]
       public async Task<IActionResult> CreateType([FromBody] RequestTypeCreate request) 
       {
-         var types = await _adminService.CreateTypeAsync(request.Id, request.Name);
+         var type = await _adminService.CreateTypeAsync(request.Id, request.Name);
 
-         return Ok(types);
+         return Ok(type);
+      }
+
+      [HttpPut("/type")]
+      public async Task<IActionResult> UpdateType([FromBody] NamePayload request) 
+      {
+         var type = await _adminService.UpdateTypeAsync(request.Id, request.Name);
+
+         return Ok(type);
       }
 
    }

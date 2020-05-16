@@ -9,5 +9,6 @@ namespace Server.Stores.Interfaces {
       Task<Category> GetAsync(uint id);
       Task<Category> GetAsync(string name);
       Task<Category> CreateAsync(string name);
+      Task<Category> UpdateAsync(Category category);
    }
 }

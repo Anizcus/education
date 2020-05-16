@@ -46,5 +46,13 @@ namespace Server.Stores.Interfaces
             .Include(category => category.Types)
             .FirstOrDefaultAsync(category => category.Name == name);
       }
+
+      public async Task<Category> UpdateAsync(Category category)
+      {
+         var updated = _store.Categories.Update(category);
+         var saved = await _store.SaveChangesAsync();
+
+         return updated.Entity;
+      }
    }
 }

@@ -35,7 +35,23 @@ namespace Server.Stores.Interfaces
       public async Task<Type> GetAsync(string name)
       {
          return await _store.Types
+            .Include(type => type.Category)
             .FirstOrDefaultAsync(type => type.Name == name);
+      }
+
+      public async Task<Type> GetAsync(uint id)
+      {
+         return await _store.Types
+            .Include(type => type.Category)
+            .FirstOrDefaultAsync(type => type.Id == id);
+      }
+
+      public async Task<Type> UpdateAsync(Type type)
+      {
+         var updated = _store.Types.Update(type);
+         var saved = await _store.SaveChangesAsync();
+
+         return updated.Entity;
       }
    }
 }

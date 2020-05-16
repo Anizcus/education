@@ -13,6 +13,18 @@ const AdminService = {
   },
   getCategories: (): Promise<NameGroupModel[]> => {
     return Service.get("category/all");
+  },
+  updateType: (model: NameServiceModel): Promise<NameServiceModel> => {
+    return Service.put("type", model);
+  },
+  updateCategory: (model: NameServiceModel): Promise<NameServiceModel> => {
+    return Service.put("category", model);
+  },
+  createType: (model: NameServiceModel): Promise<NameServiceModel> => {
+    return Service.post("type", model);
+  },
+  createCategory: (model: NameServiceModel): Promise<NameServiceModel> => {
+    return Service.post("category", model);
   }
 };
 

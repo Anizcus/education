@@ -1,5 +1,14 @@
 <template>
-  <el-table :data="groups" :loading="loading">
+  <el-table
+    :data="
+      groups.filter(
+        group =>
+          !search || group.label.toLowerCase().includes(search.toLowerCase())
+      )
+    "
+    :loading="loading"
+    empty-text="No data!"
+  >
     <el-table-column type="expand">
       <template slot-scope="scope">
         <div v-if="scope.row.options.length">
@@ -14,7 +23,7 @@
           </template>
         </div>
         <div v-else>
-          Category has no types!
+          <i>Category has no types!</i>
         </div>
       </template>
     </el-table-column>
@@ -26,14 +35,17 @@
       </template>
     </el-table-column>
     <el-table-column align="right">
-      <template slot="header" slot-scope="">
+      <template slot="header" slot-scope="scope">
         <el-input
           style="width: 75%; margin-right: 10px;"
           v-model="search"
           size="mini"
           placeholder="Search by name"
         ></el-input>
-        <el-button size="mini" type="warning" @click="() => onCreateCategory()"
+        <el-button
+          size="mini"
+          type="warning"
+          @click="() => onCreateCategory(scope)"
           >Create</el-button
         >
       </template>
@@ -62,7 +74,6 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { NameGroupModel, AdminService } from "../services/admin.service";
 import { mapActions, ActionMethod } from "vuex";
-import { NameServiceModel } from "../models/services/name.service.model";
 
 @Component({
   methods: {
@@ -83,7 +94,7 @@ class Admin extends Vue {
         this.groups = groups;
         this.loading = false;
       })
-      .catch(error => {
+      .catch(() => {
         this.loading = false;
       });
   }
@@ -101,9 +112,11 @@ class Admin extends Vue {
         name,
         title: "Update category name",
         entity: "Category",
-        onAction: (id: number, name: string) => {
-          return Promise.resolve();
-        }
+        onAction: (id: number, name: string) =>
+          AdminService.updateCategory({
+            id,
+            name
+          }).then(() => this.initialize())
       }
     });
   }
@@ -115,9 +128,11 @@ class Admin extends Vue {
       data: {
         title: "Create new category",
         entity: "Category",
-        onAction: (id: number, name: string) => {
-          return Promise.resolve();
-        }
+        onAction: (id: number, name: string) =>
+          AdminService.createCategory({
+            id,
+            name
+          }).then(() => this.initialize())
       }
     });
   }
@@ -131,9 +146,11 @@ class Admin extends Vue {
         name,
         title: "Update type name",
         entity: "Type",
-        onAction: (id: number, name: string) => {
-          return Promise.resolve();
-        }
+        onAction: (id: number, name: string) =>
+          AdminService.updateType({
+            id,
+            name
+          }).then(() => this.initialize())
       }
     });
   }
@@ -147,9 +164,11 @@ class Admin extends Vue {
         name: "",
         title: "Add new type",
         entity: "Type",
-        onAction: (id: number, name: string) => {
-          return Promise.resolve();
-        }
+        onAction: (id: number, name: string) =>
+          AdminService.createType({
+            id,
+            name
+          }).then(() => this.initialize())
       }
     });
   }

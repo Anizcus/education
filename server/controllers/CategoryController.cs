@@ -27,9 +27,17 @@ namespace Server.Controllers
       }
 
       [HttpPost("/category")]
-      public async Task<IActionResult> CreateType([FromBody] RequestNameCreate request) 
+      public async Task<IActionResult> CreateCategory([FromBody] RequestNameCreate request) 
       {
          var category = await _adminService.CreateCategoryAsync(request.Name);
+
+         return Ok(category);
+      }
+
+      [HttpPut("/category")]
+      public async Task<IActionResult> UpdateCategory([FromBody] NamePayload request) 
+      {
+         var category = await _adminService.UpdateCategoryAsync(request.Id, request.Name);
 
          return Ok(category);
       }
