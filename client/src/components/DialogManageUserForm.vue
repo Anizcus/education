@@ -1,6 +1,7 @@
 <template>
   <el-dialog
     @open="() => onOpen()"
+    @close="() => onCancel()"
     :title="`${modalState} ${data && data.name} status`"
     :visible="manageUserModal"
   >
