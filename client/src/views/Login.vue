@@ -89,6 +89,7 @@ class Login extends Vue {
       .then(user => {
         this.alert.message = `You have successfully logged in as ${user.name}!`;
         this.alert.type = "success";
+        this.loading = false;
       })
       .catch(error => {
         this.alert.message = error;

@@ -79,11 +79,22 @@
         >
         <el-button
           v-if="session && session.role === 'Administrator'"
-          icon="el-icon-set-up"
+          icon="el-icon-s-tools"
           type="default"
           class="menu-button"
           @click="() => onConfiguration()"
           >Configuration</el-button
+        >
+        <el-button
+          v-if="
+            session &&
+              (session.role === 'Administrator' || session.role === 'Teacher')
+          "
+          icon="el-icon-s-management"
+          type="default"
+          class="menu-button"
+          @click="() => onConfiguration()"
+          >Manage Lessons</el-button
         >
       </el-aside>
     </el-container>
@@ -101,17 +112,17 @@ import SearchLessonComponent from "../components/SearchLessonComponent.vue";
 @Component({
   computed: {
     ...mapGetters("user", {
-      session: "session"
-    })
+      session: "session",
+    }),
   },
   methods: {
     ...mapActions("user", {
-      logout: "logout"
-    })
+      logout: "logout",
+    }),
   },
   components: {
-    "i-search-lesson": SearchLessonComponent
-  }
+    "i-search-lesson": SearchLessonComponent,
+  },
 })
 class Main extends Vue {
   private session!: SessionModel;
