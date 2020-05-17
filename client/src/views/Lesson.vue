@@ -27,14 +27,6 @@
           <div class="text-center">{{ lesson.category }}</div>
           <el-divider> </el-divider>
           <div class="text-center">{{ lesson.type }}</div>
-          <el-divider> </el-divider>
-          <el-button
-            v-if="lesson.state == 'Created'"
-            :plain="true"
-            type="warning"
-            icon="el-icon-edit"
-            >Edit</el-button
-          >
         </div>
       </el-col>
       <el-col :span="1" style="height: 300px;">
@@ -120,7 +112,7 @@
             </el-collapse>
             <p>
               <el-button
-                v-if="lesson.state == 'Created'"
+                v-if="lesson.state == 'Created' && (session  && session.role === 'Teacher')"
                 @click="() => onAssignmentCreate()"
                 type="primary"
                 :plain="true"
@@ -128,7 +120,7 @@
                 >Add a question</el-button
               >
               <el-button
-                v-if="lesson.state == 'Waiting'"
+                v-if="lesson.state == 'Waiting' && (session  && session.role === 'Administrator')"
                 @click="() => Reject()"
                 type="danger"
                 :plain="true"
@@ -138,7 +130,7 @@
             </p>
             <p>
               <el-button
-                v-if="lesson.state == 'Created'"
+                v-if="lesson.state == 'Created' && (session  && session.role === 'Teacher')"
                 @click="() => Publish()"
                 type="success"
                 :plain="true"
@@ -146,7 +138,7 @@
                 >Publish</el-button
               >
               <el-button
-                v-if="lesson.state == 'Waiting'"
+                v-if="lesson.state == 'Waiting' && (session  && session.role === 'Administrator')"
                 @click="() => Approve()"
                 type="success"
                 :plain="true"
@@ -154,7 +146,7 @@
                 >Approve</el-button
               >
               <el-button
-                v-if="lesson.state == 'Published' && lesson.progress == null"
+                v-if="lesson.state == 'Published' && lesson.progress == null && session"
                 @click="() => onStartLesson()"
                 type="warning"
                 :plain="true"
@@ -177,12 +169,14 @@ import {
   AssignmentModel
 } from "../models/stores/lesson.store.model";
 import { ActionMethod, mapGetters, mapActions } from "vuex";
+import { SessionModel } from "../models/stores/user.store.model";
 
 @Component({
   methods: {
     ...mapActions("lesson", {
       getLesson: "getLessonById",
       startLesson: "startLesson",
+      postStatus: "postLessonStatus",
       postAssignments: "postLessonAssignments"
     }),
     ...mapActions("modal", {
@@ -195,6 +189,9 @@ import { ActionMethod, mapGetters, mapActions } from "vuex";
   computed: {
     ...mapGetters("lesson", {
       lesson: "lesson"
+    }),
+    ...mapGetters("user", {
+      session: "session"
     })
   }
 })
@@ -204,9 +201,11 @@ class Lesson extends Vue {
   private setAuthorizeModalVisible!: ActionMethod;
   private setAnswerModalVisible!: ActionMethod;
   private setConfirmModalVisible!: ActionMethod;
+  private postStatus!: ActionMethod;
   private startLesson!: ActionMethod;
   private postAssignments!: ActionMethod;
   private lesson!: LessonModel;
+  private session!: SessionModel;
   private loading = true;
   private dateOptions = {
     weekday: "long",
@@ -303,7 +302,13 @@ class Lesson extends Vue {
       visible: true,
       stateName: "Approve",
       data: {
-        lessonId: this.lesson.id
+        lessonId: this.lesson.id,
+        onAction: (id: number, status: string, valid: boolean) =>
+          this.postStatus({
+            lessonId: id,
+            status: status,
+            isValid: valid,
+          }).then(() => this.initialize()),
       }
     });
   }
@@ -313,7 +318,13 @@ class Lesson extends Vue {
       visible: true,
       stateName: "Reject",
       data: {
-        lessonId: this.lesson.id
+        lessonId: this.lesson.id,
+        onAction: (id: number, status: string, valid: boolean) =>
+          this.postStatus({
+            lessonId: id,
+            status: status,
+            isValid: valid,
+          }).then(() => this.initialize()),
       }
     });
   }

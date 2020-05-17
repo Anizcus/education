@@ -27,6 +27,12 @@ const LessonService = {
       params: model
     });
   },
+  getLessonListForAdmin: (): Promise<LessonListModel[]> => {
+    return Service.get("lesson/admin");
+  },
+  getLessonListForTeacher: (): Promise<LessonListModel[]> => {
+    return Service.get("lesson/teacher");
+  },
   postLesson: (model: FormData): Promise<NameServiceModel> => {
     return Service.post("lesson", model);
   },

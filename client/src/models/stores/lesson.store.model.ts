@@ -15,6 +15,11 @@ interface LessonListModel {
   ownerName: string;
   state: string | null;
   badgeBase64: string;
+  type: string;
+  status: string;
+  category: string;
+  description?: string;
+  modified: Date;
 }
 
 interface LessonModel {

@@ -1,5 +1,10 @@
 <template>
-  <el-dialog :title="`${modalState} a lesson`" :visible="lessonModal">
+  <el-dialog
+    :title="`${modalState} a lesson`"
+    :visible="lessonModal"
+    @open="onOpen"
+    @close="onCancel"
+  >
     <el-alert
       v-if="error"
       :title="error"
@@ -11,6 +16,30 @@
     <el-form :model="form" label-position="top">
       <el-form-item label="Lesson name">
         <el-input v-model="form.name"></el-input>
+      </el-form-item>
+      <el-form-item label="Lesson type">
+        <el-select
+          style="width: 100%;"
+          v-model="form.type"
+          placeholder=""
+          :loading="typeLoading"
+          no-data-text="No data!"
+          :clearable="true"
+        >
+          <el-option-group
+            v-for="group in groups"
+            :key="group.id"
+            :label="group.label"
+          >
+            <el-option
+              v-for="option in group.options"
+              :key="option.id"
+              :label="option.name"
+              :value="option.id"
+            >
+            </el-option>
+          </el-option-group>
+        </el-select>
       </el-form-item>
       <el-row>
         <el-col :span="18">
@@ -56,6 +85,12 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { LessonService } from "../services/lesson.service";
 import { mapGetters, mapActions, ActionMethod } from "vuex";
+import { NameGroupModel, AdminService } from "../services/admin.service";
+
+interface ModalData {
+  onSuccess: () => void;
+  onFailure: () => void;
+}
 
 @Component({
   methods: {
@@ -66,15 +101,18 @@ import { mapGetters, mapActions, ActionMethod } from "vuex";
   computed: {
     ...mapGetters("modal", {
       modalState: "modalState",
+      data: "modalData",
       lessonModal: "lessonModalVisible",
     }),
   },
 })
 class DialogLessonForm extends Vue {
   private setLessonModalVisible!: ActionMethod;
+  private groups: NameGroupModel[] = [];
   private form = {
     name: "",
     description: "",
+    type: undefined,
   };
   private modalState!: string;
   private lessonModal!: boolean;
@@ -82,6 +120,21 @@ class DialogLessonForm extends Vue {
   private error = "";
   private formData = new FormData();
   private loading = false;
+  private typeLoading = false;
+  private data!: ModalData;
+
+  private onOpen() {
+    this.typeLoading = true;
+    AdminService.getTypes()
+      .then((groups: NameGroupModel[]) => {
+        this.groups = groups;
+        this.typeLoading = false;
+      })
+      .catch((error) => {
+        this.typeLoading = false;
+      });
+    this.form.type = Number(this.$route.params.id) || "";
+  }
 
   private handleUpload(file: File) {
     if (file.type === "image/png") {
@@ -109,11 +162,12 @@ class DialogLessonForm extends Vue {
     this.formData.set("name", this.form.name);
     this.formData.set("description", this.form.description);
     this.formData.set("badge", this.image);
-    this.formData.set("type", this.$route.params.id);
+    this.formData.set("type", this.form.type);
 
     LessonService.postLesson(this.formData)
       .then(() => {
         this.loading = false;
+        this.data.onSuccess();
         this.setLessonModalVisible({
           visible: false,
           data: undefined,

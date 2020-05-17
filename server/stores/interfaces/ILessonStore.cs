@@ -23,5 +23,8 @@ namespace Server.Stores.Interfaces {
       Task<IList<UserAssignment>> GetUserAssignments(uint userId);
       Task<UserAssignment> PostUserAssignment(UserAssignment assignment);
       Task<IList<UserAssignment>> GetUserAssignmentsBasedOnProgressAndLesson(uint userId, uint lessonId, uint progressId);
+      Task<IList<Lesson>> GetLessonListForAdmin();
+      Task<IList<Lesson>> GetLessonListForOwner(uint userId);
+      
    }
 }

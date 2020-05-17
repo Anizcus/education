@@ -20,10 +20,11 @@
   </div>
   <div v-else>
     <el-row>
-      <el-col :span="12" style="padding-right: 10px;">
-        <p>Profile page of {{ profile.name }}</p>
-        <p>Role - {{ profile.role }}</p>
-        <p>Level: {{ profile.level }}</p>
+      <el-col :offset="6" :span="12" style="padding-right: 10px;">
+        <h2 style="text-align:center;">{{ profile.name }}</h2>
+        <p style="text-align:center;">{{ profile.role }}</p>
+        <p style="text-align:center;">Level</p>
+        <p style="text-align:center;">{{ profile.level }}</p>
         <el-progress
           :text-inside="true"
           :stroke-width="22"
@@ -32,68 +33,34 @@
           "
           status="warning"
         ></el-progress>
-        <p>
-          Experience: {{ profile.experience }} / {{ profile.nextExperience }}
+        <p style="text-align:center;">Experience</p>
+        <p style="text-align:center;">
+          {{ profile.experience }} / {{ profile.nextExperience }}
         </p>
-      </el-col>
-      <el-col :span="12">
-        <p>Badges (Completed)</p>
-        <el-card
-          v-for="lesson in profile.lessons.filter(
-            item => item.progress == 'Completed'
-          )"
-          :key="lesson.id"
-          shadow="hover"
-          style="display: inline-block;"
-        >
-          <div @click="() => goToLesson(lesson.id)">
-            <el-tooltip :content="lesson.name">
-              <el-image
-                :src="lesson.badgeBase64"
-                alt="Badge"
-                style="width: 100px; height: 100px;"
-              >
-                <div
-                  slot="error"
-                  style="
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              width: 100%;
-              height: 100%;
-              background: #f5f7fa;
-              color: #909399;
-              font-size: 30px;"
-                >
-                  <i class="el-icon-picture-outline"></i>
-                </div>
-              </el-image>
-            </el-tooltip>
-          </div>
-        </el-card>
       </el-col>
     </el-row>
     <el-row>
       <el-col>
-        <p>Badges (Active)</p>
-        <el-card
-          v-for="lesson in profile.lessons.filter(
-            item => item.progress == 'Active'
-          )"
-          :key="lesson.id"
-          shadow="hover"
-          style="display: inline-block;"
-        >
-          <div @click="() => goToLesson(lesson.id)">
-            <el-tooltip :content="lesson.name">
-              <el-image
-                :src="lesson.badgeBase64"
-                alt="Badge"
-                style="width: 100px; height: 100px;"
-              >
-                <div
-                  slot="error"
-                  style="
+        <p style="text-align:center;">Active badges</p>
+        <div class="container-center">
+          <el-card
+            v-for="lesson in profile.lessons.filter(
+              (item) => item.progress == 'Active'
+            )"
+            :key="lesson.id"
+            shadow="hover"
+            style="display: inline-block;"
+          >
+            <div @click="() => goToLesson(lesson.id)">
+              <el-tooltip :content="lesson.name">
+                <el-image
+                  :src="lesson.badgeBase64"
+                  alt="Badge"
+                  style="width: 100px; height: 100px;"
+                >
+                  <div
+                    slot="error"
+                    style="
               display: flex;
               justify-content: center;
               align-items: center;
@@ -102,13 +69,54 @@
               background: #f5f7fa;
               color: #909399;
               font-size: 30px;"
+                  >
+                    <i class="el-icon-picture-outline"></i>
+                  </div>
+                </el-image>
+              </el-tooltip>
+            </div>
+          </el-card>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col>
+        <p style="text-align:center;">Completed badges</p>
+        <div class="container-center">
+          <el-card
+            v-for="lesson in profile.lessons.filter(
+              (item) => item.progress == 'Completed'
+            )"
+            :key="lesson.id"
+            shadow="hover"
+            style="display: inline-block;"
+          >
+            <div @click="() => goToLesson(lesson.id)">
+              <el-tooltip :content="lesson.name">
+                <el-image
+                  :src="lesson.badgeBase64"
+                  alt="Badge"
+                  style="width: 100px; height: 100px;"
                 >
-                  <i class="el-icon-picture-outline"></i>
-                </div>
-              </el-image>
-            </el-tooltip>
-          </div>
-        </el-card>
+                  <div
+                    slot="error"
+                    style="
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 100%;
+              height: 100%;
+              background: #f5f7fa;
+              color: #909399;
+              font-size: 30px;"
+                  >
+                    <i class="el-icon-picture-outline"></i>
+                  </div>
+                </el-image>
+              </el-tooltip>
+            </div>
+          </el-card>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -123,15 +131,15 @@ import { ProfileModel, SessionModel } from "../models/stores/user.store.model";
 @Component({
   methods: {
     ...mapActions("user", {
-      getProfile: "getProfile"
-    })
+      getProfile: "getProfile",
+    }),
   },
   computed: {
     ...mapGetters("user", {
       profile: "profile",
-      session: "session"
-    })
-  }
+      session: "session",
+    }),
+  },
 })
 class Profile extends Vue {
   private getProfile!: ActionMethod;
@@ -162,3 +170,10 @@ class Profile extends Vue {
 
 export default Profile;
 </script>
+
+<style lang="scss">
+.container-center {
+  display: flex;
+  justify-content: center;
+}
+</style>

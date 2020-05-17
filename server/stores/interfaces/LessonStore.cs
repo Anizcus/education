@@ -72,6 +72,8 @@ namespace Server.Stores.Interfaces
          return await _store.Lessons
             .Include(lesson => lesson.Owner)
             .Include(lesson => lesson.State)
+            .Include(lesson => lesson.Type)
+            .Include(lesson => lesson.Category)
          .Where(lesson => lesson.TypeId == typeId)
          .ToListAsync();
       }
@@ -80,6 +82,9 @@ namespace Server.Stores.Interfaces
       {
          return await _store.Lessons
             .Include(Lesson => Lesson.Owner)
+            .Include(lesson => lesson.State)
+            .Include(lesson => lesson.Type)
+            .Include(lesson => lesson.Category)
          .Where(lesson => lesson.TypeId == typeId && lesson.StateId == (uint)StateEnum.Published)
          .ToListAsync();
       }
@@ -200,6 +205,28 @@ namespace Server.Stores.Interfaces
                assignment.Assignment.LessonId == lessonId && 
                assignment.ProgressId == progressId)
             .ToListAsync();
+      }
+
+      public async Task<IList<Lesson>> GetLessonListForAdmin()
+      {
+         return await _store.Lessons
+            .Include(Lesson => Lesson.Owner)
+            .Include(lesson => lesson.State)
+            .Include(lesson => lesson.Type)
+            .Include(lesson => lesson.Category)
+         .Where(lesson => lesson.StateId == (uint) StateEnum.Waiting)
+         .ToListAsync();
+      }
+
+      public async Task<IList<Lesson>> GetLessonListForOwner(uint userId)
+      {
+         return await _store.Lessons
+            .Include(Lesson => Lesson.Owner)
+            .Include(lesson => lesson.State)
+            .Include(lesson => lesson.Type)
+            .Include(lesson => lesson.Category)
+         .Where(lesson => lesson.OwnerId == userId)
+         .ToListAsync();
       }
    }
 }

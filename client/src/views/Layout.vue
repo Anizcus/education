@@ -78,14 +78,6 @@
           >Users</el-button
         >
         <el-button
-          v-if="session && session.role === 'Administrator'"
-          icon="el-icon-s-tools"
-          type="default"
-          class="menu-button"
-          @click="() => onConfiguration()"
-          >Configuration</el-button
-        >
-        <el-button
           v-if="
             session &&
               (session.role === 'Administrator' || session.role === 'Teacher')
@@ -93,8 +85,16 @@
           icon="el-icon-s-management"
           type="default"
           class="menu-button"
-          @click="() => onConfiguration()"
+          @click="() => onManagement()"
           >Manage Lessons</el-button
+        >
+        <el-button
+          v-if="session && session.role === 'Administrator'"
+          icon="el-icon-s-tools"
+          type="default"
+          class="menu-button"
+          @click="() => onConfiguration()"
+          >Configuration</el-button
         >
       </el-aside>
     </el-container>
@@ -131,6 +131,12 @@ class Main extends Vue {
   private onConfiguration() {
     if (this.$route.name !== "Configuration") {
       this.$router.push({ name: "Configuration" });
+    }
+  }
+
+  private onManagement() {
+    if (this.$route.name !== "Management") {
+      this.$router.push({ name: "Management" });
     }
   }
 

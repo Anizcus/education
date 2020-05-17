@@ -17,5 +17,7 @@ namespace Server.Services.Interfaces
       Task<NameAnswer> PostLessonStatusAsync(uint lessonId, bool isValid, string status);
       Task<NameAnswer> StartLessonAsync(uint lessonId, uint userId);
       Task<AssignmentAnswerStatus> AssignmentAnswerAsync(uint assignmentId, uint userId, string answer);
+      Task<IList<LessonListAnswer>> GetLessonListForAdmin(uint userId);
+      Task<IList<LessonListAnswer>> GetLessonListForTeacher(uint userId);
    }
 }

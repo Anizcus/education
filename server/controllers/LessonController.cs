@@ -59,6 +59,7 @@ namespace Server.Controllers
          return Ok(payload);
       }
 
+      [AllowAnonymous]
       [HttpGet("/lesson/published")]
       public async Task<IActionResult> GetByTypePublished([FromQuery] RequestById request)
       {
@@ -70,7 +71,11 @@ namespace Server.Controllers
               Id = lesson.Id,
               Name = lesson.Name,
               OwnerId = lesson.OwnerId,
-              OwnerName = lesson.OwnerName
+              OwnerName = lesson.OwnerName,
+              State = lesson.State,
+              BadgeBase64 = $"data:image/png;base64,{System.Convert.ToBase64String(lesson.Badge)}",
+              Status = lesson.Status,
+              Modified = lesson.Modified
            }).ToList();
 
          return Ok(payload);
@@ -89,7 +94,9 @@ namespace Server.Controllers
               OwnerId = lesson.OwnerId,
               OwnerName = lesson.OwnerName,
               State = lesson.State,
-              BadgeBase64 = $"data:image/png;base64,{System.Convert.ToBase64String(lesson.Badge)}"
+              BadgeBase64 = $"data:image/png;base64,{System.Convert.ToBase64String(lesson.Badge)}",
+              Status = lesson.Status,
+              Modified = lesson.Modified
            }).ToList();
 
          return Ok(payload);
@@ -120,11 +127,14 @@ namespace Server.Controllers
          return Ok(payload);
       }
 
+      [AllowAnonymous]
       [HttpGet("/lesson")]
       public async Task<IActionResult> GetLesson([FromQuery] RequestById request)
       {
-         var user = HttpContext.User.Claims.ElementAt(0);
-         var lesson = await _lessonService.GetAsync(request.Id, uint.Parse(user.Value));
+         var lesson = await _lessonService.GetAsync(
+            request.Id, 
+            HttpContext.User.Claims.Any() ? (uint.Parse(HttpContext.User.Claims.ElementAt(0).Value)) : 0
+         );
 
          if (!String.IsNullOrEmpty(lesson.Error))
          {
@@ -270,6 +280,77 @@ namespace Server.Controllers
             Message = assignment.Message,
             Progress = assignment.Progress
          };
+
+         return Ok(payload);
+      }
+
+      [HttpGet("/lesson/teacher")]
+      public async Task<IActionResult> GetTeacherLessonsList()
+      {
+         var user = HttpContext.User.Claims.ElementAt(0);
+         var lessons = await _lessonService.GetLessonListForTeacher(uint.Parse(user.Value));
+         var error = lessons.FirstOrDefault()?.Error;
+
+         if (lessons.Any() && !String.IsNullOrEmpty(error))
+         {
+            return BadRequest(
+               new ErrorPayload
+               {
+                  Error = error
+               }
+            );
+         }
+
+         var payload = lessons.Select(
+           lesson => new LessonListPayload
+           {
+              Id = lesson.Id,
+              Name = lesson.Name,
+              OwnerId = lesson.OwnerId,
+              OwnerName = lesson.OwnerName,
+              State = lesson.State,
+              BadgeBase64 = $"data:image/png;base64,{System.Convert.ToBase64String(lesson.Badge)}",
+              Status = lesson.Status,
+              Category = lesson.Category,
+              Description = lesson.Description,
+              Type = lesson.Type,
+              Modified = lesson.Modified
+           }).ToList();
+
+         return Ok(payload);
+      }
+
+      [HttpGet("/lesson/admin")]
+      public async Task<IActionResult> GetLessonListForAdmin()
+      {
+         var user = HttpContext.User.Claims.ElementAt(0);
+         var lessons = await _lessonService.GetLessonListForAdmin(uint.Parse(user.Value));
+         var error = lessons.FirstOrDefault()?.Error;
+
+         if (lessons.Any() && !String.IsNullOrEmpty(error))
+         {
+            return BadRequest(
+               new ErrorPayload
+               {
+                  Error = error
+               }
+            );
+         }
+
+         var payload = lessons.Select(
+           lesson => new LessonListPayload
+           {
+              Id = lesson.Id,
+              Name = lesson.Name,
+              OwnerId = lesson.OwnerId,
+              OwnerName = lesson.OwnerName,
+              State = lesson.State,
+              BadgeBase64 = $"data:image/png;base64,{System.Convert.ToBase64String(lesson.Badge)}",
+              Status = lesson.Status,
+              Category = lesson.Category,
+              Type = lesson.Type,
+              Modified = lesson.Modified
+           }).ToList();
 
          return Ok(payload);
       }

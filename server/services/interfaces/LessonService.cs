@@ -12,10 +12,12 @@ namespace Server.Services.Interfaces
    public class LessonService : ILessonService
    {
       private readonly ILessonStore _lessonStore;
+      private readonly IUserStore _userStore;
 
-      public LessonService(ILessonStore lessonStore)
+      public LessonService(ILessonStore lessonStore, IUserStore userStore)
       {
          _lessonStore = lessonStore;
+         _userStore = userStore;
       }
 
       public async Task<AssignmentAnswerStatus> AssignmentAnswerAsync(uint assignmentId, uint userId, string answer)
@@ -130,16 +132,16 @@ namespace Server.Services.Interfaces
             Category = lesson.Category.Name,
             Type = lesson.Type.Name,
             Status = lesson.Status,
-            Progress = lesson.LessonUsers
-               .FirstOrDefault(user => user.UserId == userId)?.Progress.Name,
+            Progress = userId != 0 ? lesson.LessonUsers
+               .FirstOrDefault(user => user.UserId == userId)?.Progress.Name : null,
             Assignments = lesson.Assignments.Select(assignment => new AssignmentAnswer
             {
                Id = assignment.Id,
                Description = assignment.Description,
                Experience = assignment.Experience,
-               Progress = assignment.AssignmentUsers
+               Progress = userId != 0 ? assignment.AssignmentUsers
                   .Where(user => user.UserId == userId)
-                  .FirstOrDefault()?.Progress.Name
+                  .FirstOrDefault()?.Progress.Name : null
             }).ToList()
          };
       }
@@ -156,7 +158,11 @@ namespace Server.Services.Interfaces
                OwnerId = lesson.Owner.Id,
                OwnerName = lesson.Owner.Name,
                State = lesson.State.Name,
-               Badge = lesson.Badge
+               Badge = lesson.Badge,
+               Status = lesson.Status,
+               Type = lesson.Type.Name,
+               Category = lesson.Category.Name,
+               Modified = lesson.Updated ?? lesson.Created
             }).ToList();
       }
 
@@ -170,7 +176,13 @@ namespace Server.Services.Interfaces
                Id = lesson.Id,
                Name = lesson.Name,
                OwnerId = lesson.Owner.Id,
-               OwnerName = lesson.Owner.Name
+               OwnerName = lesson.Owner.Name,
+               State = lesson.State.Name,
+               Badge = lesson.Badge,
+               Status = lesson.Status,
+               Type = lesson.Type.Name,
+               Category = lesson.Category.Name,
+               Modified = lesson.Updated ?? lesson.Created
             }).ToList();
       }
 
@@ -183,6 +195,85 @@ namespace Server.Services.Interfaces
             {
                Id = category.Id,
                Name = category.Name
+            }).ToList();
+      }
+
+      public async Task<IList<LessonListAnswer>> GetLessonListForAdmin(uint userId)
+      {
+         var user = await _userStore.GetAsync(userId);
+         var answer = new List<LessonListAnswer>();
+
+         if (user == null) {
+            answer.Add(new LessonListAnswer {
+               Error = "Your session is not valid..."
+            });
+
+            return answer;
+         }
+
+         if (user.RoleId != (uint) RoleEnum.Administrator) {
+            answer.Add(new LessonListAnswer {
+               Error = "You are not an administrator!"
+            });
+
+            return answer;
+         }
+
+         var lessons = await _lessonStore.GetLessonListForAdmin();
+
+         return lessons.Select(
+            lesson => new LessonListAnswer
+            {
+               Id = lesson.Id,
+               Name = lesson.Name,
+               OwnerId = lesson.Owner.Id,
+               OwnerName = lesson.Owner.Name,
+               State = lesson.State.Name,
+               Badge = lesson.Badge,
+               Status = lesson.Status,
+               Type = lesson.Type.Name,
+               Category = lesson.Category.Name,
+               Modified = lesson.Updated ?? lesson.Created
+            }).ToList();
+      }
+
+      public async Task<IList<LessonListAnswer>> GetLessonListForTeacher(uint userId)
+      {
+         var user = await _userStore.GetAsync(userId);
+         var answer = new List<LessonListAnswer>();
+
+         if (user == null) {
+            answer.Add(new LessonListAnswer {
+               Error = "Your session is not valid..."
+            });
+
+            return answer;
+         }
+
+         if (user.RoleId != (uint) RoleEnum.Teacher) {
+            answer.Add(new LessonListAnswer {
+               Error = "You are not a teacher!"
+            });
+
+            return answer;
+         }
+
+         var lessons = await _lessonStore.GetLessonListForOwner(user.Id);
+
+         return lessons.Select(
+            lesson => new LessonListAnswer
+            {
+               Id = lesson.Id,
+               Name = lesson.Name,
+               OwnerId = lesson.Owner.Id,
+               OwnerName = lesson.Owner.Name,
+               State = lesson.State.Name,
+               Badge = lesson.Badge,
+               Status = lesson.Status,
+               Type = lesson.Type.Name,
+               Category = lesson.Category.Name,
+               Description = lesson.Description,
+               Modified = lesson.Updated ?? lesson.Created
             }).ToList();
       }
 

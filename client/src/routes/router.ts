@@ -10,6 +10,7 @@ import Lesson from "../views/Lesson.vue";
 import Profile from "../views/Profile.vue";
 import Users from "../views/Users.vue";
 import Configuration from "../views/Configuration.vue";
+import Management from "../views/Management.vue";
 
 Vue.use(Router);
 
@@ -64,6 +65,11 @@ const router = new Router({
       path: "/configuration",
       name: "Configuration",
       component: Configuration
+    },
+    {
+      path: "/management",
+      name: "Management",
+      component: Management
     }
   ]
 });

@@ -81,7 +81,7 @@ const actions: ActionTree<LessonStoreModel, {}> = {
     });
   },
   async getPublishedLessonsByType(context, model: IdServiceModel) {
-    return await LessonService.getAllLessonsByType(model).then(response => {
+    return await LessonService.getPublishedLessonsByType(model).then(response => {
       context.commit("insertLessons", response);
 
       return response;

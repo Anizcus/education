@@ -13,9 +13,9 @@
     <el-table :data="users || []" style="width: 100%" row-key="id">
       <el-table-column prop="name" label="Name" width="180">
         <template slot-scope="scope">
-          <el-link @click="() => onProfileClick(scope.$index)">{{
-            scope.row.name
-          }}</el-link>
+          <el-button type="text" @click="() => onProfile(scope.$index)">
+            {{ scope.row.name }}
+          </el-button>
         </template>
       </el-table-column>
       <el-table-column prop="level" label="Level" width="180"></el-table-column>
@@ -86,7 +86,7 @@ class Users extends Vue {
       });
   }
 
-  private onProfileClick(index: number) {
+  private onProfile(index: number) {
     this.$router.push({
       name: "Profile",
       params: { id: this.users[index].id.toString() },

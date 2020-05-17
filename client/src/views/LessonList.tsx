@@ -3,31 +3,22 @@ import Component from "vue-class-component";
 import { VNode } from "vue/types/umd";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
 import { LessonListModel } from "@/models/stores/lesson.store.model";
-import { SessionModel } from "@/models/stores/user.store.model";
 
 @Component({
   methods: {
     ...mapActions("lesson", {
       getLessons: "getPublishedLessonsByType"
     }),
-    ...mapActions("modal", {
-      setLessonModalVisible: "setLessonModalVisible"
-    })
   },
   computed: {
     ...mapGetters("lesson", {
       lessons: "lessons"
     }),
-    ...mapGetters("user", {
-      session: "session"
-    })
   }
 })
 class LessonList extends Vue {
   private getLessons!: ActionMethod;
-  private setLessonModalVisible!: ActionMethod;
   private lessons!: LessonListModel[];
-  private session!: SessionModel;
   private loading = true;
   private dateOptions = {
     weekday: "long",
@@ -39,16 +30,10 @@ class LessonList extends Vue {
     hour12: false
   };
 
-  public mounted() {
-    this.getLessons({ id: Number(this.$route.params.id) }).finally(() => {
+  public created() {
+    this.getLessons({ id: Number(this.$route.params.id) })
+    .finally(() => {
       this.loading = false;
-    });
-  }
-
-  private onLessonCreate() {
-    this.setLessonModalVisible({
-      visible: true,
-      stateName: "Create"
     });
   }
 
@@ -104,7 +89,7 @@ class LessonList extends Vue {
               Author <b>{item.ownerName}</b>
             </span>
             <span style="float: right;">
-              {new Date().toLocaleDateString(undefined, this.dateOptions)}
+              {new Date(item.modified).toLocaleDateString(undefined, this.dateOptions)}
             </span>
           </el-col>
         </el-row>
@@ -131,24 +116,9 @@ class LessonList extends Vue {
       );
     }
 
-    const addLessonButton =
-      this.session && this.session.role === "Teacher" ? (
-        <el-button
-          style="margin-bottom: 14px;"
-          plain={true}
-          type="primary"
-          onClick={() => this.onLessonCreate()}
-        >
-          <span>Add a new lesson</span>
-        </el-button>
-      ) : (
-        ""
-      );
-
     if (!this.lessons || !this.lessons.length) {
       return (
         <el-row>
-          {addLessonButton}
           <el-card shadow="hover" style={{ textAlign: "center" }}>
             No data
           </el-card>
@@ -156,76 +126,12 @@ class LessonList extends Vue {
       );
     }
 
-    const published = this.lessons
-      .filter(item => item.state === "Published")
-      .map(this.renderItem);
-    const created = this.lessons
-      .filter(item => item.state === "Created")
-      .map(this.renderItem);
-    const waiting = this.lessons
-      .filter(item => item.state === "Waiting")
-      .map(this.renderItem);
-    const rejected = this.lessons
-      .filter(item => item.state === "Rejected")
-      .map(this.renderItem);
-    const owned =
-      (this.session &&
-        this.lessons
-          .filter(item => item.ownerId === this.session.id)
-          .map(this.renderItem)) ||
-      "";
-
-    const tabCreated =
-      this.session && this.session.role !== "Student" ? (
-        <el-tab-pane label={`Created (${created.length})`}>
-          {created}
-        </el-tab-pane>
-      ) : (
-        ""
-      );
-
-    const tabWaiting =
-      this.session && this.session.role === "Administrator" ? (
-        <el-tab-pane label={`Waiting (${waiting.length})`}>
-          {waiting}
-        </el-tab-pane>
-      ) : (
-        ""
-      );
-
-    const tabRejected =
-      this.session && this.session.role === "Administrator" ? (
-        <el-tab-pane label={`Rejected (${rejected.length})`}>
-          {rejected}
-        </el-tab-pane>
-      ) : (
-        ""
-      );
-
-    const tabOwned =
-      this.session && this.session.role === "Teacher" ? (
-        <el-tab-pane label={`Owned (${owned.length})`}>{owned}</el-tab-pane>
-      ) : (
-        ""
-      );
-
-    const tabPublished = (
-      <el-tab-pane label={`Published (${published.length})`}>
-        {published}
-      </el-tab-pane>
-    );
+    const published = this.lessons.map(this.renderItem);
 
     return (
       <el-row>
         <el-col>
-          {addLessonButton}
-          <el-tabs type="card" stretch={true}>
-            {tabPublished}
-            {tabCreated}
-            {tabWaiting}
-            {tabRejected}
-            {tabOwned}
-          </el-tabs>
+          {published}
         </el-col>
       </el-row>
     );
