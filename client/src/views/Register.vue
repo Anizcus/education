@@ -73,7 +73,11 @@ class Register extends Vue {
   private roles!: NameServiceModel[];
   private rule = {
     username: [
-      { required: true, message: "Vartotojo vardas yra privalomas", trigger: "blur" }
+      {
+        required: true,
+        message: "Vartotojo vardas yra privalomas",
+        trigger: "blur"
+      }
     ],
     password: [
       {
@@ -109,9 +113,7 @@ class Register extends Vue {
         trigger: "blur"
       }
     ],
-    role: [
-      { required: true, message: "Pasirinkite rolę!", trigger: "blur" }
-    ]
+    role: [{ required: true, message: "Pasirinkite rolę!", trigger: "blur" }]
   };
 
   public $refs!: {

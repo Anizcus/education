@@ -62,9 +62,7 @@
               <el-collapse-item
                 v-for="(assignment, index) in lesson.assignments"
                 :key="`question-${index}`"
-                :title="
-                  `Klausimas ${index + 1} ${lessonProgress}`
-                "
+                :title="`Klausimas ${index + 1} ${lessonProgress}`"
               >
                 <el-row>
                   <el-col :span="20">
@@ -110,7 +108,11 @@
             </el-collapse>
             <p>
               <el-button
-                v-if="lesson.state == 'Created' && (session  && session.role === 'Teacher')"
+                v-if="
+                  lesson.state == 'Created' &&
+                    session &&
+                    session.role === 'Teacher'
+                "
                 @click="() => onAssignmentCreate()"
                 type="primary"
                 :plain="true"
@@ -118,7 +120,11 @@
                 >Pridėti klausimą</el-button
               >
               <el-button
-                v-if="lesson.state == 'Waiting' && (session  && session.role === 'Administrator')"
+                v-if="
+                  lesson.state == 'Waiting' &&
+                    session &&
+                    session.role === 'Administrator'
+                "
                 @click="() => Reject()"
                 type="danger"
                 :plain="true"
@@ -128,7 +134,11 @@
             </p>
             <p>
               <el-button
-                v-if="lesson.state == 'Created' && (session  && session.role === 'Teacher')"
+                v-if="
+                  lesson.state == 'Created' &&
+                    session &&
+                    session.role === 'Teacher'
+                "
                 @click="() => Publish()"
                 type="success"
                 :plain="true"
@@ -136,7 +146,11 @@
                 >Publikuoti</el-button
               >
               <el-button
-                v-if="lesson.state == 'Waiting' && (session  && session.role === 'Administrator')"
+                v-if="
+                  lesson.state == 'Waiting' &&
+                    session &&
+                    session.role === 'Administrator'
+                "
                 @click="() => Approve()"
                 type="success"
                 :plain="true"
@@ -144,7 +158,11 @@
                 >Patvirtinti</el-button
               >
               <el-button
-                v-if="lesson.state == 'Published' && lesson.progress == null && session"
+                v-if="
+                  lesson.state == 'Published' &&
+                    lesson.progress == null &&
+                    session
+                "
                 @click="() => onStartLesson()"
                 type="warning"
                 :plain="true"
@@ -305,8 +323,8 @@ class Lesson extends Vue {
           this.postStatus({
             lessonId: id,
             status: status,
-            isValid: valid,
-          }).then(() => this.initialize()),
+            isValid: valid
+          }).then(() => this.initialize())
       }
     });
   }
@@ -321,8 +339,8 @@ class Lesson extends Vue {
           this.postStatus({
             lessonId: id,
             status: status,
-            isValid: valid,
-          }).then(() => this.initialize()),
+            isValid: valid
+          }).then(() => this.initialize())
       }
     });
   }
@@ -340,33 +358,33 @@ class Lesson extends Vue {
   }
 
   get lessonState() {
-    if (this.lesson.state == 'Published') {
-      return 'Publikuota'
+    if (this.lesson.state == "Published") {
+      return "Publikuota";
     }
-    if (this.lesson.state == 'Waiting') {
-      return 'Laukiama'
+    if (this.lesson.state == "Waiting") {
+      return "Laukiama";
     }
-    if (this.lesson.state == 'Created') {
-      return 'Sukurta'
+    if (this.lesson.state == "Created") {
+      return "Sukurta";
     }
-    if (this.lesson.state == 'Rejected') {
-      return 'Atmesta'
+    if (this.lesson.state == "Rejected") {
+      return "Atmesta";
     }
 
-    return '';
+    return "";
   }
 
   get lessonProgress() {
     if (this.lesson.progress) {
-      if (this.lesson.progress == 'Active') {
-        return '(Aktyvus)'
+      if (this.lesson.progress == "Active") {
+        return "(Aktyvus)";
       }
-      if (this.lesson.progress == 'Completed') {
-        return '(Užbaigta)'
+      if (this.lesson.progress == "Completed") {
+        return "(Užbaigta)";
       }
-    } 
+    }
 
-    return '';
+    return "";
   }
 }
 

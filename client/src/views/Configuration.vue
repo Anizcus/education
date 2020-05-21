@@ -13,7 +13,7 @@
     v-else
     :data="
       groups.filter(
-        (group) =>
+        group =>
           !search || group.label.toLowerCase().includes(search.toLowerCase())
       )
     "
@@ -88,9 +88,9 @@ import { mapActions, ActionMethod } from "vuex";
 @Component({
   methods: {
     ...mapActions("modal", {
-      setNameModalVisible: "setNameModalVisible",
-    }),
-  },
+      setNameModalVisible: "setNameModalVisible"
+    })
+  }
 })
 class Configuration extends Vue {
   private setNameModalVisible!: ActionMethod;
@@ -125,9 +125,9 @@ class Configuration extends Vue {
         onAction: (id: number, name: string) =>
           AdminService.updateCategory({
             id,
-            name,
-          }).then(() => this.initialize()),
-      },
+            name
+          }).then(() => this.initialize())
+      }
     });
   }
 
@@ -141,9 +141,9 @@ class Configuration extends Vue {
         onAction: (id: number, name: string) =>
           AdminService.createCategory({
             id,
-            name,
-          }).then(() => this.initialize()),
-      },
+            name
+          }).then(() => this.initialize())
+      }
     });
   }
 
@@ -159,9 +159,9 @@ class Configuration extends Vue {
         onAction: (id: number, name: string) =>
           AdminService.updateType({
             id,
-            name,
-          }).then(() => this.initialize()),
-      },
+            name
+          }).then(() => this.initialize())
+      }
     });
   }
 
@@ -177,9 +177,9 @@ class Configuration extends Vue {
         onAction: (id: number, name: string) =>
           AdminService.createType({
             id,
-            name,
-          }).then(() => this.initialize()),
-      },
+            name
+          }).then(() => this.initialize())
+      }
     });
   }
 }

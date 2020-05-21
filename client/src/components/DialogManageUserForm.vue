@@ -135,22 +135,19 @@ class DialogManageUserForm extends Vue {
   }
 
   private mapRole(role: string) {
-    if (role == 'Administrator')
-    {
-      return 'Administratorius';
+    if (role == "Administrator") {
+      return "Administratorius";
     }
 
-    if (role == 'Teacher')
-    {
-      return 'Mokytojas';
+    if (role == "Teacher") {
+      return "Mokytojas";
     }
 
-    if (role == 'Student')
-    {
-      return 'Studentas';
+    if (role == "Student") {
+      return "Studentas";
     }
 
-    return '';
+    return "";
   }
 }
 export default DialogManageUserForm;

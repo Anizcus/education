@@ -84,7 +84,7 @@
       <el-table-column prop="type" label="Tipas"></el-table-column>
       <el-table-column prop="state" label="Būsena">
         <template slot-scope="scope">
-          {{mapState(scope.row.state)}}
+          {{ mapState(scope.row.state) }}
         </template>
       </el-table-column>
       <el-table-column align="right" width="180">
@@ -143,18 +143,18 @@ import { LessonService } from "../services/lesson.service";
 @Component({
   computed: {
     ...mapGetters("user", {
-      session: "session",
-    }),
+      session: "session"
+    })
   },
   methods: {
     ...mapActions("lesson", {
-      postStatus: "postLessonStatus",
+      postStatus: "postLessonStatus"
     }),
     ...mapActions("modal", {
       setLessonModalVisible: "setLessonModalVisible",
-      setAuthorizeModalVisible: "setAuthorizeModalVisible",
-    }),
-  },
+      setAuthorizeModalVisible: "setAuthorizeModalVisible"
+    })
+  }
 })
 class Management extends Vue {
   private session!: SessionModel;
@@ -167,7 +167,7 @@ class Management extends Vue {
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false,
+    hour12: false
   };
   private setLessonModalVisible!: ActionMethod;
   private setAuthorizeModalVisible!: ActionMethod;
@@ -177,11 +177,11 @@ class Management extends Vue {
     this.setLessonModalVisible({
       visible: true,
       data: {
-         onSuccess: () => {
-            this.initialize();
-         }
+        onSuccess: () => {
+          this.initialize();
+        }
       },
-      stateName: "Sukurti",
+      stateName: "Sukurti"
     });
   }
 
@@ -192,14 +192,14 @@ class Management extends Vue {
   private initialize() {
     if (this.session) {
       if (this.session.role === "Administrator") {
-        LessonService.getLessonListForAdmin().then((lessons) => {
+        LessonService.getLessonListForAdmin().then(lessons => {
           this.lessons = lessons;
           this.loading = false;
         });
       }
 
       if (this.session.role === "Teacher") {
-        LessonService.getLessonListForTeacher().then((lessons) => {
+        LessonService.getLessonListForTeacher().then(lessons => {
           this.lessons = lessons;
           this.loading = false;
         });
@@ -237,9 +237,9 @@ class Management extends Vue {
           this.postStatus({
             lessonId: id,
             status: status,
-            isValid: valid,
-          }).then(() => this.initialize()),
-      },
+            isValid: valid
+          }).then(() => this.initialize())
+      }
     });
   }
 
@@ -253,27 +253,27 @@ class Management extends Vue {
           this.postStatus({
             lessonId: id,
             status: status,
-            isValid: valid,
-          }).then(() => this.initialize()),
-      },
+            isValid: valid
+          }).then(() => this.initialize())
+      }
     });
   }
 
-  private mapState(state) {
-    if (state == 'Published') {
-      return 'Publikuota'
+  private mapState(state: string) {
+    if (state == "Published") {
+      return "Publikuota";
     }
-    if (state == 'Waiting') {
-      return 'Laukiama'
+    if (state == "Waiting") {
+      return "Laukiama";
     }
-    if (state == 'Created') {
-      return 'Sukurta'
+    if (state == "Created") {
+      return "Sukurta";
     }
-    if (state == 'Rejected') {
-      return 'Atmesta'
+    if (state == "Rejected") {
+      return "Atmesta";
     }
 
-    return '';
+    return "";
   }
 }
 

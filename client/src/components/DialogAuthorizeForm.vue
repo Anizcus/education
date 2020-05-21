@@ -4,7 +4,7 @@
     :visible="authorizeModal"
     @close="onClose"
   >
-  <el-alert
+    <el-alert
       v-if="error"
       :title="error"
       type="error"
@@ -63,7 +63,7 @@ class DialogAuthorizeForm extends Vue {
   private data!: ModalData;
   private form = {
     description: ""
-  }
+  };
   private loading = false;
   private error = "";
 

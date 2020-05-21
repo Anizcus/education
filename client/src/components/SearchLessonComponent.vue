@@ -1,5 +1,9 @@
 <template>
-  <el-input placeholder="Ieškoti pagal pamokos pavadinimą" v-model="input" class="i-input">
+  <el-input
+    placeholder="Ieškoti pagal pamokos pavadinimą"
+    v-model="input"
+    class="i-input"
+  >
     <el-select
       class="i-select"
       v-model="select"

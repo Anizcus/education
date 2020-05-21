@@ -20,7 +20,9 @@
         <el-input-number v-model="form.experience" :min="1"></el-input-number>
       </el-form-item>
     </el-form>
-    <div v-else>Ar tikrai norite ištrinti klausimą [{{ data.index + 1 }}] ?</div>
+    <div v-else>
+      Ar tikrai norite ištrinti klausimą [{{ data.index + 1 }}] ?
+    </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="onCancel">Atgal</el-button>
       <el-button type="primary" @click="onAction">{{ modalState }}</el-button>

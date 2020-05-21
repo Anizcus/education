@@ -8,12 +8,12 @@ import { LessonListModel } from "@/models/stores/lesson.store.model";
   methods: {
     ...mapActions("lesson", {
       getLessons: "getPublishedLessonsByType"
-    }),
+    })
   },
   computed: {
     ...mapGetters("lesson", {
       lessons: "lessons"
-    }),
+    })
   }
 })
 class LessonList extends Vue {
@@ -31,8 +31,7 @@ class LessonList extends Vue {
   };
 
   public created() {
-    this.getLessons({ id: Number(this.$route.params.id) })
-    .finally(() => {
+    this.getLessons({ id: Number(this.$route.params.id) }).finally(() => {
       this.loading = false;
     });
   }
@@ -89,7 +88,10 @@ class LessonList extends Vue {
               Autorius <b>{item.ownerName}</b>
             </span>
             <span style="float: right;">
-              {new Date(item.modified).toLocaleDateString(undefined, this.dateOptions)}
+              {new Date(item.modified).toLocaleDateString(
+                undefined,
+                this.dateOptions
+              )}
             </span>
           </el-col>
         </el-row>
@@ -130,9 +132,7 @@ class LessonList extends Vue {
 
     return (
       <el-row>
-        <el-col>
-          {published}
-        </el-col>
+        <el-col>{published}</el-col>
       </el-row>
     );
   }

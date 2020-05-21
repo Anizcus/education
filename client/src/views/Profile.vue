@@ -22,7 +22,7 @@
     <el-row>
       <el-col :offset="6" :span="12" style="padding-right: 10px;">
         <h2 style="text-align:center;">{{ profile.name }}</h2>
-        <p style="text-align:center;">{{ profileRole}}</p>
+        <p style="text-align:center;">{{ profileRole }}</p>
         <p style="text-align:center;">Lygis</p>
         <p style="text-align:center;">{{ profile.level }}</p>
         <el-progress
@@ -45,7 +45,7 @@
         <div class="container-center">
           <el-card
             v-for="lesson in profile.lessons.filter(
-              (item) => item.progress == 'Active'
+              item => item.progress == 'Active'
             )"
             :key="lesson.id"
             shadow="hover"
@@ -85,7 +85,7 @@
         <div class="container-center">
           <el-card
             v-for="lesson in profile.lessons.filter(
-              (item) => item.progress == 'Completed'
+              item => item.progress == 'Completed'
             )"
             :key="lesson.id"
             shadow="hover"
@@ -131,15 +131,15 @@ import { ProfileModel, SessionModel } from "../models/stores/user.store.model";
 @Component({
   methods: {
     ...mapActions("user", {
-      getProfile: "getProfile",
-    }),
+      getProfile: "getProfile"
+    })
   },
   computed: {
     ...mapGetters("user", {
       profile: "profile",
-      session: "session",
-    }),
-  },
+      session: "session"
+    })
+  }
 })
 class Profile extends Vue {
   private getProfile!: ActionMethod;
@@ -168,22 +168,19 @@ class Profile extends Vue {
   }
 
   get profileRole() {
-    if (this.profile.role == 'Administrator')
-    {
-      return 'Administratorius';
+    if (this.profile.role == "Administrator") {
+      return "Administratorius";
     }
 
-    if (this.profile.role == 'Teacher')
-    {
-      return 'Mokytojas';
+    if (this.profile.role == "Teacher") {
+      return "Mokytojas";
     }
 
-    if (this.profile.role == 'Student')
-    {
-      return 'Studentas';
+    if (this.profile.role == "Student") {
+      return "Studentas";
     }
 
-    return '';
+    return "";
   }
 }
 

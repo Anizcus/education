@@ -81,11 +81,13 @@ const actions: ActionTree<LessonStoreModel, {}> = {
     });
   },
   async getPublishedLessonsByType(context, model: IdServiceModel) {
-    return await LessonService.getPublishedLessonsByType(model).then(response => {
-      context.commit("insertLessons", response);
+    return await LessonService.getPublishedLessonsByType(model).then(
+      response => {
+        context.commit("insertLessons", response);
 
-      return response;
-    });
+        return response;
+      }
+    );
   },
   async getLessonById(context, model: IdServiceModel) {
     return await LessonService.getLesson(model).then(response => {

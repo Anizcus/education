@@ -19,9 +19,9 @@
         </template>
       </el-table-column>
       <el-table-column prop="level" label="Lygis" width="180"></el-table-column>
-      <el-table-column prop="role" label="Rolė"> 
+      <el-table-column prop="role" label="Rolė">
         <template slot-scope="scope">
-            {{ mapRole(scope.row.role) }}
+          {{ mapRole(scope.row.role) }}
         </template>
       </el-table-column>
       <el-table-column
@@ -49,7 +49,7 @@ import { mapActions, ActionMethod, mapGetters } from "vuex";
 import {
   ProfileListModel,
   ProfileModel,
-  SessionModel,
+  SessionModel
 } from "../models/stores/user.store.model";
 import { NameServiceModel } from "../models/services/name.service.model";
 
@@ -57,19 +57,19 @@ import { NameServiceModel } from "../models/services/name.service.model";
   methods: {
     ...mapActions("user", {
       getUsers: "getUsers",
-      getRoles: "getRoles",
+      getRoles: "getRoles"
     }),
     ...mapActions("modal", {
-      setManageUserModalVisible: "setManageUserModalVisible",
-    }),
+      setManageUserModalVisible: "setManageUserModalVisible"
+    })
   },
   computed: {
     ...mapGetters("user", {
       users: "users",
       roles: "roles",
-      session: "session",
-    }),
-  },
+      session: "session"
+    })
+  }
 })
 class Users extends Vue {
   private getUsers!: ActionMethod;
@@ -93,15 +93,14 @@ class Users extends Vue {
   private onProfile(index: number) {
     this.$router.push({
       name: "Profile",
-      params: { id: this.users[index].id.toString() },
+      params: { id: this.users[index].id.toString() }
     });
   }
 
   private onModify(index: number) {
     const roleList = [...this.roles];
-    const roleId = roleList.find(
-      (item) => item.name === this.users[index].role
-    )!.id;
+    const roleId = roleList.find(item => item.name === this.users[index].role)!
+      .id;
 
     this.setManageUserModalVisible({
       visible: true,
@@ -110,28 +109,25 @@ class Users extends Vue {
         id: this.users[index].id,
         name: this.mapRole(this.users[index].name),
         roles: roleList,
-        role: roleId,
-      },
+        role: roleId
+      }
     });
   }
 
   private mapRole(role: string) {
-    if (role == 'Administrator')
-    {
-      return 'Administratorius';
+    if (role == "Administrator") {
+      return "Administratorius";
     }
 
-    if (role == 'Teacher')
-    {
-      return 'Mokytojas';
+    if (role == "Teacher") {
+      return "Mokytojas";
     }
 
-    if (role == 'Student')
-    {
-      return 'Studentas';
+    if (role == "Student") {
+      return "Studentas";
     }
 
-    return '';
+    return "";
   }
 }
 

@@ -51,7 +51,11 @@ class Login extends Vue {
   private loading = false;
   private rule = {
     username: [
-      { required: true, message: "Vartotojo vardas yra privalomas", trigger: "blur" }
+      {
+        required: true,
+        message: "Vartotojo vardas yra privalomas",
+        trigger: "blur"
+      }
     ],
     password: [
       { required: true, message: "Slaptažodis yra privalomas", trigger: "blur" }

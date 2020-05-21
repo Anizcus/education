@@ -1,5 +1,9 @@
 <template>
-  <el-dialog title="Atsakyti į klausimą." :visible="answerModal" @close="onClose">
+  <el-dialog
+    title="Atsakyti į klausimą."
+    :visible="answerModal"
+    @close="onClose"
+  >
     <el-form :model="form" label-position="top">
       <el-form-item :label="`Klausimas: ${(data && data.question) || ''}`">
         <el-input :clearable="true" v-model="form.answer"></el-input>

@@ -114,17 +114,17 @@ import SearchLessonComponent from "../components/SearchLessonComponent.vue";
 @Component({
   computed: {
     ...mapGetters("user", {
-      session: "session",
-    }),
+      session: "session"
+    })
   },
   methods: {
     ...mapActions("user", {
-      logout: "logout",
-    }),
+      logout: "logout"
+    })
   },
   components: {
-    "i-search-lesson": SearchLessonComponent,
-  },
+    "i-search-lesson": SearchLessonComponent
+  }
 })
 class Main extends Vue {
   private session!: SessionModel;

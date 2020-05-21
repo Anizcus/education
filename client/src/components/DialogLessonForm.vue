@@ -95,16 +95,16 @@ interface ModalData {
 @Component({
   methods: {
     ...mapActions("modal", {
-      setLessonModalVisible: "setLessonModalVisible",
-    }),
+      setLessonModalVisible: "setLessonModalVisible"
+    })
   },
   computed: {
     ...mapGetters("modal", {
       modalState: "modalState",
       data: "modalData",
-      lessonModal: "lessonModalVisible",
-    }),
-  },
+      lessonModal: "lessonModalVisible"
+    })
+  }
 })
 class DialogLessonForm extends Vue {
   private setLessonModalVisible!: ActionMethod;
@@ -112,7 +112,7 @@ class DialogLessonForm extends Vue {
   private form = {
     name: "",
     description: "",
-    type: undefined,
+    type: undefined
   };
   private modalState!: string;
   private lessonModal!: boolean;
@@ -130,7 +130,7 @@ class DialogLessonForm extends Vue {
         this.groups = groups;
         this.typeLoading = false;
       })
-      .catch((error) => {
+      .catch(error => {
         this.typeLoading = false;
       });
     this.form.type = Number(this.$route.params.id) || "";
@@ -171,10 +171,10 @@ class DialogLessonForm extends Vue {
         this.setLessonModalVisible({
           visible: false,
           data: undefined,
-          stateName: "Close",
+          stateName: "Close"
         });
       })
-      .catch((error) => {
+      .catch(error => {
         this.loading = false;
         this.error = error;
       });
@@ -192,7 +192,7 @@ class DialogLessonForm extends Vue {
     this.setLessonModalVisible({
       visible: false,
       data: undefined,
-      stateName: "Cancel",
+      stateName: "Cancel"
     });
   }
 }
