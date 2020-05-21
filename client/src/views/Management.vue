@@ -63,7 +63,7 @@
                 <el-col :span="8">
                   {{
                     new Date(scope.row.modified).toLocaleDateString(
-                      undefined,
+                      'lt-LT',
                       dateOptions
                     )
                   }}
@@ -87,7 +87,7 @@
           {{ mapState(scope.row.state) }}
         </template>
       </el-table-column>
-      <el-table-column align="right" width="180">
+      <el-table-column align="right" width="200">
         <template
           v-if="session.role === 'Teacher'"
           slot="header"
