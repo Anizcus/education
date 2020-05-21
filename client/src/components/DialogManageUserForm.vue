@@ -2,7 +2,7 @@
   <el-dialog
     @open="() => onOpen()"
     @close="() => onCancel()"
-    :title="`${modalState} ${data && data.name} status`"
+    :title="`${modalState} ${data && data.name} statusas`"
     :visible="manageUserModal"
   >
     <el-alert
@@ -14,33 +14,33 @@
     >
     </el-alert>
     <el-form :model="form" label-position="top">
-      <el-form-item label="Role" prop="role" v-if="data && data.roles">
+      <el-form-item label="Rolė" prop="role" v-if="data && data.roles">
         <el-select
           style="width: 100%;"
           :clearable="true"
           v-model="form.role"
-          placeholder="Select a role"
+          placeholder="Pasirinkti rolę"
         >
           <el-option
             v-for="role in data.roles"
             :key="role.id"
-            :label="role.name"
+            :label="mapRole(role.name)"
             :value="role.id"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="User status" prop="isBlocked">
+      <el-form-item label="Vartotojo prieiga" prop="isBlocked">
         <el-switch
           v-model="form.isBlocked"
-          active-text="User will be blocked"
-          inactive-text="User is not blocked"
+          active-text="Vartotojas yra užblokuotas"
+          inactive-text="Vartotojas nėra užblokuotas"
         >
         </el-switch>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="onCancel">Cancel</el-button>
+      <el-button @click="onCancel">Atgal</el-button>
       <el-button :loading="buttonLoading" type="primary" @click="onAction">{{
         modalState
       }}</el-button>
@@ -132,6 +132,25 @@ class DialogManageUserForm extends Vue {
       visible: false,
       stateName: this.modalState
     });
+  }
+
+  private mapRole(role: string) {
+    if (role == 'Administrator')
+    {
+      return 'Administratorius';
+    }
+
+    if (role == 'Teacher')
+    {
+      return 'Mokytojas';
+    }
+
+    if (role == 'Student')
+    {
+      return 'Studentas';
+    }
+
+    return '';
   }
 }
 export default DialogManageUserForm;

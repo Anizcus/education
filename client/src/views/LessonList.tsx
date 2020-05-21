@@ -44,7 +44,7 @@ class LessonList extends Vue {
           <el-col span={4}>
             <el-image
               src={item.badgeBase64}
-              alt="Badge"
+              alt="Ženkliukas"
               style="width: 100px; height: 100px"
             >
               <div
@@ -79,14 +79,14 @@ class LessonList extends Vue {
           <el-col span={19}>
             <router-link to={`/lesson/${item.id}`}>
               <el-link type="primary" underline={false}>
-                Lesson “<i>{item.name}</i>”
+                Pamoka “<i>{item.name}</i>”
               </el-link>
             </router-link>
             <el-divider>
               <i class="el-icon-star-on"></i>
             </el-divider>
             <span>
-              Author <b>{item.ownerName}</b>
+              Autorius <b>{item.ownerName}</b>
             </span>
             <span style="float: right;">
               {new Date(item.modified).toLocaleDateString(undefined, this.dateOptions)}
@@ -120,7 +120,7 @@ class LessonList extends Vue {
       return (
         <el-row>
           <el-card shadow="hover" style={{ textAlign: "center" }}>
-            No data
+            Nėra pamokų!
           </el-card>
         </el-row>
       );

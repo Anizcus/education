@@ -1,15 +1,12 @@
 <template>
   <el-col>
     <p>
-      Hello, this is simple web application to create a lesson / questions for
-      categorized topics as math, english and etc.
+      Laba diena, tai yra paprasta sistema, 
+      kurioje galima kurti pamokas ir klausimus pagal tam tikrą kategoriją ir pamokos tipą.
     </p>
     <p>
-      I took VueJS to try it out with .NET Core and Entity Framework.
-    </p>
-    <p>
-      The purpose of this is to work on Bachelor degree final work, but for me
-      it is also to learn new things (technologies and etc.)
+      Sistema buvo kuriama panaudojus VueJS karkasą su .NET Core ir Entity Framework. 
+      Temos dizainas yra Element-UI.
     </p>
   </el-col>
 </template>

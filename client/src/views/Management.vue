@@ -3,7 +3,7 @@
     v-if="
       !session || (session.role != 'Teacher' && session.role != 'Administrator')
     "
-    title="You must be logged in as a teacher or administrator!"
+    title="Jūs turite būti prisijungę kaip mokytojas ar administratorius!"
     type="error"
     :show-icon="true"
     :closable="false"
@@ -20,7 +20,7 @@
     >
       <el-button :loading="loading" type="info" :circle="true"></el-button>
     </el-container>
-    <el-table v-else :data="lessons" empty-text="No data!">
+    <el-table v-else :data="lessons" empty-text="Nėra duomenų!">
       <el-table-column type="expand">
         <template slot-scope="scope">
           <el-row>
@@ -35,16 +35,16 @@
             <el-col :span="19">
               <el-row style="text-align: center;">
                 <el-col :span="8" v-if="session.role === 'Administrator'">
-                  <span class="cell cell-custom">Author</span>
+                  <span class="cell cell-custom">Autorius</span>
                 </el-col>
                 <el-col :span="8" v-if="session.role === 'Teacher'">
-                  <span class="cell cell-custom">Description</span>
+                  <span class="cell cell-custom">Aprašymas</span>
                 </el-col>
                 <el-col :span="8"
-                  ><span class="cell cell-custom">Status</span></el-col
+                  ><span class="cell cell-custom">Priežastis</span></el-col
                 >
                 <el-col :span="8"
-                  ><span class="cell cell-custom">Modified</span></el-col
+                  ><span class="cell cell-custom">Keitimo data</span></el-col
                 >
               </el-row>
               <el-row style="text-align: center;">
@@ -73,16 +73,20 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="Name">
+      <el-table-column prop="name" label="Pavadinimas">
         <template slot-scope="scope">
           <el-button type="text" @click="() => onLesson(scope.row.id)">
             {{ scope.row.name }}
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="category" label="Category"></el-table-column>
-      <el-table-column prop="type" label="Type"></el-table-column>
-      <el-table-column prop="state" label="State"></el-table-column>
+      <el-table-column prop="category" label="Kategorija"></el-table-column>
+      <el-table-column prop="type" label="Tipas"></el-table-column>
+      <el-table-column prop="state" label="Būsena">
+        <template slot-scope="scope">
+          {{mapState(scope.row.state)}}
+        </template>
+      </el-table-column>
       <el-table-column align="right" width="180">
         <template
           v-if="session.role === 'Teacher'"
@@ -94,7 +98,7 @@
             size="mini"
             type="primary"
             @click="() => onCreateLesson(scope)"
-            >Add new lesson</el-button
+            >Pridėti naują pamoką</el-button
           >
         </template>
         <template slot-scope="scope">
@@ -105,7 +109,7 @@
             size="mini"
             type="success"
             @click="() => onApprove(scope.row.id)"
-            >Approve</el-button
+            >Patvirtinti</el-button
           >
           <el-button
             v-if="
@@ -114,13 +118,13 @@
             size="mini"
             type="danger"
             @click="() => onReject(scope.row.id)"
-            >Reject</el-button
+            >Atmesti</el-button
           >
           <el-button
             v-if="session.role === 'Teacher' && scope.row.state === 'Created'"
             size="mini"
             type="danger"
-            >Edit</el-button
+            >Redaguoti</el-button
           >
         </template>
       </el-table-column>
@@ -177,7 +181,7 @@ class Management extends Vue {
             this.initialize();
          }
       },
-      stateName: "Create",
+      stateName: "Sukurti",
     });
   }
 
@@ -226,7 +230,7 @@ class Management extends Vue {
   private onReject(id: string) {
     this.setAuthorizeModalVisible({
       visible: true,
-      stateName: "Reject",
+      stateName: "Atmesti",
       data: {
         lessonId: id,
         onAction: (id: number, status: string, valid: boolean) =>
@@ -242,7 +246,7 @@ class Management extends Vue {
   private onApprove(id: string) {
     this.setAuthorizeModalVisible({
       visible: true,
-      stateName: "Approve",
+      stateName: "Patvirtinti",
       data: {
         lessonId: id,
         onAction: (id: number, status: string, valid: boolean) =>
@@ -253,6 +257,23 @@ class Management extends Vue {
           }).then(() => this.initialize()),
       },
     });
+  }
+
+  private mapState(state) {
+    if (state == 'Published') {
+      return 'Publikuota'
+    }
+    if (state == 'Waiting') {
+      return 'Laukiama'
+    }
+    if (state == 'Created') {
+      return 'Sukurta'
+    }
+    if (state == 'Rejected') {
+      return 'Atmesta'
+    }
+
+    return '';
   }
 }
 

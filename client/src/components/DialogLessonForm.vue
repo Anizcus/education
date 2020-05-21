@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="`${modalState} a lesson`"
+    :title="`${modalState} pamoką.`"
     :visible="lessonModal"
     @open="onOpen"
     @close="onCancel"
@@ -14,16 +14,16 @@
     >
     </el-alert>
     <el-form :model="form" label-position="top">
-      <el-form-item label="Lesson name">
+      <el-form-item label="Pamokos pavadinimas">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="Lesson type">
+      <el-form-item label="Pamokos tipas">
         <el-select
           style="width: 100%;"
           v-model="form.type"
           placeholder=""
           :loading="typeLoading"
-          no-data-text="No data!"
+          no-data-text="Nėra duomenų!"
           :clearable="true"
         >
           <el-option-group
@@ -43,7 +43,7 @@
       </el-form-item>
       <el-row>
         <el-col :span="18">
-          <el-form-item label="Lesson description">
+          <el-form-item label="Pamokos aprašymas">
             <el-input
               type="textarea"
               v-model="form.description"
@@ -52,7 +52,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="Badge" class="uploader">
+          <el-form-item label="Ženkliukas" class="uploader">
             <el-upload
               action="undefined"
               :drag="false"
@@ -74,7 +74,7 @@
       </el-row>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="onCancel">Cancel</el-button>
+      <el-button @click="onCancel">Atgal</el-button>
       <el-button type="primary" @click="onAction">{{ modalState }}</el-button>
     </span>
   </el-dialog>
@@ -148,12 +148,12 @@ class DialogLessonForm extends Vue {
 
   private onAction() {
     if (this.form.name.trim() === "") {
-      this.error = "Please fill a lesson name!";
+      this.error = "Pamokos pavadinimas yra privalomas!";
       return;
     }
 
     if (this.form.description.trim() === "") {
-      this.error = "Please fill a lesson description!";
+      this.error = "Pamokos aprašymas yra privalomas!";
       return;
     }
 

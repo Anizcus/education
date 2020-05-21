@@ -39,14 +39,14 @@
           <el-col>
             <el-row>
               <el-col :span="12">
-                <p>Lesson: {{ lesson.name }}</p>
+                <p>Pamoka: {{ lesson.name }}</p>
                 <div>
-                  State: {{ lesson.state }}
-                  {{ lesson.progress ? `(${lesson.progress})` : `` }}
+                  Būsena: {{ lessonState }}
+                  {{ lessonProgress }}
                 </div>
               </el-col>
               <el-col :span="12">
-                <p style="float: right;">Author: {{ lesson.ownerName }}</p>
+                <p style="float: right;">Autorius: {{ lesson.ownerName }}</p>
               </el-col>
             </el-row>
             <el-divider>
@@ -57,21 +57,19 @@
         </el-row>
         <el-row>
           <el-col>
-            <p>Practice {{ lesson.assignments.length }}</p>
+            <p>Užduotys {{ lesson.assignments.length }}</p>
             <el-collapse>
               <el-collapse-item
                 v-for="(assignment, index) in lesson.assignments"
                 :key="`question-${index}`"
                 :title="
-                  `Question ${index + 1} ${
-                    assignment.progress ? `(${assignment.progress})` : ``
-                  }`
+                  `Klausimas ${index + 1} ${lessonProgress}`
                 "
               >
                 <el-row>
                   <el-col :span="20">
                     <h3>{{ assignment.description }}</h3>
-                    <p>Experience ({{ assignment.experience }})</p>
+                    <p>Taškai ({{ assignment.experience }})</p>
                   </el-col>
                   <el-col :span="4">
                     <el-button-group>
@@ -117,7 +115,7 @@
                 type="primary"
                 :plain="true"
                 style="float: left;"
-                >Add a question</el-button
+                >Pridėti klausimą</el-button
               >
               <el-button
                 v-if="lesson.state == 'Waiting' && (session  && session.role === 'Administrator')"
@@ -125,7 +123,7 @@
                 type="danger"
                 :plain="true"
                 style="float: left;"
-                >Reject</el-button
+                >Atšaukti</el-button
               >
             </p>
             <p>
@@ -135,7 +133,7 @@
                 type="success"
                 :plain="true"
                 style="float: right;"
-                >Publish</el-button
+                >Publikuoti</el-button
               >
               <el-button
                 v-if="lesson.state == 'Waiting' && (session  && session.role === 'Administrator')"
@@ -143,7 +141,7 @@
                 type="success"
                 :plain="true"
                 style="float: right;"
-                >Approve</el-button
+                >Patvirtinti</el-button
               >
               <el-button
                 v-if="lesson.state == 'Published' && lesson.progress == null && session"
@@ -151,7 +149,7 @@
                 type="warning"
                 :plain="true"
                 style="float: right;"
-                >Start</el-button
+                >Pasirinkti</el-button
               >
             </p>
           </el-col>
@@ -234,10 +232,10 @@ class Lesson extends Vue {
   public onStartLesson() {
     this.setConfirmModalVisible({
       visible: true,
-      stateName: "Confirm",
+      stateName: "Pasirinkti",
       data: {
-        title: "Confirm start",
-        message: "Are you sure want to start this lesson?",
+        title: "Patvirtinti pasirinkimą.",
+        message: "Ar tikrai norite pasirinkti šią pamoką?",
         onAction: () => {
           return this.startLesson()
             .then(() => {
@@ -253,14 +251,14 @@ class Lesson extends Vue {
   private onAssignmentCreate() {
     this.setAssignmentModalVisible({
       visible: true,
-      stateName: "Create"
+      stateName: "Sukurti"
     });
   }
 
   private onAssignmentDelete(index: number) {
     this.setAssignmentModalVisible({
       visible: true,
-      stateName: "Delete",
+      stateName: "Ištrinti",
       data: {
         index
       }
@@ -270,7 +268,7 @@ class Lesson extends Vue {
   private onAssignmentEdit(index: number, assignment: AssignmentModel) {
     this.setAssignmentModalVisible({
       visible: true,
-      stateName: "Update",
+      stateName: "Atnaujinti",
       data: {
         index,
         ...assignment
@@ -281,10 +279,10 @@ class Lesson extends Vue {
   private Publish() {
     this.setConfirmModalVisible({
       visible: true,
-      stateName: "Confirm",
+      stateName: "Publikuoti",
       data: {
-        title: "Confirm publish",
-        message: "Are you sure want to publish this lesson?",
+        title: "Patvirtinti publikaciją",
+        message: "Ar tikrai norite publikuoti pamoką?",
         onAction: () => {
           return this.postAssignments()
             .then(() => {
@@ -300,7 +298,7 @@ class Lesson extends Vue {
   private Approve() {
     this.setAuthorizeModalVisible({
       visible: true,
-      stateName: "Approve",
+      stateName: "Patvirtinti",
       data: {
         lessonId: this.lesson.id,
         onAction: (id: number, status: string, valid: boolean) =>
@@ -316,7 +314,7 @@ class Lesson extends Vue {
   private Reject() {
     this.setAuthorizeModalVisible({
       visible: true,
-      stateName: "Reject",
+      stateName: "Atmesti",
       data: {
         lessonId: this.lesson.id,
         onAction: (id: number, status: string, valid: boolean) =>
@@ -332,13 +330,43 @@ class Lesson extends Vue {
   private onAnswerQuestion(model: AssignmentModel) {
     this.setAnswerModalVisible({
       visible: true,
-      stateName: "Answer",
+      stateName: "Atsakyti",
       data: {
         assignmentId: model.id,
         question: model.description,
         lessonId: this.lesson.id
       }
     });
+  }
+
+  get lessonState() {
+    if (this.lesson.state == 'Published') {
+      return 'Publikuota'
+    }
+    if (this.lesson.state == 'Waiting') {
+      return 'Laukiama'
+    }
+    if (this.lesson.state == 'Created') {
+      return 'Sukurta'
+    }
+    if (this.lesson.state == 'Rejected') {
+      return 'Atmesta'
+    }
+
+    return '';
+  }
+
+  get lessonProgress() {
+    if (this.lesson.progress) {
+      if (this.lesson.progress == 'Active') {
+        return '(Aktyvus)'
+      }
+      if (this.lesson.progress == 'Completed') {
+        return '(Užbaigta)'
+      }
+    } 
+
+    return '';
   }
 }
 

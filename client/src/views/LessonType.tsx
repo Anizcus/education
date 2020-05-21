@@ -49,7 +49,7 @@ class LessonType extends Vue {
     if (!this.types.length) {
       return (
         <el-card shadow="hover" style={{ textAlign: "center" }}>
-          No types detected
+          Nėra pamokos tipų!
         </el-card>
       );
     }

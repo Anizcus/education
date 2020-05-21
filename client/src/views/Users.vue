@@ -11,18 +11,22 @@
   </el-container>
   <div v-else>
     <el-table :data="users || []" style="width: 100%" row-key="id">
-      <el-table-column prop="name" label="Name" width="180">
+      <el-table-column prop="name" label="Vartotojo vardas" width="180">
         <template slot-scope="scope">
           <el-button type="text" @click="() => onProfile(scope.$index)">
             {{ scope.row.name }}
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="level" label="Level" width="180"></el-table-column>
-      <el-table-column prop="role" label="Role"> </el-table-column>
+      <el-table-column prop="level" label="Lygis" width="180"></el-table-column>
+      <el-table-column prop="role" label="Rolė"> 
+        <template slot-scope="scope">
+            {{ mapRole(scope.row.role) }}
+        </template>
+      </el-table-column>
       <el-table-column
         v-if="session && session.role === 'Administrator'"
-        label="Operations"
+        label="Operacijos"
         width="180"
       >
         <template slot-scope="scope">
@@ -30,7 +34,7 @@
             type="primary"
             @click="() => onModify(scope.$index)"
             size="small"
-            >Modify</el-button
+            >Modifikuoti</el-button
           >
         </template>
       </el-table-column>
@@ -101,14 +105,33 @@ class Users extends Vue {
 
     this.setManageUserModalVisible({
       visible: true,
-      stateName: "Update",
+      stateName: "Atnaujinti",
       data: {
         id: this.users[index].id,
-        name: this.users[index].name,
+        name: this.mapRole(this.users[index].name),
         roles: roleList,
         role: roleId,
       },
     });
+  }
+
+  private mapRole(role: string) {
+    if (role == 'Administrator')
+    {
+      return 'Administratorius';
+    }
+
+    if (role == 'Teacher')
+    {
+      return 'Mokytojas';
+    }
+
+    if (role == 'Student')
+    {
+      return 'Studentas';
+    }
+
+    return '';
   }
 }
 

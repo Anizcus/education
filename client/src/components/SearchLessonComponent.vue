@@ -1,12 +1,12 @@
 <template>
-  <el-input placeholder="Search by lesson name" v-model="input" class="i-input">
+  <el-input placeholder="Ieškoti pagal pamokos pavadinimą" v-model="input" class="i-input">
     <el-select
       class="i-select"
       v-model="select"
       slot="prepend"
       :loading="loading"
-      placeholder="Type (Optional)"
-      no-data-text="No data!"
+      placeholder="Pamokos tipas"
+      no-data-text="Nėra duomenų!"
       :clearable="true"
     >
       <el-option-group
@@ -29,7 +29,7 @@
       slot="append"
       type="warning"
       icon="el-icon-search"
-      >Search</el-button
+      >Ieškoti</el-button
     >
   </el-input>
 </template>

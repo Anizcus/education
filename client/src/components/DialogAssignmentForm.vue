@@ -1,28 +1,28 @@
 <template>
   <el-dialog
-    :title="`${modalState} an assignment`"
+    :title="`${modalState} užduotį.`"
     :visible="assignmentModal"
     @close="onCancel"
     @open="onOpen"
   >
     <el-form v-if="modalState !== 'Delete'" :model="form" label-position="top">
-      <el-form-item label="Description">
+      <el-form-item label="Klausimo aprašymas">
         <el-input
           type="textarea"
           v-model="form.description"
           :rows="5"
         ></el-input>
       </el-form-item>
-      <el-form-item label="Answer">
+      <el-form-item label="Atsakymas">
         <el-input v-model="form.answer"></el-input>
       </el-form-item>
-      <el-form-item label="Experience">
+      <el-form-item label="Taškai">
         <el-input-number v-model="form.experience" :min="1"></el-input-number>
       </el-form-item>
     </el-form>
-    <div v-else>Are you sure want to delete question {{ data.index + 1 }}?</div>
+    <div v-else>Ar tikrai norite ištrinti klausimą [{{ data.index + 1 }}] ?</div>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="onCancel">Cancel</el-button>
+      <el-button @click="onCancel">Atgal</el-button>
       <el-button type="primary" @click="onAction">{{ modalState }}</el-button>
     </span>
   </el-dialog>
@@ -82,17 +82,17 @@ class DialogAssignmentForm extends Vue {
       answer: this.form.answer
     };
 
-    if (this.modalState == "Create") {
+    if (this.modalState == "Sukurti") {
       this.createAssignment(assignment);
     }
 
-    if (this.modalState == "Update") {
+    if (this.modalState == "Atnaujinti") {
       assignment.id = this.data.index || 0;
 
       this.updateAssignment(assignment);
     }
 
-    if (this.modalState == "Delete") {
+    if (this.modalState == "Ištrinti") {
       this.deleteAssignment(this.data.index);
     }
 

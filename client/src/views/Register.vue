@@ -2,22 +2,22 @@
   <el-row>
     <el-col>
       <el-form label-position="top" :model="form" :rules="rule" ref="form">
-        <el-form-item label="Username" prop="username">
+        <el-form-item label="Vartotojo vardas" prop="username">
           <el-input v-model="form.username"></el-input>
         </el-form-item>
-        <el-form-item label="Password" prop="password">
+        <el-form-item label="Slaptažodis" prop="password">
           <el-input v-model="form.password" :show-password="true"></el-input>
         </el-form-item>
-        <el-form-item label="Confirm password" prop="confirm">
+        <el-form-item label="Patvirtinti slaptažodį" prop="confirm">
           <el-input v-model="form.confirm" :show-password="true"></el-input>
         </el-form-item>
-        <el-form-item label="Role" prop="role">
+        <el-form-item label="Rolė" prop="role">
           <el-select
             style="width: 100%;"
             :loading="roleLoading"
             :clearable="true"
             v-model="form.role"
-            placeholder="Select a role"
+            placeholder="Pasirinkti rolę"
           >
             <el-option
               v-for="role in roles"
@@ -30,7 +30,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit" :loading="loading">
-            <span>Register</span>
+            <span>Registruotis</span>
           </el-button>
         </el-form-item>
       </el-form>
@@ -73,14 +73,14 @@ class Register extends Vue {
   private roles!: NameServiceModel[];
   private rule = {
     username: [
-      { required: true, message: "Please input username", trigger: "blur" }
+      { required: true, message: "Vartotojo vardas yra privalomas", trigger: "blur" }
     ],
     password: [
       {
         required: true,
         validator: (rule: object, value: string, callback: Function) => {
           if (value == "") {
-            return callback(new Error("Please input password"));
+            return callback(new Error("Įveskite slaptažodį"));
           }
 
           if (this.form.confirm !== "") {
@@ -97,11 +97,11 @@ class Register extends Vue {
         required: true,
         validator: (rule: object, value: string, callback: Function) => {
           if (value == "") {
-            return callback(new Error("Please input password"));
+            return callback(new Error("Įveskite slaptažodį"));
           }
 
           if (this.form.password !== value) {
-            return callback(new Error("Password inputs don't match!"));
+            return callback(new Error("Slaptažodžiai nesutampa!"));
           }
 
           return callback();
@@ -110,7 +110,7 @@ class Register extends Vue {
       }
     ],
     role: [
-      { required: true, message: "Please select a role!", trigger: "blur" }
+      { required: true, message: "Pasirinkite rolę!", trigger: "blur" }
     ]
   };
 

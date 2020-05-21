@@ -6,7 +6,7 @@
   >
     <p>{{ `${(data && data.message) || ""}` }}</p>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="onCancel">Cancel</el-button>
+      <el-button @click="onCancel">Atgal</el-button>
       <el-button type="success" :loading="loading" @click="() => onAction()"
         >{{ modalState }}
       </el-button>

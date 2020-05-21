@@ -1,12 +1,12 @@
 <template>
-  <el-dialog title="Answer a question" :visible="answerModal" @close="onClose">
+  <el-dialog title="Atsakyti į klausimą." :visible="answerModal" @close="onClose">
     <el-form :model="form" label-position="top">
-      <el-form-item :label="`Question: ${(data && data.question) || ''}`">
+      <el-form-item :label="`Klausimas: ${(data && data.question) || ''}`">
         <el-input :clearable="true" v-model="form.answer"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="onCancel">Cancel</el-button>
+      <el-button @click="onCancel">Atgal</el-button>
       <el-button type="success" :loading="loading" @click="() => onAction()"
         >{{ modalState }}
       </el-button>

@@ -49,7 +49,7 @@ class LessonCategory extends Vue {
     if (!this.categories.length) {
       return (
         <el-card shadow="hover" style={{ textAlign: "center" }}>
-          No data
+          Nėra duomenų!
         </el-card>
       );
     }

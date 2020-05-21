@@ -17,7 +17,7 @@
           !search || group.label.toLowerCase().includes(search.toLowerCase())
       )
     "
-    empty-text="No data!"
+    empty-text="Nėra duomenų!"
   >
     <el-table-column type="expand">
       <template slot-scope="scope">
@@ -33,13 +33,13 @@
           </template>
         </div>
         <div v-else>
-          <i>Category has no types!</i>
+          <i>Kategorija neturi tipų!</i>
         </div>
       </template>
     </el-table-column>
-    <el-table-column prop="label" label="Category" width="180">
+    <el-table-column prop="label" label="Kategorija" width="180">
     </el-table-column>
-    <el-table-column prop="options" label="Count" width="90">
+    <el-table-column prop="options" label="Tipų kiekis" width="90">
       <template slot-scope="scope">
         <span>{{ scope.row.options.length }}</span>
       </template>
@@ -50,13 +50,13 @@
           style="width: 75%; margin-right: 10px;"
           v-model="search"
           size="mini"
-          placeholder="Search by name"
+          placeholder="Ieškoti pagal pavadinimą"
         ></el-input>
         <el-button
           size="mini"
           type="warning"
           @click="() => onCreateCategory(scope)"
-          >Create</el-button
+          >Sukurti</el-button
         >
       </template>
       <template slot-scope="scope">
@@ -65,14 +65,14 @@
           type="danger"
           icon="el-icon-edit"
           @click="() => onUpdateCategory(scope.row.id, scope.row.label)"
-          >Edit</el-button
+          >Redaguoti</el-button
         >
         <el-button
           size="mini"
           type="primary"
           icon="el-icon-plus"
           @click="() => onCreateType(scope.row.id)"
-          >Add</el-button
+          >Pridėti</el-button
         >
       </template>
     </el-table-column>
@@ -116,12 +116,12 @@ class Configuration extends Vue {
   private onUpdateCategory(id: number, name: string) {
     this.setNameModalVisible({
       visible: true,
-      stateName: "Update",
+      stateName: "Atnaujinti",
       data: {
         id,
         name,
-        title: "Update category name",
-        entity: "Category",
+        title: "Atnaujinti kategorijos pavadinimą.",
+        entity: "Kategorijos",
         onAction: (id: number, name: string) =>
           AdminService.updateCategory({
             id,
@@ -134,10 +134,10 @@ class Configuration extends Vue {
   private onCreateCategory() {
     this.setNameModalVisible({
       visible: true,
-      stateName: "Create",
+      stateName: "Sukurti",
       data: {
-        title: "Create new category",
-        entity: "Category",
+        title: "Sukurti naują kategoriją.",
+        entity: "Kategorijos",
         onAction: (id: number, name: string) =>
           AdminService.createCategory({
             id,
@@ -150,12 +150,12 @@ class Configuration extends Vue {
   private onUpdateType(id: number, name: string) {
     this.setNameModalVisible({
       visible: true,
-      stateName: "Update",
+      stateName: "Atnaujinti",
       data: {
         id,
         name,
-        title: "Update type name",
-        entity: "Type",
+        title: "Atnaujinti pamokos tipo pavadinimą.",
+        entity: "Pamokos tipo",
         onAction: (id: number, name: string) =>
           AdminService.updateType({
             id,
@@ -168,12 +168,12 @@ class Configuration extends Vue {
   public onCreateType(categoryId: number) {
     this.setNameModalVisible({
       visible: true,
-      stateName: "Create",
+      stateName: "Sukurti",
       data: {
         id: categoryId,
         name: "",
-        title: "Add new type",
-        entity: "Type",
+        title: "Pridėti naują pamokos tipą.",
+        entity: "Pamokos tipo",
         onAction: (id: number, name: string) =>
           AdminService.createType({
             id,

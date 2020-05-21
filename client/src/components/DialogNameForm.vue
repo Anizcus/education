@@ -14,15 +14,15 @@
     >
     </el-alert>
     <el-form :model="form" label-position="top">
-      <el-form-item :label="`${data && data.entity} name`">
+      <el-form-item :label="`${data && data.entity} pavadinimas`">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="onCancel">Cancel</el-button>
+      <el-button @click="onCancel">Atgal</el-button>
       <el-button
-        :type="modalState == 'Create' ? 'success' : 'danger'"
-        @click="() => onAction(modalState == 'Create')"
+        :type="modalState == 'Sukurti' ? 'success' : 'danger'"
+        @click="() => onAction(modalState == 'Sukurti')"
         :loading="loading"
         >{{ modalState }}</el-button
       >

@@ -8,16 +8,18 @@
         <el-col :span="4" :offset="1">
           <el-button-group v-if="!session">
             <el-button
+              style="font-size: 10px;"
               icon="el-icon-user"
               type="primary"
               @click="() => onLogin()"
-              >Login</el-button
+              >Prisijungti</el-button
             >
             <el-button
+              style="font-size: 10px;"
               icon="el-icon-key"
               type="primary"
               @click="() => onRegister()"
-              >Register</el-button
+              >Registruotis</el-button
             >
           </el-button-group>
           <el-button-group v-else>
@@ -30,7 +32,7 @@
                 >{{ session.name }}</el-button
               >
             </el-tooltip>
-            <el-tooltip content="Logout" placement="bottom">
+            <el-tooltip content="Atsijungti" placement="bottom">
               <el-button
                 icon="el-icon-close"
                 type="primary"
@@ -48,14 +50,14 @@
           type="default"
           class="menu-button"
           @click="() => onHome()"
-          >Home</el-button
+          >Pagrindinis puslapis</el-button
         >
         <el-button
           icon="el-icon-info"
           type="default"
           class="menu-button"
           @click="() => onAbout()"
-          >About</el-button
+          >Apie programą</el-button
         >
       </el-aside>
       <el-main class="content">
@@ -68,14 +70,14 @@
           type="default"
           class="menu-button"
           @click="() => onProfile()"
-          >Profile</el-button
+          >Profilis</el-button
         >
         <el-button
           icon="el-icon-s-custom"
           type="default"
           class="menu-button"
           @click="() => onUsers()"
-          >Users</el-button
+          >Vartotojai</el-button
         >
         <el-button
           v-if="
@@ -86,7 +88,7 @@
           type="default"
           class="menu-button"
           @click="() => onManagement()"
-          >Manage Lessons</el-button
+          >Tvarkyti pamokas</el-button
         >
         <el-button
           v-if="session && session.role === 'Administrator'"
@@ -94,11 +96,11 @@
           type="default"
           class="menu-button"
           @click="() => onConfiguration()"
-          >Configuration</el-button
+          >Konfiguracija</el-button
         >
       </el-aside>
     </el-container>
-    <el-footer class="footer">Simple © Daniel Vrubel - 2020</el-footer>
+    <el-footer class="footer">Programa © Daniel Vrubel - 2020</el-footer>
   </el-container>
 </template>
 

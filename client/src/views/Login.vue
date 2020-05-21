@@ -10,15 +10,15 @@
       >
       </el-alert>
       <el-form :model="form" :rules="rule" ref="form">
-        <el-form-item label="Username" prop="username">
+        <el-form-item label="Vartotojo vardas" prop="username">
           <el-input v-model="form.username"></el-input>
         </el-form-item>
-        <el-form-item label="Password" prop="password">
+        <el-form-item label="Slaptažodis" prop="password">
           <el-input v-model="form.password" :show-password="true"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit" :loading="loading">
-            <span>Login</span>
+            <span>Prisijungti</span>
           </el-button>
         </el-form-item>
       </el-form>
@@ -51,10 +51,10 @@ class Login extends Vue {
   private loading = false;
   private rule = {
     username: [
-      { required: true, message: "Please input username", trigger: "blur" }
+      { required: true, message: "Vartotojo vardas yra privalomas", trigger: "blur" }
     ],
     password: [
-      { required: true, message: "Please input password", trigger: "blur" }
+      { required: true, message: "Slaptažodis yra privalomas", trigger: "blur" }
     ]
   };
   private alert = {
@@ -87,7 +87,7 @@ class Login extends Vue {
         })
       )
       .then(user => {
-        this.alert.message = `You have successfully logged in as ${user.name}!`;
+        this.alert.message = `Jūs sėkmingai prisijungėte kaip ${user.name}!`;
         this.alert.type = "success";
         this.loading = false;
       })

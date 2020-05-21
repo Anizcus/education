@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="Authorize a lesson"
+    :title="`${modalState} pamoką.`"
     :visible="authorizeModal"
     @close="onClose"
   >
@@ -12,7 +12,7 @@
       @close="onCloseAlert"
     ></el-alert>
     <el-form :model="form" label-position="top">
-      <el-form-item :label="`${modalState} status description (optional)`">
+      <el-form-item :label="`Priežastis (neprivaloma)`">
         <el-input
           type="textarea"
           v-model="form.description"
@@ -21,10 +21,10 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="onCancel">Cancel</el-button>
+      <el-button @click="onCancel">Atgal</el-button>
       <el-button
-        :type="modalState == 'Approve' ? 'success' : 'danger'"
-        @click="() => onAction(modalState == 'Approve')"
+        :type="modalState == 'Patvirtinti' ? 'success' : 'danger'"
+        @click="() => onAction(modalState == 'Patvirtinti')"
         >{{ modalState }}</el-button
       >
     </span>

@@ -11,7 +11,7 @@
   </el-container>
   <div v-else-if="!session">
     <el-alert
-      title="You must be logged in to view other users!"
+      title="Norėdami pamatyti kitus vartotojus, turite prisijungti!"
       type="error"
       :show-icon="true"
       :closable="false"
@@ -22,8 +22,8 @@
     <el-row>
       <el-col :offset="6" :span="12" style="padding-right: 10px;">
         <h2 style="text-align:center;">{{ profile.name }}</h2>
-        <p style="text-align:center;">{{ profile.role }}</p>
-        <p style="text-align:center;">Level</p>
+        <p style="text-align:center;">{{ profileRole}}</p>
+        <p style="text-align:center;">Lygis</p>
         <p style="text-align:center;">{{ profile.level }}</p>
         <el-progress
           :text-inside="true"
@@ -33,7 +33,7 @@
           "
           status="warning"
         ></el-progress>
-        <p style="text-align:center;">Experience</p>
+        <p style="text-align:center;">Taškai</p>
         <p style="text-align:center;">
           {{ profile.experience }} / {{ profile.nextExperience }}
         </p>
@@ -41,7 +41,7 @@
     </el-row>
     <el-row>
       <el-col>
-        <p style="text-align:center;">Active badges</p>
+        <p style="text-align:center;">Aktyvūs ženkliukai</p>
         <div class="container-center">
           <el-card
             v-for="lesson in profile.lessons.filter(
@@ -81,7 +81,7 @@
     </el-row>
     <el-row>
       <el-col>
-        <p style="text-align:center;">Completed badges</p>
+        <p style="text-align:center;">Baigti ženkliukai</p>
         <div class="container-center">
           <el-card
             v-for="lesson in profile.lessons.filter(
@@ -165,6 +165,25 @@ class Profile extends Vue {
 
   private goToLesson(lessonId: string) {
     this.$router.replace({ name: "Lesson", params: { id: lessonId } });
+  }
+
+  get profileRole() {
+    if (this.profile.role == 'Administrator')
+    {
+      return 'Administratorius';
+    }
+
+    if (this.profile.role == 'Teacher')
+    {
+      return 'Mokytojas';
+    }
+
+    if (this.profile.role == 'Student')
+    {
+      return 'Studentas';
+    }
+
+    return '';
   }
 }
 
