@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace server.stores.migrations
 {
-    public partial class main_models : Migration
+    public partial class miginitstartover : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,6 +24,21 @@ namespace server.stores.migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "permission",
+                columns: table => new
+                {
+                    id = table.Column<uint>(type: "int(10) unsigned", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    name = table.Column<string>(type: "varchar(32)", nullable: false),
+                    create_time = table.Column<DateTimeOffset>(type: "timestamp", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    update_time = table.Column<DateTimeOffset>(type: "timestamp", nullable: true, defaultValueSql: "NULL ON UPDATE CURRENT_TIMESTAMP")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_permission", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "progress",
                 columns: table => new
                 {
@@ -36,6 +51,21 @@ namespace server.stores.migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_progress", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "role",
+                columns: table => new
+                {
+                    id = table.Column<uint>(type: "int(10) unsigned", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    name = table.Column<string>(type: "varchar(32)", nullable: false),
+                    create_time = table.Column<DateTimeOffset>(type: "timestamp", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    update_time = table.Column<DateTimeOffset>(type: "timestamp", nullable: true, defaultValueSql: "NULL ON UPDATE CURRENT_TIMESTAMP")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_role", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,23 +106,54 @@ namespace server.stores.migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "status",
+                name: "role_permission",
                 columns: table => new
                 {
-                    id = table.Column<uint>(type: "int(10) unsigned", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    state_id = table.Column<uint>(type: "int(10) unsigned", nullable: false),
-                    description = table.Column<string>(type: "varchar(32)", nullable: false),
+                    permission_id = table.Column<uint>(type: "int(10) unsigned", nullable: false),
+                    role_id = table.Column<uint>(type: "int(10) unsigned", nullable: false),
                     create_time = table.Column<DateTimeOffset>(type: "timestamp", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     update_time = table.Column<DateTimeOffset>(type: "timestamp", nullable: true, defaultValueSql: "NULL ON UPDATE CURRENT_TIMESTAMP")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_status", x => x.id);
+                    table.PrimaryKey("INDEX_ROLE_PERMISSION_ID", x => new { x.role_id, x.permission_id });
                     table.ForeignKey(
-                        name: "FOREIGN_STATUS_STATE_ID",
-                        column: x => x.state_id,
-                        principalTable: "state",
+                        name: "FOREIGN_ROLE_PERMISSION_PERMISSION_ID",
+                        column: x => x.permission_id,
+                        principalTable: "permission",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FOREIGN_ROLE_PERMISSION_ROLE_ID",
+                        column: x => x.role_id,
+                        principalTable: "role",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "user",
+                columns: table => new
+                {
+                    id = table.Column<uint>(type: "int(10) unsigned", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    level = table.Column<uint>(type: "int(10) unsigned", nullable: false),
+                    experience = table.Column<uint>(type: "int(10) unsigned", nullable: false),
+                    name = table.Column<string>(type: "varchar(64)", nullable: false),
+                    blocked = table.Column<bool>(type: "boolean", nullable: false),
+                    password = table.Column<byte[]>(type: "tinyblob", nullable: false),
+                    salt = table.Column<byte[]>(type: "tinyblob", nullable: false),
+                    create_time = table.Column<DateTimeOffset>(type: "timestamp", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    update_time = table.Column<DateTimeOffset>(type: "timestamp", nullable: true, defaultValueSql: "NULL ON UPDATE CURRENT_TIMESTAMP"),
+                    role_id = table.Column<uint>(type: "int(10) unsigned", nullable: false, defaultValue: 1u)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_user", x => x.id);
+                    table.ForeignKey(
+                        name: "FOREIGN_USER_ROLE_ID",
+                        column: x => x.role_id,
+                        principalTable: "role",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -103,10 +164,11 @@ namespace server.stores.migrations
                 {
                     id = table.Column<uint>(type: "int(10) unsigned", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    name = table.Column<string>(type: "varchar(64)", nullable: true),
+                    name = table.Column<string>(type: "varchar(64)", nullable: false),
                     description = table.Column<string>(type: "varchar(256)", nullable: false),
-                    badge = table.Column<byte[]>(type: "tinyblob", nullable: true),
-                    status_id = table.Column<uint>(type: "int(10) unsigned", nullable: false),
+                    status = table.Column<string>(type: "varchar(256)", nullable: true),
+                    badge = table.Column<byte[]>(type: "blob", nullable: true),
+                    state_id = table.Column<uint>(type: "int(10) unsigned", nullable: false),
                     category_id = table.Column<uint>(type: "int(10) unsigned", nullable: false),
                     type_id = table.Column<uint>(type: "int(10) unsigned", nullable: false),
                     owner_id = table.Column<uint>(type: "int(10) unsigned", nullable: false),
@@ -129,9 +191,9 @@ namespace server.stores.migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FOREIGN_LESSON_STATUS_ID",
-                        column: x => x.status_id,
-                        principalTable: "status",
+                        name: "FOREIGN_LESSON_STATE_ID",
+                        column: x => x.state_id,
+                        principalTable: "state",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -150,6 +212,7 @@ namespace server.stores.migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     description = table.Column<string>(type: "varchar(256)", nullable: false),
                     experience = table.Column<uint>(type: "int(10) unsigned", nullable: false),
+                    answer = table.Column<string>(type: "varchar(64)", nullable: true),
                     create_time = table.Column<DateTimeOffset>(type: "timestamp", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     update_time = table.Column<DateTimeOffset>(type: "timestamp", nullable: true, defaultValueSql: "NULL ON UPDATE CURRENT_TIMESTAMP"),
                     lesson_id = table.Column<uint>(type: "int(10) unsigned", nullable: false)
@@ -232,13 +295,20 @@ namespace server.stores.migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "category",
+                table: "permission",
                 columns: new[] { "id", "name", "update_time" },
                 values: new object[,]
                 {
-                    { 1u, "Language", null },
-                    { 2u, "Programming", null },
-                    { 3u, "Science", null }
+                    { 1u, "User.View", null },
+                    { 14u, "Lesson.Delete", null },
+                    { 13u, "Lesson.Update", null },
+                    { 12u, "Lesson.Create", null },
+                    { 11u, "Lesson.View", null },
+                    { 15u, "Lesson.Authorize", null },
+                    { 4u, "User.Delete", null },
+                    { 3u, "User.Update", null },
+                    { 2u, "User.Create", null },
+                    { 5u, "User.Modify", null }
                 });
 
             migrationBuilder.InsertData(
@@ -252,29 +322,40 @@ namespace server.stores.migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "role",
+                columns: new[] { "id", "name", "update_time" },
+                values: new object[,]
+                {
+                    { 1u, "Student", null },
+                    { 2u, "Teacher", null },
+                    { 3u, "Administrator", null }
+                });
+
+            migrationBuilder.InsertData(
                 table: "state",
                 columns: new[] { "id", "name", "update_time" },
                 values: new object[,]
                 {
-                    { 1u, "Waiting", null },
-                    { 2u, "Accepted", null },
-                    { 3u, "Rejected", null }
+                    { 4u, "Rejected", null },
+                    { 2u, "Waiting", null },
+                    { 3u, "Published", null },
+                    { 1u, "Created", null }
                 });
 
             migrationBuilder.InsertData(
-                table: "type",
-                columns: new[] { "id", "category_id", "name", "update_time" },
-                values: new object[] { 2u, 1u, "English", null });
-
-            migrationBuilder.InsertData(
-                table: "type",
-                columns: new[] { "id", "category_id", "name", "update_time" },
-                values: new object[] { 3u, 1u, "Russian", null });
-
-            migrationBuilder.InsertData(
-                table: "type",
-                columns: new[] { "id", "category_id", "name", "update_time" },
-                values: new object[] { 1u, 3u, "Math", null });
+                table: "role_permission",
+                columns: new[] { "role_id", "permission_id", "update_time" },
+                values: new object[,]
+                {
+                    { 1u, 1u, null },
+                    { 1u, 2u, null },
+                    { 1u, 3u, null },
+                    { 1u, 4u, null },
+                    { 2u, 13u, null },
+                    { 2u, 12u, null },
+                    { 3u, 15u, null },
+                    { 3u, 5u, null }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "INDEX_ASSIGNMENT_LESSON_ID",
@@ -292,9 +373,9 @@ namespace server.stores.migrations
                 column: "owner_id");
 
             migrationBuilder.CreateIndex(
-                name: "INDEX_LESSON_STATUS_ID",
+                name: "INDEX_LESSON_STATE_ID",
                 table: "lesson",
-                column: "status_id");
+                column: "state_id");
 
             migrationBuilder.CreateIndex(
                 name: "INDEX_LESSON_TYPE_ID",
@@ -302,14 +383,24 @@ namespace server.stores.migrations
                 column: "type_id");
 
             migrationBuilder.CreateIndex(
-                name: "INDEX_STATUS_STATE_ID",
-                table: "status",
-                column: "state_id");
+                name: "INDEX_ROLE_PERMISSION_PERMISSION_ID",
+                table: "role_permission",
+                column: "permission_id");
+
+            migrationBuilder.CreateIndex(
+                name: "INDEX_ROLE_PERMISSION_ROLE_ID",
+                table: "role_permission",
+                column: "role_id");
 
             migrationBuilder.CreateIndex(
                 name: "INDEX_TYPE_CATEGORY_ID",
                 table: "type",
                 column: "category_id");
+
+            migrationBuilder.CreateIndex(
+                name: "INDEX_USER_ROLE_ID",
+                table: "user",
+                column: "role_id");
 
             migrationBuilder.CreateIndex(
                 name: "INDEX_USER_ASSIGNMENT_ASSIGNMENT_ID",
@@ -345,10 +436,16 @@ namespace server.stores.migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "role_permission");
+
+            migrationBuilder.DropTable(
                 name: "user_assignment");
 
             migrationBuilder.DropTable(
                 name: "user_lesson");
+
+            migrationBuilder.DropTable(
+                name: "permission");
 
             migrationBuilder.DropTable(
                 name: "assignment");
@@ -360,13 +457,16 @@ namespace server.stores.migrations
                 name: "lesson");
 
             migrationBuilder.DropTable(
-                name: "status");
+                name: "user");
+
+            migrationBuilder.DropTable(
+                name: "state");
 
             migrationBuilder.DropTable(
                 name: "type");
 
             migrationBuilder.DropTable(
-                name: "state");
+                name: "role");
 
             migrationBuilder.DropTable(
                 name: "category");

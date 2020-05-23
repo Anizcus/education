@@ -9,8 +9,8 @@ using Server.Stores;
 namespace server.stores.migrations
 {
     [DbContext(typeof(Store))]
-    [Migration("20200415222750_changed to blob")]
-    partial class changedtoblob
+    [Migration("20200523172429_mig-init start over")]
+    partial class miginitstartover
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,6 +25,10 @@ namespace server.stores.migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("id")
                         .HasColumnType("int(10) unsigned");
+
+                    b.Property<string>("Answer")
+                        .HasColumnName("answer")
+                        .HasColumnType("varchar(64)");
 
                     b.Property<DateTimeOffset>("Created")
                         .ValueGeneratedOnAdd()
@@ -86,26 +90,6 @@ namespace server.stores.migrations
                     b.HasKey("Id");
 
                     b.ToTable("category");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1u,
-                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "Language"
-                        },
-                        new
-                        {
-                            Id = 2u,
-                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "Programming"
-                        },
-                        new
-                        {
-                            Id = 3u,
-                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "Science"
-                        });
                 });
 
             modelBuilder.Entity("Server.Stores.Entities.Lesson", b =>
@@ -144,7 +128,7 @@ namespace server.stores.migrations
                         .HasColumnType("int(10) unsigned");
 
                     b.Property<uint>("StateId")
-                        .HasColumnName("status_id")
+                        .HasColumnName("state_id")
                         .HasColumnType("int(10) unsigned");
 
                     b.Property<string>("Status")
@@ -233,6 +217,12 @@ namespace server.stores.migrations
                         },
                         new
                         {
+                            Id = 5u,
+                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "User.Modify"
+                        },
+                        new
+                        {
                             Id = 11u,
                             Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Lesson.View"
@@ -254,6 +244,12 @@ namespace server.stores.migrations
                             Id = 14u,
                             Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Lesson.Delete"
+                        },
+                        new
+                        {
+                            Id = 15u,
+                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Lesson.Authorize"
                         });
                 });
 
@@ -412,6 +408,30 @@ namespace server.stores.migrations
                             RoleId = 1u,
                             PermissionId = 4u,
                             Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            RoleId = 3u,
+                            PermissionId = 15u,
+                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            RoleId = 3u,
+                            PermissionId = 5u,
+                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            RoleId = 2u,
+                            PermissionId = 13u,
+                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            RoleId = 2u,
+                            PermissionId = 12u,
+                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0))
                         });
                 });
 
@@ -504,29 +524,6 @@ namespace server.stores.migrations
                         .HasName("INDEX_TYPE_CATEGORY_ID");
 
                     b.ToTable("type");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 2u,
-                            CategoryId = 1u,
-                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "English"
-                        },
-                        new
-                        {
-                            Id = 1u,
-                            CategoryId = 3u,
-                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "Math"
-                        },
-                        new
-                        {
-                            Id = 3u,
-                            CategoryId = 1u,
-                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "Russian"
-                        });
                 });
 
             modelBuilder.Entity("Server.Stores.Entities.User", b =>
@@ -536,11 +533,23 @@ namespace server.stores.migrations
                         .HasColumnName("id")
                         .HasColumnType("int(10) unsigned");
 
+                    b.Property<bool>("Blocked")
+                        .HasColumnName("blocked")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTimeOffset>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("create_time")
                         .HasColumnType("timestamp")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<uint>("Experience")
+                        .HasColumnName("experience")
+                        .HasColumnType("int(10) unsigned");
+
+                    b.Property<uint>("Level")
+                        .HasColumnName("level")
+                        .HasColumnType("int(10) unsigned");
 
                     b.Property<string>("Name")
                         .IsRequired()

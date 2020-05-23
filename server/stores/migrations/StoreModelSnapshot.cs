@@ -88,26 +88,6 @@ namespace server.stores.migrations
                     b.HasKey("Id");
 
                     b.ToTable("category");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1u,
-                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "Language"
-                        },
-                        new
-                        {
-                            Id = 2u,
-                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "Programming"
-                        },
-                        new
-                        {
-                            Id = 3u,
-                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "Science"
-                        });
                 });
 
             modelBuilder.Entity("Server.Stores.Entities.Lesson", b =>
@@ -542,29 +522,6 @@ namespace server.stores.migrations
                         .HasName("INDEX_TYPE_CATEGORY_ID");
 
                     b.ToTable("type");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 2u,
-                            CategoryId = 1u,
-                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "English"
-                        },
-                        new
-                        {
-                            Id = 1u,
-                            CategoryId = 3u,
-                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "Math"
-                        },
-                        new
-                        {
-                            Id = 3u,
-                            CategoryId = 1u,
-                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "Russian"
-                        });
                 });
 
             modelBuilder.Entity("Server.Stores.Entities.User", b =>
