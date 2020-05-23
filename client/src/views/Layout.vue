@@ -2,7 +2,7 @@
   <el-container class="container">
     <el-header class="header">
       <el-row>
-        <el-col :span="14" :offset="5">
+        <el-col :span="11" :offset="5">
           <i-search-lesson></i-search-lesson>
         </el-col>
         <el-col :span="4" :offset="1">
@@ -12,14 +12,14 @@
               icon="el-icon-user"
               type="primary"
               @click="() => onLogin()"
-              >Prisijungti</el-button
+              >{{ language.Login }}</el-button
             >
             <el-button
               style="font-size: 10px;"
               icon="el-icon-key"
               type="primary"
               @click="() => onRegister()"
-              >Registruotis</el-button
+              >{{ language.Register }}</el-button
             >
           </el-button-group>
           <el-button-group v-else>
@@ -32,7 +32,7 @@
                 >{{ session.name }}</el-button
               >
             </el-tooltip>
-            <el-tooltip content="Atsijungti" placement="bottom">
+            <el-tooltip :content="language.Logout" placement="bottom">
               <el-button
                 icon="el-icon-close"
                 type="primary"
@@ -40,6 +40,16 @@
               ></el-button>
             </el-tooltip>
           </el-button-group>
+        </el-col>
+        <el-col :span="2" :offset="1">
+          <el-select
+            @change="onChangeLanguage"
+            :placeholder="language.Language"
+            :value="languageKey"
+          >
+            <el-option value="English">{{ language.English }}</el-option>
+            <el-option value="Lithuanian">{{ language.Lithuanian }}</el-option>
+          </el-select>
         </el-col>
       </el-row>
     </el-header>
@@ -50,14 +60,14 @@
           type="default"
           class="menu-button"
           @click="() => onHome()"
-          >Pagrindinis puslapis</el-button
+          >{{ language.MainPage }}</el-button
         >
         <el-button
           icon="el-icon-info"
           type="default"
           class="menu-button"
           @click="() => onAbout()"
-          >Apie programą</el-button
+          >{{ language.AboutPage }}</el-button
         >
       </el-aside>
       <el-main class="content">
@@ -70,14 +80,14 @@
           type="default"
           class="menu-button"
           @click="() => onProfile()"
-          >Profilis</el-button
+          >{{ language.Profile }}</el-button
         >
         <el-button
           icon="el-icon-s-custom"
           type="default"
           class="menu-button"
           @click="() => onUsers()"
-          >Vartotojai</el-button
+          >{{ language.Users }}</el-button
         >
         <el-button
           v-if="
@@ -88,7 +98,7 @@
           type="default"
           class="menu-button"
           @click="() => onManagement()"
-          >Tvarkyti pamokas</el-button
+          >{{ language.ManageLessons }}</el-button
         >
         <el-button
           v-if="session && session.role === 'Administrator'"
@@ -96,11 +106,11 @@
           type="default"
           class="menu-button"
           @click="() => onConfiguration()"
-          >Konfiguracija</el-button
+          >{{ language.Configuration }}</el-button
         >
       </el-aside>
     </el-container>
-    <el-footer class="footer">Programa © Daniel Vrubel - 2020</el-footer>
+    <el-footer class="footer">{{ language.FooterNotice }}</el-footer>
   </el-container>
 </template>
 
@@ -109,24 +119,35 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { mapGetters, mapActions, ActionMethod } from "vuex";
 import { SessionModel } from "../models/stores/user.store.model";
+import { LanguageModel } from "../assets/i18n/language";
 import SearchLessonComponent from "../components/SearchLessonComponent.vue";
 
 @Component({
   computed: {
     ...mapGetters("user", {
-      session: "session"
-    })
+      session: "session",
+    }),
+    ...mapGetters("language", {
+      language: "getTranslations",
+      languageKey: "getKey",
+    }),
   },
   methods: {
     ...mapActions("user", {
-      logout: "logout"
-    })
+      logout: "logout",
+    }),
+    ...mapActions("language", {
+      setLanguage: "setTranslations",
+    }),
   },
   components: {
-    "i-search-lesson": SearchLessonComponent
-  }
+    "i-search-lesson": SearchLessonComponent,
+  },
 })
 class Main extends Vue {
+  private language!: LanguageModel;
+  private languageKey!: string;
+  private setLanguage!: ActionMethod;
   private session!: SessionModel;
   private logout!: ActionMethod;
 
@@ -189,6 +210,10 @@ class Main extends Vue {
     if (this.$route.name !== "Users") {
       this.$router.push({ name: "Users" });
     }
+  }
+
+  private onChangeLanguage(language: string) {
+    this.setLanguage(language);
   }
 }
 export default Main;

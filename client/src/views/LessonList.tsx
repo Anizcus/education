@@ -89,7 +89,7 @@ class LessonList extends Vue {
             </span>
             <span style="float: right;">
               {new Date(item.modified).toLocaleDateString(
-                'lt-LT',
+                "lt-LT",
                 this.dateOptions
               )}
             </span>

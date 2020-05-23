@@ -63,7 +63,7 @@
                 <el-col :span="8">
                   {{
                     new Date(scope.row.modified).toLocaleDateString(
-                      'lt-LT',
+                      "lt-LT",
                       dateOptions
                     )
                   }}

@@ -161,7 +161,8 @@
                 v-if="
                   lesson.state == 'Published' &&
                     lesson.progress == null &&
-                    session && session.role === 'Student'
+                    session &&
+                    session.role === 'Student'
                 "
                 @click="() => onStartLesson()"
                 type="warning"

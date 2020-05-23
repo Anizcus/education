@@ -3,6 +3,7 @@ import Vuex, { StoreOptions } from "vuex";
 import UserStore from "@/stores/user.store";
 import LessonStore from "./lesson.store";
 import ModalStore from "./modal.store";
+import LanguageStore from "./language.store";
 
 Vue.use(Vuex);
 
@@ -11,7 +12,8 @@ const store: StoreOptions<{}> = {
   modules: {
     user: UserStore,
     lesson: LessonStore,
-    modal: ModalStore
+    modal: ModalStore,
+    language: LanguageStore
   }
 };
 

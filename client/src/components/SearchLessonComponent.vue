@@ -1,6 +1,6 @@
 <template>
   <el-input
-    placeholder="Ieškoti pagal pamokos pavadinimą"
+    :placeholder="language.SearchLessonByTitle"
     v-model="input"
     class="i-input"
   >
@@ -9,8 +9,8 @@
       v-model="select"
       slot="prepend"
       :loading="loading"
-      placeholder="Pamokos tipas"
-      no-data-text="Nėra duomenų!"
+      :placeholder="language.LessonType"
+      :no-data-text="language.NoData"
       :clearable="true"
     >
       <el-option-group
@@ -33,7 +33,7 @@
       slot="append"
       type="warning"
       icon="el-icon-search"
-      >Ieškoti</el-button
+      >{{ language.Search }}</el-button
     >
   </el-input>
 </template>
@@ -42,9 +42,18 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { AdminService, NameGroupModel } from "../services/admin.service";
+import { LanguageModel } from "../assets/i18n/language";
+import { mapGetters } from "vuex";
 
-@Component
+@Component({
+  computed: {
+    ...mapGetters("language", {
+      language: "getTranslations"
+    })
+  }
+})
 class SearchLessonComponent extends Vue {
+  private language!: LanguageModel;
   private input = "";
   private select = "";
   private groups: NameGroupModel[] = [];

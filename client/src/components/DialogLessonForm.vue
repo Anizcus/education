@@ -112,7 +112,7 @@ class DialogLessonForm extends Vue {
   private form = {
     name: "",
     description: "",
-    type: undefined
+    type: ""
   };
   private modalState!: string;
   private lessonModal!: boolean;
@@ -130,10 +130,10 @@ class DialogLessonForm extends Vue {
         this.groups = groups;
         this.typeLoading = false;
       })
-      .catch(error => {
+      .catch(() => {
         this.typeLoading = false;
       });
-    this.form.type = Number(this.$route.params.id) || "";
+    this.form.type = this.$route.params.id || "";
   }
 
   private handleUpload(file: File) {
