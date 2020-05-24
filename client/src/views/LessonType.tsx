@@ -3,6 +3,7 @@ import Component from "vue-class-component";
 import { VNode } from "vue/types/umd";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
 import { TypeModel } from "@/models/stores/lesson.store.model";
+import { LanguageModel } from '@/assets/i18n/language';
 
 @Component({
   methods: {
@@ -13,11 +14,15 @@ import { TypeModel } from "@/models/stores/lesson.store.model";
   computed: {
     ...mapGetters("lesson", {
       types: "types"
-    })
+    }),
+    ...mapGetters("language", {
+      language: "getTranslations",
+    }),
   }
 })
 class LessonType extends Vue {
   private getTypes!: ActionMethod;
+  private language!: LanguageModel;
   private types!: TypeModel[];
   private loading = true;
 
@@ -49,7 +54,7 @@ class LessonType extends Vue {
     if (!this.types.length) {
       return (
         <el-card shadow="hover" style={{ textAlign: "center" }}>
-          Nėra pamokos tipų!
+          {this.language.NoData}
         </el-card>
       );
     }

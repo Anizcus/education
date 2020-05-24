@@ -3,6 +3,15 @@ import { Language, LanguageModel } from "@/assets/i18n/language";
 
 const namespaced = true;
 const defaultLanguage = 'Lithuanian';
+const dateOptions = {
+   weekday: "long",
+   year: "numeric",
+   month: "long",
+   day: "numeric",
+   hour: "2-digit",
+   minute: "2-digit",
+   hour12: false
+};
 
 interface LanguageStore {
    language: LanguageModel;
@@ -45,6 +54,14 @@ const actions: ActionTree<LanguageStore, {}> = {
 
       context.commit("setLanguage", language);
       context.commit("setKey", languageKey);
+   },
+   getLocalTime(context, date: string) {
+      const locale = context.state.key == 'Lithuanian'
+         ? "lt-LT"
+         : 'en-EN';
+
+      return new Date(date)
+         .toLocaleDateString(locale, dateOptions);
    }
 };
 

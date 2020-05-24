@@ -33,7 +33,7 @@
           "
           status="warning"
         ></el-progress>
-        <p style="text-align:center;">Taškai</p>
+        <p style="text-align:center;">{{ language.Points }}</p>
         <p style="text-align:center;">
           {{ profile.experience }} / {{ profile.nextExperience }}
         </p>
@@ -127,6 +127,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { mapActions, mapGetters, ActionMethod } from "vuex";
 import { ProfileModel, SessionModel } from "../models/stores/user.store.model";
+import { LanguageModel } from "../assets/i18n/language";
 
 @Component({
   methods: {
@@ -138,6 +139,9 @@ import { ProfileModel, SessionModel } from "../models/stores/user.store.model";
     ...mapGetters("user", {
       profile: "profile",
       session: "session"
+    }),
+    ...mapGetters("language", {
+      language: "getTranslations"
     })
   }
 })
@@ -146,6 +150,7 @@ class Profile extends Vue {
   private profile!: ProfileModel;
   private session!: SessionModel;
   private loading = true;
+  private language!: LanguageModel;
 
   public created() {
     this.onProfile();
@@ -168,19 +173,7 @@ class Profile extends Vue {
   }
 
   get profileRole() {
-    if (this.profile.role == "Administrator") {
-      return "Administratorius";
-    }
-
-    if (this.profile.role == "Teacher") {
-      return "Mokytojas";
-    }
-
-    if (this.profile.role == "Student") {
-      return "Studentas";
-    }
-
-    return "";
+    return `${this.language[this.profile.role]}`;
   }
 }
 

@@ -3,32 +3,32 @@ import Component from "vue-class-component";
 import { VNode } from "vue/types/umd";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
 import { LessonListModel } from "@/models/stores/lesson.store.model";
+import { LanguageModel } from '@/assets/i18n/language';
 
 @Component({
   methods: {
     ...mapActions("lesson", {
       getLessons: "getPublishedLessonsByType"
+    }),
+    ...mapActions("language", {
+      localTime: "getLocalTime"
     })
   },
   computed: {
     ...mapGetters("lesson", {
       lessons: "lessons"
-    })
+    }),
+    ...mapGetters("language", {
+      language: "getTranslations",
+    }),
   }
 })
 class LessonList extends Vue {
   private getLessons!: ActionMethod;
+  private language!: LanguageModel;
+  private localTime!: ActionMethod;
   private lessons!: LessonListModel[];
   private loading = true;
-  private dateOptions = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false
-  };
 
   public created() {
     this.getLessons({ id: Number(this.$route.params.id) }).finally(() => {
@@ -43,7 +43,7 @@ class LessonList extends Vue {
           <el-col span={4}>
             <el-image
               src={item.badgeBase64}
-              alt="Ženkliukas"
+              alt={this.language.Badge}
               style="width: 100px; height: 100px"
             >
               <div
@@ -78,20 +78,17 @@ class LessonList extends Vue {
           <el-col span={19}>
             <router-link to={`/lesson/${item.id}`}>
               <el-link type="primary" underline={false}>
-                Pamoka “<i>{item.name}</i>”
+                {this.language.Lesson} “<i>{item.name}</i>”
               </el-link>
             </router-link>
             <el-divider>
               <i class="el-icon-star-on"></i>
             </el-divider>
             <span>
-              Autorius <b>{item.ownerName}</b>
+            {this.language.Author} <b>{item.ownerName}</b>
             </span>
             <span style="float: right;">
-              {new Date(item.modified).toLocaleDateString(
-                "lt-LT",
-                this.dateOptions
-              )}
+              {this.localTime(item.modified)}
             </span>
           </el-col>
         </el-row>
@@ -122,7 +119,7 @@ class LessonList extends Vue {
       return (
         <el-row>
           <el-card shadow="hover" style={{ textAlign: "center" }}>
-            Nėra pamokų!
+            {this.language.NoData}
           </el-card>
         </el-row>
       );

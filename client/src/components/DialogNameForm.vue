@@ -14,17 +14,17 @@
     >
     </el-alert>
     <el-form :model="form" label-position="top">
-      <el-form-item :label="`${data && data.entity} pavadinimas`">
+      <el-form-item :label="data && data.labelName">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="onCancel">Atgal</el-button>
+      <el-button @click="onCancel">{{ data && data.labelBack }}</el-button>
       <el-button
-        :type="modalState == 'Sukurti' ? 'success' : 'danger'"
-        @click="() => onAction(modalState == 'Sukurti')"
+        :type="isCreate ? 'success' : 'danger'"
+        @click="() => onAction()"
         :loading="loading"
-        >{{ modalState }}</el-button
+        >{{ data && data.labelAction }}</el-button
       >
     </span>
   </el-dialog>
@@ -39,23 +39,25 @@ interface ModalData {
   id: number;
   title: string;
   name: string;
-  entity: string;
+  labelBack: string;
+  labelName: string;
+  labelAction: string;
   onAction: (id: number, name: string) => Promise<void>;
 }
 
 @Component({
   methods: {
     ...mapActions("modal", {
-      setNameModalVisible: "setNameModalVisible"
-    })
+      setNameModalVisible: "setNameModalVisible",
+    }),
   },
   computed: {
     ...mapGetters("modal", {
       nameModal: "nameModalVisible",
       modalState: "modalState",
-      data: "modalData"
-    })
-  }
+      data: "modalData",
+    }),
+  },
 })
 class DialogNameForm extends Vue {
   private setNameModalVisible!: ActionMethod;
@@ -65,7 +67,7 @@ class DialogNameForm extends Vue {
   private loading = false;
   private error = "";
   private form = {
-    name: ""
+    name: "",
   };
 
   private onOpen() {
@@ -76,7 +78,7 @@ class DialogNameForm extends Vue {
     this.setNameModalVisible({
       visible: false,
       data: undefined,
-      stateName: this.modalState
+      stateName: this.modalState,
     });
   }
 
@@ -84,7 +86,7 @@ class DialogNameForm extends Vue {
     this.error = "";
   }
 
-  private onAction(state: boolean) {
+  private onAction() {
     this.loading = true;
     this.data
       .onAction(this.data.id, this.form.name)
@@ -93,10 +95,10 @@ class DialogNameForm extends Vue {
         this.setNameModalVisible({
           visible: false,
           data: undefined,
-          stateName: this.modalState
+          stateName: this.modalState,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.loading = false;
         this.error = error;
       });
@@ -106,8 +108,12 @@ class DialogNameForm extends Vue {
     this.setNameModalVisible({
       visible: false,
       data: undefined,
-      stateName: this.modalState
+      stateName: this.modalState,
     });
+  }
+
+  get isCreate() {
+    return this.modalState == 'Create';
   }
 }
 export default DialogNameForm;

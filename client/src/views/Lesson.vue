@@ -39,14 +39,16 @@
           <el-col>
             <el-row>
               <el-col :span="12">
-                <p>Pamoka: {{ lesson.name }}</p>
+                <p>{{ language.Lesson }}: {{ lesson.name }}</p>
                 <div>
-                  Būsena: {{ lessonState }}
+                  {{ language.State }}: {{ lessonState }}
                   {{ lessonProgress }}
                 </div>
               </el-col>
               <el-col :span="12">
-                <p style="float: right;">Autorius: {{ lesson.ownerName }}</p>
+                <p style="float: right;">
+                  {{ language.Author }}: {{ lesson.ownerName }}
+                </p>
               </el-col>
             </el-row>
             <el-divider>
@@ -62,12 +64,12 @@
               <el-collapse-item
                 v-for="(assignment, index) in lesson.assignments"
                 :key="`question-${index}`"
-                :title="`Klausimas ${index + 1} ${lessonProgress}`"
+                :title="`${language.Question} ${index + 1} ${lessonProgress}`"
               >
                 <el-row>
                   <el-col :span="20">
                     <h3>{{ assignment.description }}</h3>
-                    <p>Taškai ({{ assignment.experience }})</p>
+                    <p>{{ language.Points }} ({{ assignment.experience }})</p>
                   </el-col>
                   <el-col :span="4">
                     <el-button-group>
@@ -117,7 +119,7 @@
                 type="primary"
                 :plain="true"
                 style="float: left;"
-                >Pridėti klausimą</el-button
+                >{{ language.AddQuestion }}</el-button
               >
               <el-button
                 v-if="
@@ -129,7 +131,7 @@
                 type="danger"
                 :plain="true"
                 style="float: left;"
-                >Atšaukti</el-button
+                >{{ language.Reject }}</el-button
               >
             </p>
             <p>
@@ -143,7 +145,7 @@
                 type="success"
                 :plain="true"
                 style="float: right;"
-                >Publikuoti</el-button
+                >{{ language.Publish }}</el-button
               >
               <el-button
                 v-if="
@@ -155,7 +157,7 @@
                 type="success"
                 :plain="true"
                 style="float: right;"
-                >Patvirtinti</el-button
+                >{{ language.Approve }}</el-button
               >
               <el-button
                 v-if="
@@ -168,7 +170,7 @@
                 type="warning"
                 :plain="true"
                 style="float: right;"
-                >Pasirinkti</el-button
+                >{{ language.Choose }}</el-button
               >
             </p>
           </el-col>
@@ -183,10 +185,11 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import {
   LessonModel,
-  AssignmentModel
+  AssignmentModel,
 } from "../models/stores/lesson.store.model";
 import { ActionMethod, mapGetters, mapActions } from "vuex";
 import { SessionModel } from "../models/stores/user.store.model";
+import { LanguageModel } from "../assets/i18n/language";
 
 @Component({
   methods: {
@@ -194,23 +197,26 @@ import { SessionModel } from "../models/stores/user.store.model";
       getLesson: "getLessonById",
       startLesson: "startLesson",
       postStatus: "postLessonStatus",
-      postAssignments: "postLessonAssignments"
+      postAssignments: "postLessonAssignments",
     }),
     ...mapActions("modal", {
       setAssignmentModalVisible: "setAssignmentModalVisible",
       setAuthorizeModalVisible: "setAuthorizeModalVisible",
       setAnswerModalVisible: "setAnswerModalVisible",
-      setConfirmModalVisible: "setConfirmModalVisible"
-    })
+      setConfirmModalVisible: "setConfirmModalVisible",
+    }),
   },
   computed: {
     ...mapGetters("lesson", {
-      lesson: "lesson"
+      lesson: "lesson",
     }),
     ...mapGetters("user", {
-      session: "session"
-    })
-  }
+      session: "session",
+    }),
+    ...mapGetters("language", {
+      language: "getTranslations",
+    }),
+  },
 })
 class Lesson extends Vue {
   private getLesson!: ActionMethod;
@@ -223,6 +229,7 @@ class Lesson extends Vue {
   private postAssignments!: ActionMethod;
   private lesson!: LessonModel;
   private session!: SessionModel;
+  private language!: LanguageModel;
   private loading = true;
   private dateOptions = {
     weekday: "long",
@@ -231,7 +238,7 @@ class Lesson extends Vue {
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false
+    hour12: false,
   };
 
   private initialize() {
@@ -262,15 +269,15 @@ class Lesson extends Vue {
               return Promise.resolve();
             })
             .catch(() => Promise.reject());
-        }
-      }
+        },
+      },
     });
   }
 
   private onAssignmentCreate() {
     this.setAssignmentModalVisible({
       visible: true,
-      stateName: "Sukurti"
+      stateName: "Sukurti",
     });
   }
 
@@ -279,8 +286,8 @@ class Lesson extends Vue {
       visible: true,
       stateName: "Ištrinti",
       data: {
-        index
-      }
+        index,
+      },
     });
   }
 
@@ -290,8 +297,8 @@ class Lesson extends Vue {
       stateName: "Atnaujinti",
       data: {
         index,
-        ...assignment
-      }
+        ...assignment,
+      },
     });
   }
 
@@ -309,8 +316,8 @@ class Lesson extends Vue {
               return Promise.resolve();
             })
             .catch(() => Promise.reject());
-        }
-      }
+        },
+      },
     });
   }
 
@@ -324,9 +331,9 @@ class Lesson extends Vue {
           this.postStatus({
             lessonId: id,
             status: status,
-            isValid: valid
-          }).then(() => this.initialize())
-      }
+            isValid: valid,
+          }).then(() => this.initialize()),
+      },
     });
   }
 
@@ -340,9 +347,9 @@ class Lesson extends Vue {
           this.postStatus({
             lessonId: id,
             status: status,
-            isValid: valid
-          }).then(() => this.initialize())
-      }
+            isValid: valid,
+          }).then(() => this.initialize()),
+      },
     });
   }
 
@@ -353,39 +360,17 @@ class Lesson extends Vue {
       data: {
         assignmentId: model.id,
         question: model.description,
-        lessonId: this.lesson.id
-      }
+        lessonId: this.lesson.id,
+      },
     });
   }
 
   get lessonState() {
-    if (this.lesson.state == "Published") {
-      return "Publikuota";
-    }
-    if (this.lesson.state == "Waiting") {
-      return "Laukiama";
-    }
-    if (this.lesson.state == "Created") {
-      return "Sukurta";
-    }
-    if (this.lesson.state == "Rejected") {
-      return "Atmesta";
-    }
-
-    return "";
+    return `${this.language[this.lesson.state]}`;
   }
 
   get lessonProgress() {
-    if (this.lesson.progress) {
-      if (this.lesson.progress == "Active") {
-        return "(Aktyvus)";
-      }
-      if (this.lesson.progress == "Completed") {
-        return "(Užbaigta)";
-      }
-    }
-
-    return "";
+    return `(${this.language[this.lesson.progress]})`;
   }
 }
 

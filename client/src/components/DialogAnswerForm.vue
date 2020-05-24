@@ -1,18 +1,18 @@
 <template>
   <el-dialog
-    title="Atsakyti į klausimą."
+    :title="data && data.labelTitle"
     :visible="answerModal"
     @close="onClose"
   >
     <el-form :model="form" label-position="top">
-      <el-form-item :label="`Klausimas: ${(data && data.question) || ''}`">
+      <el-form-item :label="data && data.labelQuestion">
         <el-input :clearable="true" v-model="form.answer"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="onCancel">Atgal</el-button>
+      <el-button @click="onCancel">{{data && data.labelBack}}</el-button>
       <el-button type="success" :loading="loading" @click="() => onAction()"
-        >{{ modalState }}
+        >{{ data && data.labelAction }}
       </el-button>
     </span>
   </el-dialog>
@@ -26,7 +26,10 @@ import { mapGetters, mapActions, ActionMethod } from "vuex";
 interface ModalData {
   assignmentId: number;
   lessonId: number;
-  question: string;
+  labelQuestion: string;
+  labelAction: string;
+  labelTitle: string;
+  labelBack: string;
 }
 
 @Component({

@@ -2,16 +2,16 @@
   <el-row>
     <el-col>
       <el-form label-position="top" :model="form" :rules="rule" ref="form">
-        <el-form-item label="Vartotojo vardas" prop="username">
+        <el-form-item :label="language.Username" prop="username">
           <el-input v-model="form.username"></el-input>
         </el-form-item>
-        <el-form-item label="Slaptažodis" prop="password">
+        <el-form-item :label="language.Password" prop="password">
           <el-input v-model="form.password" :show-password="true"></el-input>
         </el-form-item>
         <el-form-item label="Patvirtinti slaptažodį" prop="confirm">
           <el-input v-model="form.confirm" :show-password="true"></el-input>
         </el-form-item>
-        <el-form-item label="Rolė" prop="role">
+        <el-form-item :label="language.Role" prop="role">
           <el-select
             style="width: 100%;"
             :loading="roleLoading"
@@ -30,7 +30,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit" :loading="loading">
-            <span>Registruotis</span>
+            <span>{{ language.Register }}</span>
           </el-button>
         </el-form-item>
       </el-form>
@@ -45,6 +45,7 @@ import { FormRefModel } from "../models/refs/form.ref.model";
 import { RegisterFormModel } from "../models/forms/register.form.model";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
 import { NameServiceModel } from "../models/services/name.service.model";
+import { LanguageModel } from "../assets/i18n/language";
 
 @Component({
   methods: {
@@ -56,12 +57,16 @@ import { NameServiceModel } from "../models/services/name.service.model";
   computed: {
     ...mapGetters("user", {
       roles: "roles"
-    })
+    }),
+    ...mapGetters("language", {
+      language: "getTranslations",
+    }),
   }
 })
 class Register extends Vue {
   private register!: ActionMethod;
   private getRoles!: ActionMethod;
+  private language!: LanguageModel;
   private form: RegisterFormModel = {
     username: "",
     password: "",
@@ -75,7 +80,7 @@ class Register extends Vue {
     username: [
       {
         required: true,
-        message: "Vartotojo vardas yra privalomas",
+        message: this.language.UsernameIsRequired,
         trigger: "blur"
       }
     ],

@@ -13,11 +13,11 @@
     v-else
     :data="
       groups.filter(
-        group =>
+        (group) =>
           !search || group.label.toLowerCase().includes(search.toLowerCase())
       )
     "
-    empty-text="Nėra duomenų!"
+    :empty-text="language.NoData"
   >
     <el-table-column type="expand">
       <template slot-scope="scope">
@@ -33,13 +33,13 @@
           </template>
         </div>
         <div v-else>
-          <i>Kategorija neturi tipų!</i>
+          <i>{{ language.NoData }}</i>
         </div>
       </template>
     </el-table-column>
-    <el-table-column prop="label" label="Kategorija" width="180">
+    <el-table-column prop="label" :label="language.Category" width="180">
     </el-table-column>
-    <el-table-column prop="options" label="Tipų kiekis" width="90">
+    <el-table-column prop="options" :label="language.TypeQuantity" width="90">
       <template slot-scope="scope">
         <span>{{ scope.row.options.length }}</span>
       </template>
@@ -50,13 +50,13 @@
           style="width: 75%; margin-right: 10px;"
           v-model="search"
           size="mini"
-          placeholder="Ieškoti pagal pavadinimą"
+          :placeholder="language.SearchByTitle"
         ></el-input>
         <el-button
           size="mini"
           type="warning"
           @click="() => onCreateCategory(scope)"
-          >Sukurti</el-button
+          >{{ language.Create }}</el-button
         >
       </template>
       <template slot-scope="scope">
@@ -65,14 +65,14 @@
           type="danger"
           icon="el-icon-edit"
           @click="() => onUpdateCategory(scope.row.id, scope.row.label)"
-          >Redaguoti</el-button
+          >{{ language.Edit }}</el-button
         >
         <el-button
           size="mini"
           type="primary"
           icon="el-icon-plus"
           @click="() => onCreateType(scope.row.id)"
-          >Pridėti</el-button
+          >{{ language.Add }}</el-button
         >
       </template>
     </el-table-column>
@@ -83,17 +83,24 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { NameGroupModel, AdminService } from "../services/admin.service";
-import { mapActions, ActionMethod } from "vuex";
+import { mapActions, ActionMethod, mapGetters } from "vuex";
+import { LanguageModel } from "../assets/i18n/language";
 
 @Component({
   methods: {
     ...mapActions("modal", {
-      setNameModalVisible: "setNameModalVisible"
-    })
-  }
+      setNameModalVisible: "setNameModalVisible",
+    }),
+  },
+  computed: {
+    ...mapGetters("language", {
+      language: "getTranslations",
+    }),
+  },
 })
 class Configuration extends Vue {
   private setNameModalVisible!: ActionMethod;
+  private language!: LanguageModel;
   private groups: NameGroupModel[] = [];
   private search = "";
   private loading = true;
@@ -116,70 +123,78 @@ class Configuration extends Vue {
   private onUpdateCategory(id: number, name: string) {
     this.setNameModalVisible({
       visible: true,
-      stateName: "Atnaujinti",
+      stateName: "Update",
       data: {
         id,
         name,
-        title: "Atnaujinti kategorijos pavadinimą.",
-        entity: "Kategorijos",
+        title: this.language.UpdateCategory,
+        labelName: this.language.CategoryTitle,
+        labelAction: this.language.Update,
+        labelBack: this.language.Back,
         onAction: (id: number, name: string) =>
           AdminService.updateCategory({
             id,
-            name
-          }).then(() => this.initialize())
-      }
+            name,
+          }).then(() => this.initialize()),
+      },
     });
   }
 
   private onCreateCategory() {
     this.setNameModalVisible({
       visible: true,
-      stateName: "Sukurti",
+      stateName: "Create",
       data: {
-        title: "Sukurti naują kategoriją.",
-        entity: "Kategorijos",
+        title: this.language.CreateCategory,
+        labelName: this.language.CategoryTitle,
+        labelAction: this.language.Create,
+        labelBack: this.language.Back,
         onAction: (id: number, name: string) =>
           AdminService.createCategory({
             id,
-            name
-          }).then(() => this.initialize())
-      }
+            name,
+          }).then(() => this.initialize()),
+      },
     });
   }
 
   private onUpdateType(id: number, name: string) {
     this.setNameModalVisible({
       visible: true,
-      stateName: "Atnaujinti",
+      stateName: "Update",
       data: {
         id,
         name,
-        title: "Atnaujinti pamokos tipo pavadinimą.",
-        entity: "Pamokos tipo",
+        title: this.language.UpdateLessonType,
+        labelName: this.language.LessonTypeTitle,
+        labelAction: this.language.Update,
+        labelBack: this.language.Back,
         onAction: (id: number, name: string) =>
           AdminService.updateType({
             id,
-            name
-          }).then(() => this.initialize())
-      }
+            name,
+          }).then(() => this.initialize()),
+      },
     });
   }
 
   public onCreateType(categoryId: number) {
     this.setNameModalVisible({
       visible: true,
-      stateName: "Sukurti",
+      stateName: "Create",
       data: {
         id: categoryId,
         name: "",
-        title: "Pridėti naują pamokos tipą.",
-        entity: "Pamokos tipo",
+        title: this.language.CrateLessonType,
+        labelName: this.language.LessonTypeTitle,
+        labelAction: this.language.Create,
+        labelBack: this.language.Back,
         onAction: (id: number, name: string) =>
           AdminService.createType({
             id,
-            name
-          }).then(() => this.initialize())
-      }
+            name,
+          }).then(() => this.initialize()),
+      },
     });
   }
 }
