@@ -104,7 +104,8 @@ const English: LanguageModel = {
   LessonTitleIsRequired: "Lesson title is required",
   AssignmentAnswer: "Assignment answer",
   LessonTypes: "Lesson types",
-  Lessons: "Lessons"
+  Lessons: "Lessons",
+  SearchResults: "Search results"
 };
 
 export { English };

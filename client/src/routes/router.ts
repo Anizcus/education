@@ -11,6 +11,7 @@ import Profile from "../views/Profile.vue";
 import Users from "../views/Users.vue";
 import Configuration from "../views/Configuration.vue";
 import Management from "../views/Management.vue";
+import Search from "../views/Search.vue";
 
 Vue.use(Router);
 
@@ -70,6 +71,12 @@ const router = new Router({
       path: "/management",
       name: "Management",
       component: Management
+    },
+    {
+      path: "/search",
+      name: "Search",
+      component: Search,
+      props: true
     }
   ]
 });

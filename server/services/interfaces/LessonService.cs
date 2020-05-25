@@ -294,6 +294,26 @@ namespace Server.Services.Interfaces
             }).ToList();
       }
 
+      public async Task<IList<LessonListAnswer>> GetSearchedLesson(uint typeId, string name, uint userId)
+      {
+         var lessons = await _lessonStore.GetSearchedLesson(userId, typeId, name);
+
+         return lessons.Select(
+            lesson => new LessonListAnswer
+            {
+               Id = lesson.Id,
+               Name = lesson.Name,
+               OwnerId = lesson.Owner.Id,
+               OwnerName = lesson.Owner.Name,
+               State = lesson.State.Name,
+               Badge = lesson.Badge,
+               Status = lesson.Status,
+               Type = lesson.Type.Name,
+               Category = lesson.Category.Name,
+               Modified = lesson.Updated ?? lesson.Created
+            }).ToList();
+      }
+
       public async Task<IList<NameAnswer>> GetTypesByCategoryAsync(uint id)
       {
          var types = await _lessonStore.GetTypesByCategoryAsync(id);

@@ -104,7 +104,8 @@ const Lithuanian: LanguageModel = {
   LessonDescriptionIsRequired: "Pamokos aprašymas yra privalomas",
   LessonTitleIsRequired: "Pamokos pavadinimas yra privalomas",
   LessonTypes: "Pamokų tipai",
-  Lessons: "Pamokos"
+  Lessons: "Pamokos",
+  SearchResults: "Paieškos rezultatai"
 };
 
 export { Lithuanian };

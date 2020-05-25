@@ -33,6 +33,7 @@
       slot="append"
       type="warning"
       icon="el-icon-search"
+      @click="onSearch"
       >{{ language.Search }}</el-button
     >
   </el-input>
@@ -43,20 +44,26 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { AdminService, NameGroupModel } from "../services/admin.service";
 import { LanguageModel } from "../assets/i18n/language";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions, ActionMethod } from "vuex";
 
 @Component({
   computed: {
     ...mapGetters("language", {
-      language: "getTranslations"
-    })
-  }
+      language: "getTranslations",
+    }),
+  },
+  methods: {
+    ...mapActions("search", {
+      searchLesson: "getLessons",
+    }),
+  },
 })
 class SearchLessonComponent extends Vue {
   private language!: LanguageModel;
   private input = "";
   private select = "";
   private groups: NameGroupModel[] = [];
+  private searchLesson!: ActionMethod;
   private loading = true;
 
   public created() {
@@ -65,9 +72,20 @@ class SearchLessonComponent extends Vue {
         this.groups = groups;
         this.loading = false;
       })
-      .catch(error => {
+      .catch((error) => {
         this.loading = false;
       });
+  }
+
+  private onSearch() {
+    this.searchLesson({
+      typeId: this.select || 0,
+      name: this.input,
+    }).then(() =>
+      this.$router.push({
+        name: "Search",
+      })
+    );
   }
 }
 

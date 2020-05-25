@@ -111,6 +111,7 @@ type LanguageModel = {
   LessonTitleIsRequired: string;
   LessonTypes: string;
   Lessons: string;
+  SearchResults: string;
 };
 
 export { Language, LanguageModel };

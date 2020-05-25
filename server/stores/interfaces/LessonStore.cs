@@ -28,7 +28,7 @@ namespace Server.Stores.Interfaces
             TypeId = typeId,
             Badge = badge,
             Status = "",
-            StateId = (uint) StateEnum.Created
+            StateId = (uint)StateEnum.Created
          };
 
          var added = await _store.Lessons.AddAsync(entity);
@@ -106,9 +106,10 @@ namespace Server.Stores.Interfaces
             .Include(l => l.Assignments)
          .Where(l => l.Id == lessonId).FirstOrDefaultAsync();
 
-         entity.StateId = (uint) StateEnum.Waiting;
+         entity.StateId = (uint)StateEnum.Waiting;
 
-         foreach(var assignment in assignments) {
+         foreach (var assignment in assignments)
+         {
             entity.Assignments.Add(assignment);
          }
 
@@ -200,9 +201,9 @@ namespace Server.Stores.Interfaces
             .Include(assignment => assignment.User)
             .Include(assignment => assignment.Assignment)
             .Include(assignment => assignment.Progress)
-            .Where(assignment => 
-               assignment.UserId == userId && 
-               assignment.Assignment.LessonId == lessonId && 
+            .Where(assignment =>
+               assignment.UserId == userId &&
+               assignment.Assignment.LessonId == lessonId &&
                assignment.ProgressId == progressId)
             .ToListAsync();
       }
@@ -214,7 +215,7 @@ namespace Server.Stores.Interfaces
             .Include(lesson => lesson.State)
             .Include(lesson => lesson.Type)
             .Include(lesson => lesson.Category)
-         .Where(lesson => lesson.StateId == (uint) StateEnum.Waiting)
+         .Where(lesson => lesson.StateId == (uint)StateEnum.Waiting)
          .ToListAsync();
       }
 
@@ -235,6 +236,45 @@ namespace Server.Stores.Interfaces
          var saved = await _store.SaveChangesAsync();
 
          return updated.Entity;
+      }
+
+      public async Task<IList<Lesson>> GetSearchedLesson(uint userId, uint typeId, string name)
+      {
+         var user = await _store.Users
+            .FirstOrDefaultAsync(user => user.Id == userId);
+
+         var lessons = _store.Lessons
+            .Include(Lesson => Lesson.Owner)
+            .Include(lesson => lesson.State)
+            .Include(lesson => lesson.Type)
+            .Include(lesson => lesson.Category)
+         .Where(lesson => lesson.Name.ToLower().Contains(name.ToLower()));
+
+         if (user != null && user.RoleId == (uint)RoleEnum.Administrator)
+         {
+            lessons = lessons.Where(lesson =>
+               lesson.StateId == (uint)StateEnum.Waiting ||
+               lesson.StateId == (uint)StateEnum.Published);
+         }
+
+         if (user != null && user.RoleId == (uint)RoleEnum.Teacher)
+         {
+            lessons = lessons.Where(lesson =>
+               lesson.OwnerId == userId ||
+               lesson.StateId == (uint)StateEnum.Published);
+         }
+
+         if (user == null)
+         {
+            lessons = lessons.Where(lesson => lesson.StateId == (uint)StateEnum.Published);
+         }
+
+         if (typeId != 0)
+         {
+            lessons = lessons.Where(lesson => lesson.TypeId == typeId);
+         }
+
+         return await lessons.ToListAsync();
       }
    }
 }

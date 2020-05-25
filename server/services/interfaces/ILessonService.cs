@@ -20,5 +20,6 @@ namespace Server.Services.Interfaces
       Task<AssignmentAnswerStatus> AssignmentAnswerAsync(uint assignmentId, uint userId, string answer);
       Task<IList<LessonListAnswer>> GetLessonListForAdmin(uint userId);
       Task<IList<LessonListAnswer>> GetLessonListForTeacher(uint userId);
+      Task<IList<LessonListAnswer>> GetSearchedLesson(uint typeId, string name, uint userId);
    }
 }
