@@ -103,31 +103,37 @@ interface ModalData {
   id: string;
 }
 
+interface LessonForm {
+  name: string;
+  description: string;
+  type?: number;
+}
+
 @Component({
   methods: {
     ...mapActions("modal", {
-      setLessonModalVisible: "setLessonModalVisible"
-    })
+      setLessonModalVisible: "setLessonModalVisible",
+    }),
   },
   computed: {
     ...mapGetters("modal", {
       modalState: "modalState",
       data: "modalData",
-      lessonModal: "lessonModalVisible"
+      lessonModal: "lessonModalVisible",
     }),
     ...mapGetters("language", {
-      language: "getTranslations"
-    })
-  }
+      language: "getTranslations",
+    }),
+  },
 })
 class DialogLessonForm extends Vue {
   private setLessonModalVisible!: ActionMethod;
   private groups: NameGroupModel[] = [];
   private language!: LanguageModel;
-  private form = {
+  private form: LessonForm = {
     name: "",
     description: "",
-    type: ""
+    type: undefined,
   };
   private modalState!: string;
   private lessonModal!: boolean;
@@ -145,13 +151,13 @@ class DialogLessonForm extends Vue {
         this.groups = groups;
 
         if (this.data.type) {
-          const group = this.groups.find(group =>
-            group.options.find(option => option.name == this.data.type)
+          const group = this.groups.find((group) =>
+            group.options.find((option) => option.name == this.data.type)
           );
 
           if (group) {
             this.form.type = group.options.find(
-              option => option.name == this.data.type
+              (option) => option.name == this.data.type
             ).id;
           }
         }
@@ -191,7 +197,7 @@ class DialogLessonForm extends Vue {
     this.formData.set("name", this.form.name);
     this.formData.set("description", this.form.description);
     this.formData.set("badge", this.image);
-    this.formData.set("type", this.form.type);
+    this.formData.set("type", this.form.type.toString());
 
     if (this.modalState == "Update") {
       this.formData.set("id", this.data.id);
@@ -202,10 +208,10 @@ class DialogLessonForm extends Vue {
           this.setLessonModalVisible({
             visible: false,
             data: undefined,
-            stateName: "Close"
+            stateName: "Close",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.loading = false;
           this.error = error.toString();
         });
@@ -217,10 +223,10 @@ class DialogLessonForm extends Vue {
           this.setLessonModalVisible({
             visible: false,
             data: undefined,
-            stateName: "Close"
+            stateName: "Close",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.loading = false;
           this.error = error.toString();
         });
@@ -236,13 +242,14 @@ class DialogLessonForm extends Vue {
   private onCancel() {
     this.form.name = "";
     this.form.description = "";
+    this.form.type = undefined;
     this.image = "";
     this.error = "";
 
     this.setLessonModalVisible({
       visible: false,
       data: undefined,
-      stateName: "Cancel"
+      stateName: "Cancel",
     });
   }
 }
