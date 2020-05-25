@@ -82,7 +82,8 @@ const Lithuanian: LanguageModel = {
   PasswordsDoNotMatch: "Slaptažodžiai nesutampa",
   Reason: "Priežastis",
   ModifyDate: "Keitimo data",
-  LogInAsTeacherOrAdmin: "Jūs turite būti prisijungę kaip mokytojas ar administratorius!",
+  LogInAsTeacherOrAdmin:
+    "Jūs turite būti prisijungę kaip mokytojas ar administratorius!",
   LogInToView: "Norėdami pamatyti kitus vartotojus, turite prisijungti!",
   ConfirmChoice: "Patvirtinti pasirinkimą",
   ConfirmChoiceLesson: "Ar tikrai norite pasirinkti šią pamoką?",

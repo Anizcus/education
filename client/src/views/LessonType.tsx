@@ -3,7 +3,7 @@ import Component from "vue-class-component";
 import { VNode } from "vue/types/umd";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
 import { TypeModel } from "@/models/stores/lesson.store.model";
-import { LanguageModel } from '@/assets/i18n/language';
+import { LanguageModel } from "@/assets/i18n/language";
 import TitleComponent from "@/components/TitleComponent.vue";
 
 @Component({
@@ -17,12 +17,12 @@ import TitleComponent from "@/components/TitleComponent.vue";
       types: "types"
     }),
     ...mapGetters("language", {
-      language: "getTranslations",
-    }),
+      language: "getTranslations"
+    })
   },
   components: {
-    "i-title": TitleComponent,
-  },
+    "i-title": TitleComponent
+  }
 })
 class LessonType extends Vue {
   private getTypes!: ActionMethod;
@@ -88,7 +88,9 @@ class LessonType extends Vue {
     return (
       <el-row>
         {title}
-        <el-col style="border-bottom: 1px dashed #e6e6e6; padding: 0 24px;">{types}</el-col>
+        <el-col style="border-bottom: 1px dashed #e6e6e6; padding: 0 24px;">
+          {types}
+        </el-col>
       </el-row>
     );
   }

@@ -10,9 +10,9 @@ import Component from "vue-class-component";
   props: {
     title: {
       type: String,
-      required: true,
-    },
-  },
+      required: true
+    }
+  }
 })
 class TitleComponent extends Vue {}
 

@@ -106,19 +106,19 @@ interface ModalData {
 @Component({
   methods: {
     ...mapActions("modal", {
-      setLessonModalVisible: "setLessonModalVisible",
-    }),
+      setLessonModalVisible: "setLessonModalVisible"
+    })
   },
   computed: {
     ...mapGetters("modal", {
       modalState: "modalState",
       data: "modalData",
-      lessonModal: "lessonModalVisible",
+      lessonModal: "lessonModalVisible"
     }),
     ...mapGetters("language", {
-      language: "getTranslations",
-    }),
-  },
+      language: "getTranslations"
+    })
+  }
 })
 class DialogLessonForm extends Vue {
   private setLessonModalVisible!: ActionMethod;
@@ -127,7 +127,7 @@ class DialogLessonForm extends Vue {
   private form = {
     name: "",
     description: "",
-    type: "",
+    type: ""
   };
   private modalState!: string;
   private lessonModal!: boolean;
@@ -145,13 +145,13 @@ class DialogLessonForm extends Vue {
         this.groups = groups;
 
         if (this.data.type) {
-          const group = this.groups.find((group) =>
-            group.options.find((option) => option.name == this.data.type)
+          const group = this.groups.find(group =>
+            group.options.find(option => option.name == this.data.type)
           );
 
           if (group) {
             this.form.type = group.options.find(
-              (option) => option.name == this.data.type
+              option => option.name == this.data.type
             ).id;
           }
         }
@@ -202,10 +202,10 @@ class DialogLessonForm extends Vue {
           this.setLessonModalVisible({
             visible: false,
             data: undefined,
-            stateName: "Close",
+            stateName: "Close"
           });
         })
-        .catch((error) => {
+        .catch(error => {
           this.loading = false;
           this.error = error.toString();
         });
@@ -217,10 +217,10 @@ class DialogLessonForm extends Vue {
           this.setLessonModalVisible({
             visible: false,
             data: undefined,
-            stateName: "Close",
+            stateName: "Close"
           });
         })
-        .catch((error) => {
+        .catch(error => {
           this.loading = false;
           this.error = error.toString();
         });
@@ -242,7 +242,7 @@ class DialogLessonForm extends Vue {
     this.setLessonModalVisible({
       visible: false,
       data: undefined,
-      stateName: "Cancel",
+      stateName: "Cancel"
     });
   }
 }

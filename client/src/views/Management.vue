@@ -152,24 +152,24 @@ import { LanguageModel } from "../assets/i18n/language";
 @Component({
   computed: {
     ...mapGetters("user", {
-      session: "session",
+      session: "session"
     }),
     ...mapGetters("language", {
-      language: "getTranslations",
-    }),
+      language: "getTranslations"
+    })
   },
   methods: {
     ...mapActions("lesson", {
-      postStatus: "postLessonStatus",
+      postStatus: "postLessonStatus"
     }),
     ...mapActions("modal", {
       setLessonModalVisible: "setLessonModalVisible",
-      setAuthorizeModalVisible: "setAuthorizeModalVisible",
+      setAuthorizeModalVisible: "setAuthorizeModalVisible"
     }),
     ...mapActions("language", {
-      localTime: "getLocalTime",
-    }),
-  },
+      localTime: "getLocalTime"
+    })
+  }
 })
 class Management extends Vue {
   private session!: SessionModel;
@@ -179,7 +179,7 @@ class Management extends Vue {
   private setLessonModalVisible!: ActionMethod;
   private setAuthorizeModalVisible!: ActionMethod;
   private postStatus!: ActionMethod;
-  private localTime: ActionMethod;
+  private localTime!: ActionMethod;
 
   private onCreateLesson() {
     this.setLessonModalVisible({
@@ -190,9 +190,9 @@ class Management extends Vue {
         labelAction: this.language.Create,
         onSuccess: () => {
           this.initialize();
-        },
+        }
       },
-      stateName: "Create",
+      stateName: "Create"
     });
   }
 
@@ -210,9 +210,9 @@ class Management extends Vue {
         image: row.badgeBase64,
         onSuccess: () => {
           this.initialize();
-        },
+        }
       },
-      stateName: "Update",
+      stateName: "Update"
     });
   }
 
@@ -223,14 +223,14 @@ class Management extends Vue {
   private initialize() {
     if (this.session) {
       if (this.session.role === "Administrator") {
-        LessonService.getLessonListForAdmin().then((lessons) => {
+        LessonService.getLessonListForAdmin().then(lessons => {
           this.lessons = lessons;
           this.loading = false;
         });
       }
 
       if (this.session.role === "Teacher") {
-        LessonService.getLessonListForTeacher().then((lessons) => {
+        LessonService.getLessonListForTeacher().then(lessons => {
           this.lessons = lessons;
           this.loading = false;
         });
@@ -272,9 +272,9 @@ class Management extends Vue {
           this.postStatus({
             lessonId: id,
             status: status,
-            isValid: valid,
-          }).then(() => this.initialize()),
-      },
+            isValid: valid
+          }).then(() => this.initialize())
+      }
     });
   }
 
@@ -292,9 +292,9 @@ class Management extends Vue {
           this.postStatus({
             lessonId: id,
             status: status,
-            isValid: valid,
-          }).then(() => this.initialize()),
-      },
+            isValid: valid
+          }).then(() => this.initialize())
+      }
     });
   }
 
@@ -306,7 +306,8 @@ class Management extends Vue {
     let localDate = "";
 
     await this.localTime(date).then(
-      (response: string) => localDate = response);
+      (response: string) => (localDate = response)
+    );
 
     return localDate;
   }

@@ -13,7 +13,7 @@
     v-else
     :data="
       groups.filter(
-        (group) =>
+        group =>
           !search || group.label.toLowerCase().includes(search.toLowerCase())
       )
     "
@@ -89,14 +89,14 @@ import { LanguageModel } from "../assets/i18n/language";
 @Component({
   methods: {
     ...mapActions("modal", {
-      setNameModalVisible: "setNameModalVisible",
-    }),
+      setNameModalVisible: "setNameModalVisible"
+    })
   },
   computed: {
     ...mapGetters("language", {
-      language: "getTranslations",
-    }),
-  },
+      language: "getTranslations"
+    })
+  }
 })
 class Configuration extends Vue {
   private setNameModalVisible!: ActionMethod;
@@ -134,9 +134,9 @@ class Configuration extends Vue {
         onAction: (id: number, name: string) =>
           AdminService.updateCategory({
             id,
-            name,
-          }).then(() => this.initialize()),
-      },
+            name
+          }).then(() => this.initialize())
+      }
     });
   }
 
@@ -152,9 +152,9 @@ class Configuration extends Vue {
         onAction: (id: number, name: string) =>
           AdminService.createCategory({
             id,
-            name,
-          }).then(() => this.initialize()),
-      },
+            name
+          }).then(() => this.initialize())
+      }
     });
   }
 
@@ -172,9 +172,9 @@ class Configuration extends Vue {
         onAction: (id: number, name: string) =>
           AdminService.updateType({
             id,
-            name,
-          }).then(() => this.initialize()),
-      },
+            name
+          }).then(() => this.initialize())
+      }
     });
   }
 
@@ -192,9 +192,9 @@ class Configuration extends Vue {
         onAction: (id: number, name: string) =>
           AdminService.createType({
             id,
-            name,
-          }).then(() => this.initialize()),
-      },
+            name
+          }).then(() => this.initialize())
+      }
     });
   }
 }

@@ -52,8 +52,7 @@ import Component from "vue-class-component";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
 import {
   ProfileListModel,
-  ProfileModel,
-  SessionModel,
+  SessionModel
 } from "../models/stores/user.store.model";
 import { NameServiceModel } from "../models/services/name.service.model";
 import { LanguageModel } from "../assets/i18n/language";
@@ -62,22 +61,22 @@ import { LanguageModel } from "../assets/i18n/language";
   methods: {
     ...mapActions("user", {
       getUsers: "getUsers",
-      getRoles: "getRoles",
+      getRoles: "getRoles"
     }),
     ...mapActions("modal", {
-      setManageUserModalVisible: "setManageUserModalVisible",
-    }),
+      setManageUserModalVisible: "setManageUserModalVisible"
+    })
   },
   computed: {
     ...mapGetters("user", {
       users: "users",
       roles: "roles",
-      session: "session",
+      session: "session"
     }),
     ...mapGetters("language", {
-      language: "getTranslations",
-    }),
-  },
+      language: "getTranslations"
+    })
+  }
 })
 class Users extends Vue {
   private getUsers!: ActionMethod;
@@ -102,17 +101,17 @@ class Users extends Vue {
   private onProfile(index: number) {
     this.$router.push({
       name: "Profile",
-      params: { id: this.users[index].id.toString() },
+      params: { id: this.users[index].id.toString() }
     });
   }
 
   private onModify(index: number) {
-    const roleList = this.roles.map((item) => {
+    const roleList = this.roles.map(item => {
       return { id: item.id, name: this.language[item.name] };
     });
 
-    const role = this.roles.find((item) => {
-      return item.name === this.users[index].role
+    const role = this.roles.find(item => {
+      return item.name === this.users[index].role;
     });
 
     this.setManageUserModalVisible({
@@ -130,8 +129,8 @@ class Users extends Vue {
         labelAccess: this.language.UserAccess,
         labelBlock: this.language.BlockUser,
         labelUnblock: this.language.UnblockUser,
-        labelRole: this.language.Role,
-      },
+        labelRole: this.language.Role
+      }
     });
   }
 

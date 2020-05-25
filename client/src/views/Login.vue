@@ -38,14 +38,14 @@ import { LanguageModel } from "../assets/i18n/language";
   methods: {
     ...mapActions("user", {
       login: "login",
-      getProfile: "getProfile",
-    }),
+      getProfile: "getProfile"
+    })
   },
   computed: {
     ...mapGetters("language", {
-      language: "getTranslations",
-    }),
-  },
+      language: "getTranslations"
+    })
+  }
 })
 class Login extends Vue {
   private login!: ActionMethod;
@@ -53,13 +53,13 @@ class Login extends Vue {
   private language!: LanguageModel;
   private form: LoginFormModel = {
     username: "",
-    password: "",
+    password: ""
   };
   private loading = false;
   private rule = {};
   private alert = {
     message: "",
-    type: "",
+    type: ""
   };
 
   public created() {
@@ -73,8 +73,8 @@ class Login extends Vue {
               return callback(new Error(this.language.UsernameIsRequired));
             }
             return callback();
-          },
-        },
+          }
+        }
       ],
       password: [
         {
@@ -85,9 +85,9 @@ class Login extends Vue {
               return callback(new Error(this.language.PasswordIsRequired));
             }
             return callback();
-          },
-        },
-      ],
+          }
+        }
+      ]
     };
   }
 
@@ -112,15 +112,15 @@ class Login extends Vue {
       .then(() =>
         this.login({
           username: this.form.username,
-          password: this.form.password,
+          password: this.form.password
         })
       )
-      .then((user) => {
+      .then(user => {
         this.alert.message = `${this.language.SuccessfullyLoggedInAs} ${user.name}!`;
         this.alert.type = "success";
         this.loading = false;
       })
-      .catch((error) => {
+      .catch(error => {
         this.alert.message = error;
         this.alert.type = "error";
         this.loading = false;

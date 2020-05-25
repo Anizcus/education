@@ -9,7 +9,10 @@
         {{ language.NoData }}
       </el-card>
     </el-col>
-    <el-col v-if="lessons.length" style="border-bottom: 1px dashed #e6e6e6; padding: 0 24px;">
+    <el-col
+      v-if="lessons.length"
+      style="border-bottom: 1px dashed #e6e6e6; padding: 0 24px;"
+    >
       <template v-for="lesson in lessons">
         <el-card :key="lesson.id" shadow="hover" style="margin-bottom: 14px;">
           <el-row>
@@ -83,18 +86,18 @@ import { LanguageModel } from "../assets/i18n/language";
 @Component({
   computed: {
     ...mapGetters("language", {
-      language: "getTranslations",
+      language: "getTranslations"
     }),
     ...mapGetters("search", {
-      lessons: "lessons",
-    }),
+      lessons: "lessons"
+    })
   },
   components: {
-    "i-title": TitleComponent,
-  },
+    "i-title": TitleComponent
+  }
 })
 class Search extends Vue {
-  private lessons: LessonList[];
+  private lessons!: LessonList[];
   private language!: LanguageModel;
 }
 

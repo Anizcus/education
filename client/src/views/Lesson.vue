@@ -185,7 +185,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import {
   LessonModel,
-  AssignmentModel,
+  AssignmentModel
 } from "../models/stores/lesson.store.model";
 import { ActionMethod, mapGetters, mapActions } from "vuex";
 import { SessionModel } from "../models/stores/user.store.model";
@@ -197,26 +197,26 @@ import { LanguageModel } from "../assets/i18n/language";
       getLesson: "getLessonById",
       startLesson: "startLesson",
       postStatus: "postLessonStatus",
-      postAssignments: "postLessonAssignments",
+      postAssignments: "postLessonAssignments"
     }),
     ...mapActions("modal", {
       setAssignmentModalVisible: "setAssignmentModalVisible",
       setAuthorizeModalVisible: "setAuthorizeModalVisible",
       setAnswerModalVisible: "setAnswerModalVisible",
-      setConfirmModalVisible: "setConfirmModalVisible",
-    }),
+      setConfirmModalVisible: "setConfirmModalVisible"
+    })
   },
   computed: {
     ...mapGetters("lesson", {
-      lesson: "lesson",
+      lesson: "lesson"
     }),
     ...mapGetters("user", {
-      session: "session",
+      session: "session"
     }),
     ...mapGetters("language", {
-      language: "getTranslations",
-    }),
-  },
+      language: "getTranslations"
+    })
+  }
 })
 class Lesson extends Vue {
   private getLesson!: ActionMethod;
@@ -262,8 +262,8 @@ class Lesson extends Vue {
               return Promise.resolve();
             })
             .catch(() => Promise.reject());
-        },
-      },
+        }
+      }
     });
   }
 
@@ -274,8 +274,8 @@ class Lesson extends Vue {
       data: {
         labelTitle: this.language.CreateAssignment,
         labelAction: this.language.Create,
-        labelBack: this.language.Back,
-      },
+        labelBack: this.language.Back
+      }
     });
   }
 
@@ -287,8 +287,8 @@ class Lesson extends Vue {
         labelTitle: this.language.DeleteAssignment,
         labelAction: this.language.Delete,
         labelBack: this.language.Back,
-        index,
-      },
+        index
+      }
     });
   }
 
@@ -301,8 +301,8 @@ class Lesson extends Vue {
         labelAction: this.language.Update,
         labelBack: this.language.Back,
         index,
-        ...assignment,
-      },
+        ...assignment
+      }
     });
   }
 
@@ -322,8 +322,8 @@ class Lesson extends Vue {
               return Promise.resolve();
             })
             .catch(() => Promise.reject());
-        },
-      },
+        }
+      }
     });
   }
 
@@ -341,9 +341,9 @@ class Lesson extends Vue {
           this.postStatus({
             lessonId: id,
             status: status,
-            isValid: valid,
-          }).then(() => this.initialize()),
-      },
+            isValid: valid
+          }).then(() => this.initialize())
+      }
     });
   }
 
@@ -361,9 +361,9 @@ class Lesson extends Vue {
           this.postStatus({
             lessonId: id,
             status: status,
-            isValid: valid,
-          }).then(() => this.initialize()),
-      },
+            isValid: valid
+          }).then(() => this.initialize())
+      }
     });
   }
 
@@ -377,8 +377,8 @@ class Lesson extends Vue {
         labelQuestion: `${this.language.Question}: ${model.description}`,
         labelAction: this.language.Answer,
         labelTitle: this.language.AnswerQuestion,
-        labelBack: this.language.Back,
-      },
+        labelBack: this.language.Back
+      }
     });
   }
 

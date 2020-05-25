@@ -49,14 +49,14 @@ import { mapGetters, mapActions, ActionMethod } from "vuex";
 @Component({
   computed: {
     ...mapGetters("language", {
-      language: "getTranslations",
-    }),
+      language: "getTranslations"
+    })
   },
   methods: {
     ...mapActions("search", {
-      searchLesson: "getLessons",
-    }),
-  },
+      searchLesson: "getLessons"
+    })
+  }
 })
 class SearchLessonComponent extends Vue {
   private language!: LanguageModel;
@@ -72,7 +72,7 @@ class SearchLessonComponent extends Vue {
         this.groups = groups;
         this.loading = false;
       })
-      .catch((error) => {
+      .catch(() => {
         this.loading = false;
       });
   }
@@ -80,10 +80,10 @@ class SearchLessonComponent extends Vue {
   private onSearch() {
     this.searchLesson({
       typeId: this.select || 0,
-      name: this.input,
+      name: this.input
     }).then(() =>
       this.$router.push({
-        name: "Search",
+        name: "Search"
       })
     );
   }

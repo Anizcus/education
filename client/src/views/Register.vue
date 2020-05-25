@@ -51,17 +51,17 @@ import { LanguageModel } from "../assets/i18n/language";
   methods: {
     ...mapActions("user", {
       register: "register",
-      getRoles: "getRoles",
-    }),
+      getRoles: "getRoles"
+    })
   },
   computed: {
     ...mapGetters("user", {
-      roles: "roles",
+      roles: "roles"
     }),
     ...mapGetters("language", {
-      language: "getTranslations",
-    }),
-  },
+      language: "getTranslations"
+    })
+  }
 })
 class Register extends Vue {
   private register!: ActionMethod;
@@ -71,7 +71,7 @@ class Register extends Vue {
     username: "",
     password: "",
     confirm: "",
-    role: "",
+    role: ""
   };
   private loading = false;
   private roleLoading = true;
@@ -97,8 +97,8 @@ class Register extends Vue {
               return callback(new Error(this.language.UsernameIsRequired));
             }
             return callback();
-          },
-        },
+          }
+        }
       ],
       password: [
         {
@@ -114,8 +114,8 @@ class Register extends Vue {
 
             return callback();
           },
-          trigger: "blur",
-        },
+          trigger: "blur"
+        }
       ],
       confirm: [
         {
@@ -131,8 +131,8 @@ class Register extends Vue {
 
             return callback();
           },
-          trigger: "blur",
-        },
+          trigger: "blur"
+        }
       ],
       role: [
         {
@@ -143,9 +143,9 @@ class Register extends Vue {
               return callback(new Error(this.language.SelectRole));
             }
             return callback();
-          },
-        },
-      ],
+          }
+        }
+      ]
     };
   }
 
@@ -162,10 +162,10 @@ class Register extends Vue {
         this.register({
           username: this.form.username,
           password: this.form.password,
-          role: Number(this.form.role),
+          role: Number(this.form.role)
         })
       )
-      .then((response) => {
+      .then(response => {
         this.loading = false;
         alert(response.name);
       })

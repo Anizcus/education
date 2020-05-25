@@ -21,11 +21,13 @@
       </el-form-item>
     </el-form>
     <div v-else>
-      {{ language.DeleteQuestion}}
+      {{ language.DeleteQuestion }}
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="onCancel">{{ data && data.labelBack }}</el-button>
-      <el-button type="primary" @click="onAction">{{ data && data.labelAction }}</el-button>
+      <el-button type="primary" @click="onAction">{{
+        data && data.labelAction
+      }}</el-button>
     </span>
   </el-dialog>
 </template>

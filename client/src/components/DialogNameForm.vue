@@ -48,16 +48,16 @@ interface ModalData {
 @Component({
   methods: {
     ...mapActions("modal", {
-      setNameModalVisible: "setNameModalVisible",
-    }),
+      setNameModalVisible: "setNameModalVisible"
+    })
   },
   computed: {
     ...mapGetters("modal", {
       nameModal: "nameModalVisible",
       modalState: "modalState",
-      data: "modalData",
-    }),
-  },
+      data: "modalData"
+    })
+  }
 })
 class DialogNameForm extends Vue {
   private setNameModalVisible!: ActionMethod;
@@ -67,7 +67,7 @@ class DialogNameForm extends Vue {
   private loading = false;
   private error = "";
   private form = {
-    name: "",
+    name: ""
   };
 
   private onOpen() {
@@ -78,7 +78,7 @@ class DialogNameForm extends Vue {
     this.setNameModalVisible({
       visible: false,
       data: undefined,
-      stateName: this.modalState,
+      stateName: this.modalState
     });
   }
 
@@ -95,10 +95,10 @@ class DialogNameForm extends Vue {
         this.setNameModalVisible({
           visible: false,
           data: undefined,
-          stateName: this.modalState,
+          stateName: this.modalState
         });
       })
-      .catch((error) => {
+      .catch(error => {
         this.loading = false;
         this.error = error;
       });
@@ -108,12 +108,12 @@ class DialogNameForm extends Vue {
     this.setNameModalVisible({
       visible: false,
       data: undefined,
-      stateName: this.modalState,
+      stateName: this.modalState
     });
   }
 
   get isCreate() {
-    return this.modalState == 'Create';
+    return this.modalState == "Create";
   }
 }
 export default DialogNameForm;

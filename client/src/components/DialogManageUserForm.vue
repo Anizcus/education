@@ -55,7 +55,6 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { LessonService } from "../services/lesson.service";
 import { mapGetters, mapActions, ActionMethod } from "vuex";
 import { NameServiceModel } from "../models/services/name.service.model";
 
@@ -82,25 +81,25 @@ interface ManageUserForm {
 @Component({
   methods: {
     ...mapActions("modal", {
-      setManageUserModalVisible: "setManageUserModalVisible",
+      setManageUserModalVisible: "setManageUserModalVisible"
     }),
     ...mapActions("user", {
-      modifyStatus: "modifyStatus",
-    }),
+      modifyStatus: "modifyStatus"
+    })
   },
   computed: {
     ...mapGetters("modal", {
       modalState: "modalState",
       manageUserModal: "manageUserModalVisible",
-      data: "modalData",
-    }),
-  },
+      data: "modalData"
+    })
+  }
 })
 class DialogManageUserForm extends Vue {
   private setManageUserModalVisible!: ActionMethod;
   private form: ManageUserForm = {
     isBlocked: false,
-    role: null,
+    role: null
   };
   private modalState!: string;
   private manageUserModal!: boolean;
@@ -115,17 +114,17 @@ class DialogManageUserForm extends Vue {
     this.modifyStatus({
       userId: this.data.id,
       roleId: this.form.role,
-      isBlocked: this.form.isBlocked,
+      isBlocked: this.form.isBlocked
     })
       .then(() => {
         this.buttonLoading = false;
         this.setManageUserModalVisible({
           visible: false,
           data: undefined,
-          stateName: this.modalState,
+          stateName: this.modalState
         });
       })
-      .catch((error) => {
+      .catch(error => {
         this.error = error;
         this.buttonLoading = false;
       });
@@ -142,7 +141,7 @@ class DialogManageUserForm extends Vue {
   private onCancel() {
     this.setManageUserModalVisible({
       visible: false,
-      stateName: this.modalState,
+      stateName: this.modalState
     });
   }
 }

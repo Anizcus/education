@@ -1,5 +1,5 @@
 import { Service } from "./service";
-import LessonList from '@/views/LessonList';
+import LessonList from "@/views/LessonList";
 
 interface SearchModel {
   typeId: number;
@@ -9,7 +9,7 @@ interface SearchModel {
 const SearchService = {
   getLessons: (model: SearchModel): Promise<LessonList[]> => {
     return Service.post("search", model);
-  },
+  }
 };
 
 export { SearchService, SearchModel };

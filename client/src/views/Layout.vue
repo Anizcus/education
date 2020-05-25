@@ -123,24 +123,24 @@ import SearchLessonComponent from "../components/SearchLessonComponent.vue";
 @Component({
   computed: {
     ...mapGetters("user", {
-      session: "session",
+      session: "session"
     }),
     ...mapGetters("language", {
       language: "getTranslations",
-      languageKey: "getKey",
-    }),
+      languageKey: "getKey"
+    })
   },
   methods: {
     ...mapActions("user", {
-      logout: "logout",
+      logout: "logout"
     }),
     ...mapActions("language", {
-      setLanguage: "setTranslations",
-    }),
+      setLanguage: "setTranslations"
+    })
   },
   components: {
-    "i-search-lesson": SearchLessonComponent,
-  },
+    "i-search-lesson": SearchLessonComponent
+  }
 })
 class Main extends Vue {
   private language!: LanguageModel;

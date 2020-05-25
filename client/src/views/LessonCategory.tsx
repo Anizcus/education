@@ -9,20 +9,20 @@ import { LanguageModel } from "@/assets/i18n/language";
 @Component({
   methods: {
     ...mapActions("lesson", {
-      getCategories: "getCategories",
-    }),
+      getCategories: "getCategories"
+    })
   },
   computed: {
     ...mapGetters("lesson", {
-      categories: "categories",
+      categories: "categories"
     }),
     ...mapGetters("language", {
-      language: "getTranslations",
-    }),
+      language: "getTranslations"
+    })
   },
   components: {
-    "i-title": TitleComponent,
-  },
+    "i-title": TitleComponent
+  }
 })
 class LessonCategory extends Vue {
   private getCategories!: ActionMethod;
@@ -43,7 +43,7 @@ class LessonCategory extends Vue {
           style={{
             alignItems: "center",
             justifyContent: "center",
-            height: "100%",
+            height: "100%"
           }}
         >
           <el-button
@@ -75,10 +75,7 @@ class LessonCategory extends Vue {
 
     const categories = this.categories.map((item: CategoryModel) => {
       return (
-        <el-card
-          shadow="hover"
-          style="margin-bottom: 14px;"
-        >
+        <el-card shadow="hover" style="margin-bottom: 14px;">
           <router-link to={`/lesson/category/${item.id}`}>
             <el-link type="primary" underline={false}>
               {item.name}
@@ -91,7 +88,9 @@ class LessonCategory extends Vue {
     return (
       <el-row>
         {title}
-        <el-col style="border-bottom: 1px dashed #e6e6e6; padding: 0 24px;">{categories}</el-col>
+        <el-col style="border-bottom: 1px dashed #e6e6e6; padding: 0 24px;">
+          {categories}
+        </el-col>
       </el-row>
     );
   }

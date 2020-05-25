@@ -3,7 +3,7 @@ import Component from "vue-class-component";
 import { VNode } from "vue/types/umd";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
 import { LessonListModel } from "@/models/stores/lesson.store.model";
-import { LanguageModel } from '@/assets/i18n/language';
+import { LanguageModel } from "@/assets/i18n/language";
 import TitleComponent from "@/components/TitleComponent.vue";
 
 @Component({
@@ -20,12 +20,12 @@ import TitleComponent from "@/components/TitleComponent.vue";
       lessons: "lessons"
     }),
     ...mapGetters("language", {
-      language: "getTranslations",
-    }),
+      language: "getTranslations"
+    })
   },
   components: {
-    "i-title": TitleComponent,
-  },
+    "i-title": TitleComponent
+  }
 })
 class LessonList extends Vue {
   private getLessons!: ActionMethod;
@@ -89,11 +89,9 @@ class LessonList extends Vue {
               <i class="el-icon-star-on"></i>
             </el-divider>
             <span>
-            {this.language.Author} <b>{item.ownerName}</b>
+              {this.language.Author} <b>{item.ownerName}</b>
             </span>
-            <span style="float: right;">
-              {this.localTime(item.modified)}
-            </span>
+            <span style="float: right;">{this.localTime(item.modified)}</span>
           </el-col>
         </el-row>
       </el-card>
@@ -142,7 +140,9 @@ class LessonList extends Vue {
     return (
       <el-row>
         {title}
-        <el-col style="border-bottom: 1px dashed #e6e6e6; padding: 0 24px;">{published}</el-col>
+        <el-col style="border-bottom: 1px dashed #e6e6e6; padding: 0 24px;">
+          {published}
+        </el-col>
       </el-row>
     );
   }

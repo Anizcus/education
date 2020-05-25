@@ -32,7 +32,7 @@ type LanguageModel = {
   NoData: string;
   MainPage: string;
   AboutPage: string;
-  FooterNotice: string; 
+  FooterNotice: string;
   Logout: string;
   Categories: string;
   Administrator: string;
@@ -82,7 +82,7 @@ type LanguageModel = {
   AddLesson: string;
   BlockUser: string;
   UnblockUser: string;
-  UserAccess: string,
+  UserAccess: string;
   UpdateUserStatus: string;
   EnterPassword: string;
   PasswordsDoNotMatch: string;
