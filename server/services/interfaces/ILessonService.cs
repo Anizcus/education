@@ -12,6 +12,7 @@ namespace Server.Services.Interfaces
       Task<IList<LessonListAnswer>> GetByTypePublishedAsync(uint typeId);
       Task<IList<LessonListAnswer>> GetByTypeAllAsync(uint typeId);
       Task<NameAnswer> CreateLessonAsync(uint typeId, uint ownerId, string name, string description, byte[] badge);
+      Task<NameAnswer> UpdateLessonAsync(uint typeId, uint ownerId, uint lessonId, string name, string description, byte[] badge);
       Task<LessonAnswer> GetAsync(uint id, uint userId);
       Task<NameAnswer> PostLessonAssignmentAsync(uint lessonId, uint ownerId, string type, IList<AssignmentRequest> assignments);
       Task<NameAnswer> PostLessonStatusAsync(uint lessonId, bool isValid, string status);

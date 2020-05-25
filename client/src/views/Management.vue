@@ -3,7 +3,7 @@
     v-if="
       !session || (session.role != 'Teacher' && session.role != 'Administrator')
     "
-    title="Jūs turite būti prisijungę kaip mokytojas ar administratorius!"
+    :title="language.LogInAsTeacherOrAdmin"
     type="error"
     :show-icon="true"
     :closable="false"
@@ -20,7 +20,7 @@
     >
       <el-button :loading="loading" type="info" :circle="true"></el-button>
     </el-container>
-    <el-table v-else :data="lessons" empty-text="Nėra duomenų!">
+    <el-table v-else :data="lessons" :empty-text="language.NoData">
       <el-table-column type="expand">
         <template slot-scope="scope">
           <el-row>
@@ -38,13 +38,19 @@
                   <span class="cell cell-custom">{{ language.Author }}</span>
                 </el-col>
                 <el-col :span="8" v-if="session.role === 'Teacher'">
-                  <span class="cell cell-custom">{{ language.Description }}</span>
+                  <span class="cell cell-custom">{{
+                    language.Description
+                  }}</span>
                 </el-col>
                 <el-col :span="8"
-                  ><span class="cell cell-custom">Priežastis</span></el-col
+                  ><span class="cell cell-custom">{{
+                    language.Reason
+                  }}</span></el-col
                 >
                 <el-col :span="8"
-                  ><span class="cell cell-custom">Keitimo data</span></el-col
+                  ><span class="cell cell-custom">{{
+                    language.ModifyDate
+                  }}</span></el-col
                 >
               </el-row>
               <el-row style="text-align: center;">
@@ -61,9 +67,7 @@
                 </el-col>
                 <el-col :span="8">{{ scope.row.status || "-" }}</el-col>
                 <el-col :span="8">
-                  {{
-                    localTime(scope.row.modified)
-                  }}
+                  {{ localTime(scope.row.modified) }}
                 </el-col>
               </el-row>
             </el-col>
@@ -77,8 +81,14 @@
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="category" :label="language.Category"></el-table-column>
-      <el-table-column prop="type" :label="language.LessonType"></el-table-column>
+      <el-table-column
+        prop="category"
+        :label="language.Category"
+      ></el-table-column>
+      <el-table-column
+        prop="type"
+        :label="language.LessonType"
+      ></el-table-column>
       <el-table-column prop="state" :label="language.State">
         <template slot-scope="scope">
           {{ mapState(scope.row.state) }}
@@ -95,7 +105,7 @@
             size="mini"
             type="primary"
             @click="() => onCreateLesson(scope)"
-            >Pridėti naują pamoką</el-button
+            >{{ language.AddLesson }}</el-button
           >
         </template>
         <template slot-scope="scope">
@@ -121,6 +131,7 @@
             v-if="session.role === 'Teacher' && scope.row.state === 'Created'"
             size="mini"
             type="danger"
+            @click="() => onUpdateLesson(scope.row)"
             >{{ language.Edit }}</el-button
           >
         </template>
@@ -141,24 +152,24 @@ import { LanguageModel } from "../assets/i18n/language";
 @Component({
   computed: {
     ...mapGetters("user", {
-      session: "session"
+      session: "session",
     }),
     ...mapGetters("language", {
-      language: "getTranslations"
+      language: "getTranslations",
     }),
   },
   methods: {
     ...mapActions("lesson", {
-      postStatus: "postLessonStatus"
+      postStatus: "postLessonStatus",
     }),
     ...mapActions("modal", {
       setLessonModalVisible: "setLessonModalVisible",
-      setAuthorizeModalVisible: "setAuthorizeModalVisible"
+      setAuthorizeModalVisible: "setAuthorizeModalVisible",
     }),
-    ...mapGetters("language", {
-      localTime: "getLocalTime"
+    ...mapActions("language", {
+      localTime: "getLocalTime",
     }),
-  }
+  },
 })
 class Management extends Vue {
   private session!: SessionModel;
@@ -168,17 +179,40 @@ class Management extends Vue {
   private setLessonModalVisible!: ActionMethod;
   private setAuthorizeModalVisible!: ActionMethod;
   private postStatus!: ActionMethod;
-  private localTime!: ActionMethod;
+  private localTime: ActionMethod;
 
   private onCreateLesson() {
     this.setLessonModalVisible({
       visible: true,
       data: {
+        labelTitle: this.language.CreateLesson,
+        labelBack: this.language.Back,
+        labelAction: this.language.Create,
         onSuccess: () => {
           this.initialize();
-        }
+        },
       },
-      stateName: "Create"
+      stateName: "Create",
+    });
+  }
+
+  private onUpdateLesson(row: LessonListModel) {
+    this.setLessonModalVisible({
+      visible: true,
+      data: {
+        labelTitle: this.language.UpdateLesson,
+        labelBack: this.language.Back,
+        labelAction: this.language.Update,
+        name: row.name,
+        description: row.description,
+        type: row.type,
+        id: row.id,
+        image: row.badgeBase64,
+        onSuccess: () => {
+          this.initialize();
+        },
+      },
+      stateName: "Update",
     });
   }
 
@@ -189,14 +223,14 @@ class Management extends Vue {
   private initialize() {
     if (this.session) {
       if (this.session.role === "Administrator") {
-        LessonService.getLessonListForAdmin().then(lessons => {
+        LessonService.getLessonListForAdmin().then((lessons) => {
           this.lessons = lessons;
           this.loading = false;
         });
       }
 
       if (this.session.role === "Teacher") {
-        LessonService.getLessonListForTeacher().then(lessons => {
+        LessonService.getLessonListForTeacher().then((lessons) => {
           this.lessons = lessons;
           this.loading = false;
         });
@@ -230,13 +264,17 @@ class Management extends Vue {
       stateName: "Reject",
       data: {
         lessonId: id,
+        labelAction: this.language.Reject,
+        labelBack: this.language.Back,
+        labelTitle: this.language.RejectLesson,
+        labelReasonOptional: this.language.ReasonOptional,
         onAction: (id: number, status: string, valid: boolean) =>
           this.postStatus({
             lessonId: id,
             status: status,
-            isValid: valid
-          }).then(() => this.initialize())
-      }
+            isValid: valid,
+          }).then(() => this.initialize()),
+      },
     });
   }
 
@@ -246,18 +284,31 @@ class Management extends Vue {
       stateName: "Approve",
       data: {
         lessonId: id,
+        labelAction: this.language.Approve,
+        labelBack: this.language.Back,
+        labelTitle: this.language.ApproveLesson,
+        labelReasonOptional: this.language.ReasonOptional,
         onAction: (id: number, status: string, valid: boolean) =>
           this.postStatus({
             lessonId: id,
             status: status,
-            isValid: valid
-          }).then(() => this.initialize())
-      }
+            isValid: valid,
+          }).then(() => this.initialize()),
+      },
     });
   }
 
   private mapState(state: string) {
-    return `${this.language[state]}`;
+    return this.language[state];
+  }
+
+  private async onLocalTime(date: string) {
+    let localDate = "";
+
+    await this.localTime(date).then(
+      (response: string) => localDate = response);
+
+    return localDate;
   }
 }
 

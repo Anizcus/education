@@ -4,25 +4,25 @@ import { VNode } from "vue/types/umd";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
 import { CategoryModel } from "@/models/stores/lesson.store.model";
 import TitleComponent from "@/components/TitleComponent.vue";
-import { LanguageModel } from '@/assets/i18n/language';
+import { LanguageModel } from "@/assets/i18n/language";
 
 @Component({
   methods: {
     ...mapActions("lesson", {
-      getCategories: "getCategories"
-    })
+      getCategories: "getCategories",
+    }),
   },
   computed: {
     ...mapGetters("lesson", {
-      categories: "categories"
+      categories: "categories",
     }),
     ...mapGetters("language", {
       language: "getTranslations",
     }),
   },
   components: {
-    "i-title": TitleComponent
-  }
+    "i-title": TitleComponent,
+  },
 })
 class LessonCategory extends Vue {
   private getCategories!: ActionMethod;
@@ -43,7 +43,7 @@ class LessonCategory extends Vue {
           style={{
             alignItems: "center",
             justifyContent: "center",
-            height: "100%"
+            height: "100%",
           }}
         >
           <el-button
@@ -60,9 +60,12 @@ class LessonCategory extends Vue {
     if (!this.categories.length) {
       return (
         <el-row>
-          <el-col>
-            {title}
-            <el-card shadow="hover" style={{ textAlign: "center" }}>
+          {title}
+          <el-col style="border-bottom: 1px dashed #e6e6e6; margin-bottom: 14px; padding: 0 24px;">
+            <el-card
+              shadow="hover"
+              style="text-align: center; margin-bottom: 14px;"
+            >
               {this.language.NoData}
             </el-card>
           </el-col>
@@ -72,7 +75,10 @@ class LessonCategory extends Vue {
 
     const categories = this.categories.map((item: CategoryModel) => {
       return (
-        <el-card shadow="hover" style="margin-bottom: 14px;">
+        <el-card
+          shadow="hover"
+          style="margin-bottom: 14px;"
+        >
           <router-link to={`/lesson/category/${item.id}`}>
             <el-link type="primary" underline={false}>
               {item.name}
@@ -85,7 +91,7 @@ class LessonCategory extends Vue {
     return (
       <el-row>
         {title}
-        <el-col>{categories}</el-col>
+        <el-col style="border-bottom: 1px dashed #e6e6e6; padding: 0 24px;">{categories}</el-col>
       </el-row>
     );
   }

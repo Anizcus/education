@@ -5,17 +5,15 @@
         <el-col :span="11" :offset="5">
           <i-search-lesson></i-search-lesson>
         </el-col>
-        <el-col :span="4" :offset="1">
+        <el-col :span="5" :offset="1">
           <el-button-group v-if="!session">
             <el-button
-              style="font-size: 10px;"
               icon="el-icon-user"
               type="primary"
               @click="() => onLogin()"
               >{{ language.Login }}</el-button
             >
             <el-button
-              style="font-size: 10px;"
               icon="el-icon-key"
               type="primary"
               @click="() => onRegister()"
@@ -41,11 +39,11 @@
             </el-tooltip>
           </el-button-group>
         </el-col>
-        <el-col :span="2" :offset="1">
+        <el-col :span="2">
           <el-select
             @change="onChangeLanguage"
             :placeholder="language.Language"
-            :value="languageKey"
+            :value="language[languageKey]"
           >
             <el-option value="English">{{ language.English }}</el-option>
             <el-option value="Lithuanian">{{ language.Lithuanian }}</el-option>

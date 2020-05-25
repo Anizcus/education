@@ -1,31 +1,31 @@
 <template>
   <el-dialog
-    :title="`${modalState} užduotį.`"
+    :title="data && data.labelTitle"
     :visible="assignmentModal"
     @close="onCancel"
     @open="onOpen"
   >
     <el-form v-if="modalState !== 'Delete'" :model="form" label-position="top">
-      <el-form-item label="Klausimo aprašymas">
+      <el-form-item :label="language.Description">
         <el-input
           type="textarea"
           v-model="form.description"
           :rows="5"
         ></el-input>
       </el-form-item>
-      <el-form-item label="Atsakymas">
+      <el-form-item :label="language.AssignmentAnswer">
         <el-input v-model="form.answer"></el-input>
       </el-form-item>
-      <el-form-item label="Taškai">
+      <el-form-item :label="language.Points">
         <el-input-number v-model="form.experience" :min="1"></el-input-number>
       </el-form-item>
     </el-form>
     <div v-else>
-      Ar tikrai norite ištrinti klausimą [{{ data.index + 1 }}] ?
+      {{ language.DeleteQuestion}}
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="onCancel">Atgal</el-button>
-      <el-button type="primary" @click="onAction">{{ modalState }}</el-button>
+      <el-button @click="onCancel">{{ data && data.labelBack }}</el-button>
+      <el-button type="primary" @click="onAction">{{ data && data.labelAction }}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -34,12 +34,16 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { mapGetters, mapActions, ActionMethod } from "vuex";
+import { LanguageModel } from "../assets/i18n/language";
 
 interface ModalData {
   description: string;
   answer: string;
   experience: number;
   index?: number;
+  labelTitle: string;
+  labelAction: string;
+  labelBack: string;
 }
 
 @Component({
@@ -58,6 +62,9 @@ interface ModalData {
       assignmentModal: "assignmentModalVisible",
       modalState: "modalState",
       data: "modalData"
+    }),
+    ...mapGetters("language", {
+      language: "getTranslations"
     })
   }
 })
@@ -66,11 +73,12 @@ class DialogAssignmentForm extends Vue {
   private updateAssignment!: ActionMethod;
   private createAssignment!: ActionMethod;
   private deleteAssignment!: ActionMethod;
+  private language!: LanguageModel;
   private assignmentModal!: boolean;
   private data!: ModalData;
   private modalState!: string;
 
-  private form: ModalData = {
+  private form = {
     description: "",
     answer: "",
     experience: 1
@@ -84,17 +92,17 @@ class DialogAssignmentForm extends Vue {
       answer: this.form.answer
     };
 
-    if (this.modalState == "Sukurti") {
+    if (this.modalState == "Create") {
       this.createAssignment(assignment);
     }
 
-    if (this.modalState == "Atnaujinti") {
+    if (this.modalState == "Update") {
       assignment.id = this.data.index || 0;
 
       this.updateAssignment(assignment);
     }
 
-    if (this.modalState == "Ištrinti") {
+    if (this.modalState == "Delete") {
       this.deleteAssignment(this.data.index);
     }
 

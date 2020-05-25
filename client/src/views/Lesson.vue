@@ -59,7 +59,7 @@
         </el-row>
         <el-row>
           <el-col>
-            <p>Užduotys {{ lesson.assignments.length }}</p>
+            <p>{{ language.Assignments }} {{ lesson.assignments.length }}</p>
             <el-collapse>
               <el-collapse-item
                 v-for="(assignment, index) in lesson.assignments"
@@ -231,15 +231,6 @@ class Lesson extends Vue {
   private session!: SessionModel;
   private language!: LanguageModel;
   private loading = true;
-  private dateOptions = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  };
 
   private initialize() {
     this.getLesson({ id: Number(this.$route.params.id) })
@@ -258,10 +249,12 @@ class Lesson extends Vue {
   public onStartLesson() {
     this.setConfirmModalVisible({
       visible: true,
-      stateName: "Pasirinkti",
+      stateName: "Confirm",
       data: {
-        title: "Patvirtinti pasirinkimą.",
-        message: "Ar tikrai norite pasirinkti šią pamoką?",
+        title: this.language.ConfirmChoice,
+        message: this.language.ConfirmChoiceLesson,
+        labelAction: this.language.Choose,
+        labelBack: this.language.Back,
         onAction: () => {
           return this.startLesson()
             .then(() => {
@@ -277,15 +270,23 @@ class Lesson extends Vue {
   private onAssignmentCreate() {
     this.setAssignmentModalVisible({
       visible: true,
-      stateName: "Sukurti",
+      stateName: "Create",
+      data: {
+        labelTitle: this.language.CreateAssignment,
+        labelAction: this.language.Create,
+        labelBack: this.language.Back,
+      },
     });
   }
 
   private onAssignmentDelete(index: number) {
     this.setAssignmentModalVisible({
       visible: true,
-      stateName: "Ištrinti",
+      stateName: "Delete",
       data: {
+        labelTitle: this.language.DeleteAssignment,
+        labelAction: this.language.Delete,
+        labelBack: this.language.Back,
         index,
       },
     });
@@ -294,8 +295,11 @@ class Lesson extends Vue {
   private onAssignmentEdit(index: number, assignment: AssignmentModel) {
     this.setAssignmentModalVisible({
       visible: true,
-      stateName: "Atnaujinti",
+      stateName: "Update",
       data: {
+        labelTitle: this.language.UpdateAssignment,
+        labelAction: this.language.Update,
+        labelBack: this.language.Back,
         index,
         ...assignment,
       },
@@ -305,10 +309,12 @@ class Lesson extends Vue {
   private Publish() {
     this.setConfirmModalVisible({
       visible: true,
-      stateName: "Publikuoti",
+      stateName: "Publish",
       data: {
-        title: "Patvirtinti publikaciją",
-        message: "Ar tikrai norite publikuoti pamoką?",
+        title: this.language.ConfirmPublish,
+        message: this.language.ConfirmPublishLesson,
+        labelAction: this.language.Publish,
+        labelBack: this.language.Back,
         onAction: () => {
           return this.postAssignments()
             .then(() => {
@@ -324,9 +330,13 @@ class Lesson extends Vue {
   private Approve() {
     this.setAuthorizeModalVisible({
       visible: true,
-      stateName: "Patvirtinti",
+      stateName: "Approve",
       data: {
         lessonId: this.lesson.id,
+        labelAction: this.language.Approve,
+        labelBack: this.language.Back,
+        labelTitle: this.language.ApproveLesson,
+        labelReasonOptional: this.language.ReasonOptional,
         onAction: (id: number, status: string, valid: boolean) =>
           this.postStatus({
             lessonId: id,
@@ -340,9 +350,13 @@ class Lesson extends Vue {
   private Reject() {
     this.setAuthorizeModalVisible({
       visible: true,
-      stateName: "Atmesti",
+      stateName: "Reject",
       data: {
         lessonId: this.lesson.id,
+        labelAction: this.language.Reject,
+        labelBack: this.language.Back,
+        labelTitle: this.language.RejectLesson,
+        labelReasonOptional: this.language.ReasonOptional,
         onAction: (id: number, status: string, valid: boolean) =>
           this.postStatus({
             lessonId: id,
@@ -356,21 +370,26 @@ class Lesson extends Vue {
   private onAnswerQuestion(model: AssignmentModel) {
     this.setAnswerModalVisible({
       visible: true,
-      stateName: "Atsakyti",
+      stateName: "Answer",
       data: {
         assignmentId: model.id,
-        question: model.description,
         lessonId: this.lesson.id,
+        labelQuestion: `${this.language.Question}: ${model.description}`,
+        labelAction: this.language.Answer,
+        labelTitle: this.language.AnswerQuestion,
+        labelBack: this.language.Back,
       },
     });
   }
 
   get lessonState() {
-    return `${this.language[this.lesson.state]}`;
+    return this.lesson.state ? this.language[this.lesson.state] : "";
   }
 
   get lessonProgress() {
-    return `(${this.language[this.lesson.progress]})`;
+    return this.lesson.progress
+      ? `(${this.language[this.lesson.progress]})`
+      : "";
   }
 }
 

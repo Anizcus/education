@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="`${modalState} pamoką.`"
+    :title="data && data.labelTitle"
     :visible="authorizeModal"
     @close="onClose"
   >
@@ -12,7 +12,7 @@
       @close="onCloseAlert"
     ></el-alert>
     <el-form :model="form" label-position="top">
-      <el-form-item :label="`Priežastis (neprivaloma)`">
+      <el-form-item :label="data && data.labelReasonOptional">
         <el-input
           type="textarea"
           v-model="form.description"
@@ -21,11 +21,11 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="onCancel">Atgal</el-button>
+      <el-button @click="onCancel">{{ data && data.labelBack }}</el-button>
       <el-button
-        :type="modalState == 'Patvirtinti' ? 'success' : 'danger'"
-        @click="() => onAction(modalState == 'Patvirtinti')"
-        >{{ modalState }}</el-button
+        :type="modalState == 'Approve' ? 'success' : 'danger'"
+        @click="() => onAction(modalState == 'Approve')"
+        >{{ data && data.labelAction }}</el-button
       >
     </span>
   </el-dialog>
@@ -39,6 +39,10 @@ import { mapGetters, mapActions, ActionMethod } from "vuex";
 interface ModalData {
   lessonId: number;
   onAction: (id: number, status: string, valid: boolean) => Promise<void>;
+  labelAction: string;
+  labelBack: string;
+  labelTitle: string;
+  labelReasonOptional: string;
 }
 
 @Component({

@@ -10,7 +10,7 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="onCancel">{{data && data.labelBack}}</el-button>
+      <el-button @click="onCancel">{{ data && data.labelBack }}</el-button>
       <el-button type="success" :loading="loading" @click="() => onAction()"
         >{{ data && data.labelAction }}
       </el-button>
@@ -36,19 +36,19 @@ interface ModalData {
   methods: {
     ...mapActions("lesson", {
       postAnswer: "postAnswer",
-      getLesson: "getLessonById"
+      getLesson: "getLessonById",
     }),
     ...mapActions("modal", {
-      setAnswerModalVisible: "setAnswerModalVisible"
-    })
+      setAnswerModalVisible: "setAnswerModalVisible",
+    }),
   },
   computed: {
     ...mapGetters("modal", {
       answerModal: "answerModalVisible",
       modalState: "modalState",
-      data: "modalData"
-    })
-  }
+      data: "modalData",
+    }),
+  },
 })
 class DialogAnswerForm extends Vue {
   private setAnswerModalVisible!: ActionMethod;
@@ -58,7 +58,7 @@ class DialogAnswerForm extends Vue {
   private modalState!: string;
   private data!: ModalData;
   private form = {
-    answer: ""
+    answer: "",
   };
   private loading = false;
 
@@ -66,7 +66,7 @@ class DialogAnswerForm extends Vue {
     this.setAnswerModalVisible({
       visible: false,
       data: undefined,
-      stateName: this.modalState
+      stateName: this.modalState,
     });
   }
 
@@ -74,7 +74,7 @@ class DialogAnswerForm extends Vue {
     this.loading = true;
     this.postAnswer({
       assignmentId: this.data.assignmentId,
-      answer: this.form.answer
+      answer: this.form.answer,
     })
       .then(() => {
         this.getLesson({ id: this.data.lessonId })
@@ -83,7 +83,7 @@ class DialogAnswerForm extends Vue {
             this.setAnswerModalVisible({
               visible: false,
               data: undefined,
-              stateName: this.modalState
+              stateName: this.modalState,
             });
           })
           .catch(() => {
@@ -91,7 +91,7 @@ class DialogAnswerForm extends Vue {
             this.setAnswerModalVisible({
               visible: false,
               data: undefined,
-              stateName: this.modalState
+              stateName: this.modalState,
             });
           });
       })
@@ -104,7 +104,7 @@ class DialogAnswerForm extends Vue {
     this.setAnswerModalVisible({
       visible: false,
       data: undefined,
-      stateName: this.modalState
+      stateName: this.modalState,
     });
   }
 }

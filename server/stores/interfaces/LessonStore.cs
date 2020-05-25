@@ -228,5 +228,13 @@ namespace Server.Stores.Interfaces
          .Where(lesson => lesson.OwnerId == userId)
          .ToListAsync();
       }
+
+      public async Task<Lesson> UpdateLessonAsync(Lesson lesson)
+      {
+         var updated = _store.Lessons.Update(lesson);
+         var saved = await _store.SaveChangesAsync();
+
+         return updated.Entity;
+      }
    }
 }

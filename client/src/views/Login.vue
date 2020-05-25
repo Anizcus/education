@@ -56,26 +56,40 @@ class Login extends Vue {
     password: "",
   };
   private loading = false;
-  private rule = {
-    username: [
-      {
-        required: true,
-        message: this.language.UsernameIsRequired,
-        trigger: "blur",
-      },
-    ],
-    password: [
-      {
-        required: true,
-        message: this.language.PasswordIsRequired,
-        trigger: "blur",
-      },
-    ],
-  };
+  private rule = {};
   private alert = {
     message: "",
     type: "",
   };
+
+  public created() {
+    this.rule = {
+      username: [
+        {
+          required: true,
+          trigger: "blur",
+          validator: (rule: object, value: string, callback: Function) => {
+            if (value == "") {
+              return callback(new Error(this.language.UsernameIsRequired));
+            }
+            return callback();
+          },
+        },
+      ],
+      password: [
+        {
+          required: true,
+          trigger: "blur",
+          validator: (rule: object, value: string, callback: Function) => {
+            if (value == "") {
+              return callback(new Error(this.language.PasswordIsRequired));
+            }
+            return callback();
+          },
+        },
+      ],
+    };
+  }
 
   public $refs!: {
     form: FormRefModel;

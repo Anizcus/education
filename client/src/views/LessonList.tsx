@@ -4,6 +4,7 @@ import { VNode } from "vue/types/umd";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
 import { LessonListModel } from "@/models/stores/lesson.store.model";
 import { LanguageModel } from '@/assets/i18n/language';
+import TitleComponent from "@/components/TitleComponent.vue";
 
 @Component({
   methods: {
@@ -21,7 +22,10 @@ import { LanguageModel } from '@/assets/i18n/language';
     ...mapGetters("language", {
       language: "getTranslations",
     }),
-  }
+  },
+  components: {
+    "i-title": TitleComponent,
+  },
 })
 class LessonList extends Vue {
   private getLessons!: ActionMethod;
@@ -115,12 +119,20 @@ class LessonList extends Vue {
       );
     }
 
+    const title = <i-title title={this.language.Lessons}></i-title>;
+
     if (!this.lessons || !this.lessons.length) {
       return (
         <el-row>
-          <el-card shadow="hover" style={{ textAlign: "center" }}>
-            {this.language.NoData}
-          </el-card>
+          {title}
+          <el-col style="border-bottom: 1px dashed #e6e6e6; margin-bottom: 14px; padding: 0 24px;">
+            <el-card
+              shadow="hover"
+              style="text-align: center; margin-bottom: 14px;"
+            >
+              {this.language.NoData}
+            </el-card>
+          </el-col>
         </el-row>
       );
     }
@@ -129,7 +141,8 @@ class LessonList extends Vue {
 
     return (
       <el-row>
-        <el-col>{published}</el-col>
+        {title}
+        <el-col style="border-bottom: 1px dashed #e6e6e6; padding: 0 24px;">{published}</el-col>
       </el-row>
     );
   }

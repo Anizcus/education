@@ -11,7 +11,7 @@
   </el-container>
   <div v-else-if="!session">
     <el-alert
-      title="Norėdami pamatyti kitus vartotojus, turite prisijungti!"
+      :title="language.LogInToView"
       type="error"
       :show-icon="true"
       :closable="false"
@@ -23,7 +23,7 @@
       <el-col :offset="6" :span="12" style="padding-right: 10px;">
         <h2 style="text-align:center;">{{ profile.name }}</h2>
         <p style="text-align:center;">{{ profileRole }}</p>
-        <p style="text-align:center;">Lygis</p>
+        <p style="text-align:center;">{{ language.Level }}</p>
         <p style="text-align:center;">{{ profile.level }}</p>
         <el-progress
           :text-inside="true"
@@ -41,7 +41,7 @@
     </el-row>
     <el-row>
       <el-col>
-        <p style="text-align:center;">Aktyvūs ženkliukai</p>
+        <p style="text-align:center;">{{ language.ActiveBadges }}</p>
         <div class="container-center">
           <el-card
             v-for="lesson in profile.lessons.filter(
@@ -81,7 +81,7 @@
     </el-row>
     <el-row>
       <el-col>
-        <p style="text-align:center;">Baigti ženkliukai</p>
+        <p style="text-align:center;">{{ language.CompletedBadges }}</p>
         <div class="container-center">
           <el-card
             v-for="lesson in profile.lessons.filter(

@@ -36,6 +36,9 @@ const LessonService = {
   postLesson: (model: FormData): Promise<NameServiceModel> => {
     return Service.post("lesson", model);
   },
+  putLesson: (model: FormData): Promise<NameServiceModel> => {
+    return Service.put("lesson", model);
+  },
   getLesson: (model: IdServiceModel): Promise<LessonModel> => {
     return Service.get("lesson", {
       params: model

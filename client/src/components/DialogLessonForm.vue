@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="`${modalState} pamoką.`"
+    :title="data && data.labelTitle"
     :visible="lessonModal"
     @open="onOpen"
     @close="onCancel"
@@ -14,16 +14,16 @@
     >
     </el-alert>
     <el-form :model="form" label-position="top">
-      <el-form-item label="Pamokos pavadinimas">
+      <el-form-item :label="language.LessonTitle">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="Pamokos tipas">
+      <el-form-item :label="language.LessonType">
         <el-select
           style="width: 100%;"
           v-model="form.type"
-          placeholder=""
+          :placeholder="language.SelectLessonType"
           :loading="typeLoading"
-          no-data-text="Nėra duomenų!"
+          :no-data-text="language.NoData"
           :clearable="true"
         >
           <el-option-group
@@ -43,7 +43,7 @@
       </el-form-item>
       <el-row>
         <el-col :span="18">
-          <el-form-item label="Pamokos aprašymas">
+          <el-form-item :label="language.LessonDescription">
             <el-input
               type="textarea"
               v-model="form.description"
@@ -52,7 +52,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="Ženkliukas" class="uploader">
+          <el-form-item :label="language.Badge" class="uploader">
             <el-upload
               action="undefined"
               :drag="false"
@@ -61,8 +61,8 @@
               :before-upload="handleUpload"
             >
               <img
-                v-if="image"
-                :src="getImageUrl()"
+                v-if="(data && data.image) || image"
+                :src="(data && data.image) || getImageUrl()"
                 width="100"
                 height="100"
                 style="margin-top: 14px;"
@@ -74,8 +74,10 @@
       </el-row>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="onCancel">Atgal</el-button>
-      <el-button type="primary" @click="onAction">{{ modalState }}</el-button>
+      <el-button @click="onCancel">{{ data && data.labelBack }}</el-button>
+      <el-button type="primary" @click="onAction">{{
+        data && data.labelAction
+      }}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -86,33 +88,46 @@ import Component from "vue-class-component";
 import { LessonService } from "../services/lesson.service";
 import { mapGetters, mapActions, ActionMethod } from "vuex";
 import { NameGroupModel, AdminService } from "../services/admin.service";
+import { LanguageModel } from "../assets/i18n/language";
 
 interface ModalData {
   onSuccess: () => void;
   onFailure: () => void;
+  labelTitle: string;
+  labelBack: string;
+  labelAction: string;
+  name: string;
+  description: string;
+  type: string;
+  image: string;
+  id: string;
 }
 
 @Component({
   methods: {
     ...mapActions("modal", {
-      setLessonModalVisible: "setLessonModalVisible"
-    })
+      setLessonModalVisible: "setLessonModalVisible",
+    }),
   },
   computed: {
     ...mapGetters("modal", {
       modalState: "modalState",
       data: "modalData",
-      lessonModal: "lessonModalVisible"
-    })
-  }
+      lessonModal: "lessonModalVisible",
+    }),
+    ...mapGetters("language", {
+      language: "getTranslations",
+    }),
+  },
 })
 class DialogLessonForm extends Vue {
   private setLessonModalVisible!: ActionMethod;
   private groups: NameGroupModel[] = [];
+  private language!: LanguageModel;
   private form = {
     name: "",
     description: "",
-    type: ""
+    type: "",
   };
   private modalState!: string;
   private lessonModal!: boolean;
@@ -128,16 +143,30 @@ class DialogLessonForm extends Vue {
     AdminService.getTypes()
       .then((groups: NameGroupModel[]) => {
         this.groups = groups;
+
+        if (this.data.type) {
+          const group = this.groups.find((group) =>
+            group.options.find((option) => option.name == this.data.type)
+          );
+
+          if (group) {
+            this.form.type = group.options.find(
+              (option) => option.name == this.data.type
+            ).id;
+          }
+        }
         this.typeLoading = false;
       })
       .catch(() => {
         this.typeLoading = false;
       });
-    this.form.type = this.$route.params.id || "";
+    this.form.description = this.data.description || "";
+    this.form.name = this.data.name || "";
   }
 
   private handleUpload(file: File) {
     if (file.type === "image/png") {
+      this.data.image = "";
       this.image = file as Blob;
     }
   }
@@ -148,12 +177,12 @@ class DialogLessonForm extends Vue {
 
   private onAction() {
     if (this.form.name.trim() === "") {
-      this.error = "Pamokos pavadinimas yra privalomas!";
+      this.error = this.language.LessonTitleIsRequired;
       return;
     }
 
     if (this.form.description.trim() === "") {
-      this.error = "Pamokos aprašymas yra privalomas!";
+      this.error = this.language.LessonDescriptionIsRequired;
       return;
     }
 
@@ -164,20 +193,40 @@ class DialogLessonForm extends Vue {
     this.formData.set("badge", this.image);
     this.formData.set("type", this.form.type);
 
-    LessonService.postLesson(this.formData)
-      .then(() => {
-        this.loading = false;
-        this.data.onSuccess();
-        this.setLessonModalVisible({
-          visible: false,
-          data: undefined,
-          stateName: "Close"
+    if (this.modalState == "Update") {
+      this.formData.set("id", this.data.id);
+      LessonService.putLesson(this.formData)
+        .then(() => {
+          this.loading = false;
+          this.data.onSuccess();
+          this.setLessonModalVisible({
+            visible: false,
+            data: undefined,
+            stateName: "Close",
+          });
+        })
+        .catch((error) => {
+          this.loading = false;
+          this.error = error.toString();
         });
-      })
-      .catch(error => {
-        this.loading = false;
-        this.error = error;
-      });
+    } else {
+      LessonService.postLesson(this.formData)
+        .then(() => {
+          this.loading = false;
+          this.data.onSuccess();
+          this.setLessonModalVisible({
+            visible: false,
+            data: undefined,
+            stateName: "Close",
+          });
+        })
+        .catch((error) => {
+          this.loading = false;
+          this.error = error.toString();
+        });
+    }
+
+    this.error = "";
   }
 
   private onCloseAlert() {
@@ -188,11 +237,12 @@ class DialogLessonForm extends Vue {
     this.form.name = "";
     this.form.description = "";
     this.image = "";
+    this.error = "";
 
     this.setLessonModalVisible({
       visible: false,
       data: undefined,
-      stateName: "Cancel"
+      stateName: "Cancel",
     });
   }
 }

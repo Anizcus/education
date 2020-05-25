@@ -24,20 +24,26 @@ namespace Server.Services.Interfaces
       {
          var userTask = await _lessonStore.GetUserAssignment(assignmentId, userId);
 
-         if (userTask == null) {
-            return new AssignmentAnswerStatus {
+         if (userTask == null)
+         {
+            return new AssignmentAnswerStatus
+            {
                Error = "Assignment is not found"
             };
          }
 
-         if (userTask.ProgressId == (uint) ProgressEnum.Completed) {
-            return new AssignmentAnswerStatus {
+         if (userTask.ProgressId == (uint)ProgressEnum.Completed)
+         {
+            return new AssignmentAnswerStatus
+            {
                Error = "Assignment is already completed!"
             };
          }
 
-         if (userTask.Assignment.Answer != answer) {
-            return new AssignmentAnswerStatus {
+         if (userTask.Assignment.Answer != answer)
+         {
+            return new AssignmentAnswerStatus
+            {
                Error = "Assignment answer does not match!"
             };
          }
@@ -46,13 +52,14 @@ namespace Server.Services.Interfaces
          var level = user.Level;
          var experience = user.Experience + userTask.Assignment.Experience;
 
-         while (experience >= level * 15) {
+         while (experience >= level * 15)
+         {
             experience -= level * 15;
             level++;
          }
 
          var difference = level - user.Level;
-         var message = difference > 0 
+         var message = difference > 0
             ? $"Correct! You have gained {difference} level(-s)!"
             : $"Correct! You have gained {userTask.Assignment.Experience} experience!";
 
@@ -61,7 +68,7 @@ namespace Server.Services.Interfaces
 
          user = await _lessonStore.PostUserAsync(user);
 
-         userTask.ProgressId = (uint) ProgressEnum.Completed;
+         userTask.ProgressId = (uint)ProgressEnum.Completed;
 
          userTask = await _lessonStore.PostUserAssignment(userTask);
 
@@ -70,19 +77,21 @@ namespace Server.Services.Interfaces
 
          var countCompleted = await _lessonStore
             .GetUserAssignmentsBasedOnProgressAndLesson(
-               userId, 
-               userTask.Assignment.LessonId, 
-               (uint) ProgressEnum.Completed);
+               userId,
+               userTask.Assignment.LessonId,
+               (uint)ProgressEnum.Completed);
          var countTotal = lessonAssignments.Count();
 
-         if (countCompleted.Count() == countTotal) {
+         if (countCompleted.Count() == countTotal)
+         {
             var lesson = await _lessonStore.GetUserLesson(userTask.Assignment.LessonId, userId);
 
-            lesson.ProgressId = (uint) ProgressEnum.Completed;
+            lesson.ProgressId = (uint)ProgressEnum.Completed;
             lesson = await _lessonStore.PostUserLesson(lesson);
          }
 
-         return new AssignmentAnswerStatus {
+         return new AssignmentAnswerStatus
+         {
             AssignmentId = assignmentId,
             Message = message,
             Progress = nameof(ProgressEnum.Completed)
@@ -203,16 +212,20 @@ namespace Server.Services.Interfaces
          var user = await _userStore.GetAsync(userId);
          var answer = new List<LessonListAnswer>();
 
-         if (user == null) {
-            answer.Add(new LessonListAnswer {
+         if (user == null)
+         {
+            answer.Add(new LessonListAnswer
+            {
                Error = "Your session is not valid..."
             });
 
             return answer;
          }
 
-         if (user.RoleId != (uint) RoleEnum.Administrator) {
-            answer.Add(new LessonListAnswer {
+         if (user.RoleId != (uint)RoleEnum.Administrator)
+         {
+            answer.Add(new LessonListAnswer
+            {
                Error = "You are not an administrator!"
             });
 
@@ -242,16 +255,20 @@ namespace Server.Services.Interfaces
          var user = await _userStore.GetAsync(userId);
          var answer = new List<LessonListAnswer>();
 
-         if (user == null) {
-            answer.Add(new LessonListAnswer {
+         if (user == null)
+         {
+            answer.Add(new LessonListAnswer
+            {
                Error = "Your session is not valid..."
             });
 
             return answer;
          }
 
-         if (user.RoleId != (uint) RoleEnum.Teacher) {
-            answer.Add(new LessonListAnswer {
+         if (user.RoleId != (uint)RoleEnum.Teacher)
+         {
+            answer.Add(new LessonListAnswer
+            {
                Error = "You are not a teacher!"
             });
 
@@ -363,27 +380,31 @@ namespace Server.Services.Interfaces
 
          lesson.LessonUsers = new List<UserLesson>();
 
-         lesson.LessonUsers.Add(new UserLesson {
+         lesson.LessonUsers.Add(new UserLesson
+         {
             LessonId = lessonId,
             UserId = userId,
-            ProgressId = (uint) ProgressEnum.Active
+            ProgressId = (uint)ProgressEnum.Active
          });
 
          foreach (var item in lesson.Assignments)
          {
             item.AssignmentUsers = new List<UserAssignment>();
 
-            item.AssignmentUsers.Add(new UserAssignment {
+            item.AssignmentUsers.Add(new UserAssignment
+            {
                AssignmentId = item.Id,
                UserId = userId,
-               ProgressId = (uint) ProgressEnum.Active
+               ProgressId = (uint)ProgressEnum.Active
             });
          }
 
          var update = await _lessonStore.UpdateLessonStatusAsync(lesson);
 
-         if (update == null) {
-            return new NameAnswer {
+         if (update == null)
+         {
+            return new NameAnswer
+            {
                Error = "Failed to update assignments"
             };
          }
@@ -392,6 +413,36 @@ namespace Server.Services.Interfaces
          {
             Name = update.Name,
             Id = update.Id
+         };
+      }
+
+      public async Task<NameAnswer> UpdateLessonAsync(uint typeId, uint ownerId, uint lessonId, string name, string description, byte[] badge)
+      {
+         var lesson = await _lessonStore.GetAsync(lessonId);
+
+         if (lesson == null)
+         {
+            return new NameAnswer
+            {
+               Error = "Lesson was not found!"
+            };
+         }
+
+         lesson.TypeId = typeId;
+         lesson.Name = name;
+         lesson.Description = description;
+
+         if (badge.Length != 0)
+         {
+            lesson.Badge = badge;
+         }
+
+         lesson = await _lessonStore.UpdateLessonAsync(lesson);
+
+         return new NameAnswer
+         {
+            Id = lesson.Id,
+            Name = lesson.Name
          };
       }
    }

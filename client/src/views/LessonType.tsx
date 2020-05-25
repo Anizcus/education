@@ -4,6 +4,7 @@ import { VNode } from "vue/types/umd";
 import { mapActions, ActionMethod, mapGetters } from "vuex";
 import { TypeModel } from "@/models/stores/lesson.store.model";
 import { LanguageModel } from '@/assets/i18n/language';
+import TitleComponent from "@/components/TitleComponent.vue";
 
 @Component({
   methods: {
@@ -18,7 +19,10 @@ import { LanguageModel } from '@/assets/i18n/language';
     ...mapGetters("language", {
       language: "getTranslations",
     }),
-  }
+  },
+  components: {
+    "i-title": TitleComponent,
+  },
 })
 class LessonType extends Vue {
   private getTypes!: ActionMethod;
@@ -51,11 +55,21 @@ class LessonType extends Vue {
       );
     }
 
+    const title = <i-title title={this.language.LessonTypes}></i-title>;
+
     if (!this.types.length) {
       return (
-        <el-card shadow="hover" style={{ textAlign: "center" }}>
-          {this.language.NoData}
-        </el-card>
+        <el-row>
+          {title}
+          <el-col style="border-bottom: 1px dashed #e6e6e6; margin-bottom: 14px; padding: 0 24px;">
+            <el-card
+              shadow="hover"
+              style="text-align: center; margin-bottom: 14px;"
+            >
+              {this.language.NoData}
+            </el-card>
+          </el-col>
+        </el-row>
       );
     }
 
@@ -73,7 +87,8 @@ class LessonType extends Vue {
 
     return (
       <el-row>
-        <el-col>{types}</el-col>
+        {title}
+        <el-col style="border-bottom: 1px dashed #e6e6e6; padding: 0 24px;">{types}</el-col>
       </el-row>
     );
   }

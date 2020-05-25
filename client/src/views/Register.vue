@@ -8,7 +8,7 @@
         <el-form-item :label="language.Password" prop="password">
           <el-input v-model="form.password" :show-password="true"></el-input>
         </el-form-item>
-        <el-form-item label="Patvirtinti slaptažodį" prop="confirm">
+        <el-form-item :label="language.ConfirmPassword" prop="confirm">
           <el-input v-model="form.confirm" :show-password="true"></el-input>
         </el-form-item>
         <el-form-item :label="language.Role" prop="role">
@@ -17,12 +17,12 @@
             :loading="roleLoading"
             :clearable="true"
             v-model="form.role"
-            placeholder="Pasirinkti rolę"
+            :placeholder="language.SelectRole"
           >
             <el-option
               v-for="role in roles"
               :key="role.id"
-              :label="role.name"
+              :label="language[role.name]"
               :value="role.id"
             >
             </el-option>
@@ -51,17 +51,17 @@ import { LanguageModel } from "../assets/i18n/language";
   methods: {
     ...mapActions("user", {
       register: "register",
-      getRoles: "getRoles"
-    })
+      getRoles: "getRoles",
+    }),
   },
   computed: {
     ...mapGetters("user", {
-      roles: "roles"
+      roles: "roles",
     }),
     ...mapGetters("language", {
       language: "getTranslations",
     }),
-  }
+  },
 })
 class Register extends Vue {
   private register!: ActionMethod;
@@ -71,64 +71,82 @@ class Register extends Vue {
     username: "",
     password: "",
     confirm: "",
-    role: ""
+    role: "",
   };
   private loading = false;
   private roleLoading = true;
   private roles!: NameServiceModel[];
-  private rule = {
-    username: [
-      {
-        required: true,
-        message: this.language.UsernameIsRequired,
-        trigger: "blur"
-      }
-    ],
-    password: [
-      {
-        required: true,
-        validator: (rule: object, value: string, callback: Function) => {
-          if (value == "") {
-            return callback(new Error("Įveskite slaptažodį"));
-          }
-
-          if (this.form.confirm !== "") {
-            this.$refs.form.validateField("confirm");
-          }
-
-          return callback();
-        },
-        trigger: "blur"
-      }
-    ],
-    confirm: [
-      {
-        required: true,
-        validator: (rule: object, value: string, callback: Function) => {
-          if (value == "") {
-            return callback(new Error("Įveskite slaptažodį"));
-          }
-
-          if (this.form.password !== value) {
-            return callback(new Error("Slaptažodžiai nesutampa!"));
-          }
-
-          return callback();
-        },
-        trigger: "blur"
-      }
-    ],
-    role: [{ required: true, message: "Pasirinkite rolę!", trigger: "blur" }]
-  };
+  private rule = {};
 
   public $refs!: {
     form: FormRefModel;
   };
 
-  public mounted() {
+  public created() {
     this.getRoles({ forRegistration: true })
       .then(() => (this.roleLoading = false))
       .catch(() => (this.roleLoading = false));
+
+    this.rule = {
+      username: [
+        {
+          required: true,
+          trigger: "blur",
+          validator: (rule: object, value: string, callback: Function) => {
+            if (value == "") {
+              return callback(new Error(this.language.UsernameIsRequired));
+            }
+            return callback();
+          },
+        },
+      ],
+      password: [
+        {
+          required: true,
+          validator: (rule: object, value: string, callback: Function) => {
+            if (value == "") {
+              return callback(new Error(this.language.EnterPassword));
+            }
+
+            if (this.form.confirm !== "") {
+              this.$refs.form.validateField("confirm");
+            }
+
+            return callback();
+          },
+          trigger: "blur",
+        },
+      ],
+      confirm: [
+        {
+          required: true,
+          validator: (rule: object, value: string, callback: Function) => {
+            if (value == "") {
+              return callback(new Error(this.language.EnterPassword));
+            }
+
+            if (this.form.password !== value) {
+              return callback(new Error(this.language.PasswordsDoNotMatch));
+            }
+
+            return callback();
+          },
+          trigger: "blur",
+        },
+      ],
+      role: [
+        {
+          required: true,
+          trigger: "blur",
+          validator: (rule: object, value: string, callback: Function) => {
+            if (value == "") {
+              return callback(new Error(this.language.SelectRole));
+            }
+            return callback();
+          },
+        },
+      ],
+    };
   }
 
   private onSubmit() {
@@ -144,10 +162,10 @@ class Register extends Vue {
         this.register({
           username: this.form.username,
           password: this.form.password,
-          role: Number(this.form.role)
+          role: Number(this.form.role),
         })
       )
-      .then(response => {
+      .then((response) => {
         this.loading = false;
         alert(response.name);
       })
@@ -159,5 +177,3 @@ class Register extends Vue {
 
 export default Register;
 </script>
-
-<style lang="scss" scoped></style>

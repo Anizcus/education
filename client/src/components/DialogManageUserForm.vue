@@ -2,7 +2,7 @@
   <el-dialog
     @open="() => onOpen()"
     @close="() => onCancel()"
-    :title="`${modalState} ${data && data.name} statusas`"
+    :title="data && data.labelTitle"
     :visible="manageUserModal"
   >
     <el-alert
@@ -14,35 +14,39 @@
     >
     </el-alert>
     <el-form :model="form" label-position="top">
-      <el-form-item label="Rolė" prop="role" v-if="data && data.roles">
+      <el-form-item
+        :label="data && data.labelRole"
+        prop="role"
+        v-if="data && data.roles"
+      >
         <el-select
           style="width: 100%;"
           :clearable="true"
           v-model="form.role"
-          placeholder="Pasirinkti rolę"
+          :placeholder="data && data.labelSelect"
         >
           <el-option
             v-for="role in data.roles"
             :key="role.id"
-            :label="mapRole(role.name)"
+            :label="role.name"
             :value="role.id"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="Vartotojo prieiga" prop="isBlocked">
+      <el-form-item :label="data && data.labelAccess" prop="isBlocked">
         <el-switch
           v-model="form.isBlocked"
-          active-text="Vartotojas yra užblokuotas"
-          inactive-text="Vartotojas nėra užblokuotas"
+          :active-text="data && data.labelBlock"
+          :inactive-text="data && data.labelUnblock"
         >
         </el-switch>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="onCancel">Atgal</el-button>
+      <el-button @click="onCancel">{{ data && data.labelBack }}</el-button>
       <el-button :loading="buttonLoading" type="primary" @click="onAction">{{
-        modalState
+        data && data.labelAction
       }}</el-button>
     </span>
   </el-dialog>
@@ -60,6 +64,14 @@ interface ModalData {
   name: string;
   roles: NameServiceModel[];
   role: number;
+  labelAction: string;
+  labelTitle: string;
+  labelSelect: string;
+  labelBack: string;
+  labelAccess: string;
+  labelBlock: string;
+  labelUnblock: string;
+  labelRole: string;
 }
 
 interface ManageUserForm {
@@ -70,25 +82,25 @@ interface ManageUserForm {
 @Component({
   methods: {
     ...mapActions("modal", {
-      setManageUserModalVisible: "setManageUserModalVisible"
+      setManageUserModalVisible: "setManageUserModalVisible",
     }),
     ...mapActions("user", {
-      modifyStatus: "modifyStatus"
-    })
+      modifyStatus: "modifyStatus",
+    }),
   },
   computed: {
     ...mapGetters("modal", {
       modalState: "modalState",
       manageUserModal: "manageUserModalVisible",
-      data: "modalData"
-    })
-  }
+      data: "modalData",
+    }),
+  },
 })
 class DialogManageUserForm extends Vue {
   private setManageUserModalVisible!: ActionMethod;
   private form: ManageUserForm = {
     isBlocked: false,
-    role: null
+    role: null,
   };
   private modalState!: string;
   private manageUserModal!: boolean;
@@ -103,17 +115,17 @@ class DialogManageUserForm extends Vue {
     this.modifyStatus({
       userId: this.data.id,
       roleId: this.form.role,
-      isBlocked: this.form.isBlocked
+      isBlocked: this.form.isBlocked,
     })
       .then(() => {
         this.buttonLoading = false;
         this.setManageUserModalVisible({
           visible: false,
           data: undefined,
-          stateName: this.modalState
+          stateName: this.modalState,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.error = error;
         this.buttonLoading = false;
       });
@@ -130,24 +142,8 @@ class DialogManageUserForm extends Vue {
   private onCancel() {
     this.setManageUserModalVisible({
       visible: false,
-      stateName: this.modalState
+      stateName: this.modalState,
     });
-  }
-
-  private mapRole(role: string) {
-    if (role == "Administrator") {
-      return "Administratorius";
-    }
-
-    if (role == "Teacher") {
-      return "Mokytojas";
-    }
-
-    if (role == "Student") {
-      return "Studentas";
-    }
-
-    return "";
   }
 }
 export default DialogManageUserForm;

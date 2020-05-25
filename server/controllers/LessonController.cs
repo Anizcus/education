@@ -127,6 +127,34 @@ namespace Server.Controllers
          return Ok(payload);
       }
 
+      [HttpPut("/lesson")]
+      public async Task<IActionResult> PutLesson([FromForm] LessonFormRequest request)
+      {
+         var user = HttpContext.User.Claims.ElementAt(0);
+         var memoryStream = new System.IO.MemoryStream();
+
+         if (request.Badge != null) {
+            await request.Badge.CopyToAsync(memoryStream);
+         }
+
+         var lesson = await _lessonService.UpdateLessonAsync(
+            uint.Parse(request.Type),
+            uint.Parse(user.Value),
+            uint.Parse(request.Id),
+            request.Name,
+            request.Description,
+            memoryStream.ToArray()
+         );
+
+         var payload = new NamePayload
+         {
+            Id = lesson.Id,
+            Name = lesson.Name
+         };
+
+         return Ok(payload);
+      }
+
       [AllowAnonymous]
       [HttpGet("/lesson")]
       public async Task<IActionResult> GetLesson([FromQuery] RequestById request)
