@@ -5,22 +5,21 @@ import { mapActions, ActionMethod, mapGetters } from "vuex";
 import { LessonListModel } from "@/models/stores/lesson.store.model";
 import { LanguageModel } from "@/assets/i18n/language";
 import TitleComponent from "@/components/TitleComponent.vue";
+import { getLocalTime } from "../services/language.service";
 
 @Component({
   methods: {
     ...mapActions("lesson", {
       getLessons: "getPublishedLessonsByType"
     }),
-    ...mapActions("language", {
-      localTime: "getLocalTime"
-    })
   },
   computed: {
     ...mapGetters("lesson", {
       lessons: "lessons"
     }),
     ...mapGetters("language", {
-      language: "getTranslations"
+      language: "getTranslations",
+      languageKey: "getKey",
     })
   },
   components: {
@@ -30,7 +29,8 @@ import TitleComponent from "@/components/TitleComponent.vue";
 class LessonList extends Vue {
   private getLessons!: ActionMethod;
   private language!: LanguageModel;
-  private localTime!: ActionMethod;
+  private languageKey!: string;
+  private getTime = getLocalTime;
   private lessons!: LessonListModel[];
   private loading = true;
 
@@ -91,7 +91,7 @@ class LessonList extends Vue {
             <span>
               {this.language.Author} <b>{item.ownerName}</b>
             </span>
-            <span style="float: right;">{this.localTime(item.modified)}</span>
+            <span style="float: right;">{ this.getTime(this.languageKey, item.modified.toString())}</span>
           </el-col>
         </el-row>
       </el-card>

@@ -67,7 +67,7 @@
                 </el-col>
                 <el-col :span="8">{{ scope.row.status || "-" }}</el-col>
                 <el-col :span="8">
-                  {{ localTime(scope.row.modified) }}
+                  {{ getTime(languageKey, scope.row.modified) }}
                 </el-col>
               </el-row>
             </el-col>
@@ -143,11 +143,13 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import { getLocalTime } from "../services/language.service";
 import { LessonListModel } from "../models/stores/lesson.store.model";
 import { SessionModel } from "../models/stores/user.store.model";
-import { mapGetters, mapActions, ActionMethod } from "vuex";
+import { mapGetters, mapActions, ActionMethod, Action } from "vuex";
 import { LessonService } from "../services/lesson.service";
 import { LanguageModel } from "../assets/i18n/language";
+import { Method } from "axios";
 
 @Component({
   computed: {
@@ -155,7 +157,8 @@ import { LanguageModel } from "../assets/i18n/language";
       session: "session"
     }),
     ...mapGetters("language", {
-      language: "getTranslations"
+      language: "getTranslations",
+      languageKey: "getKey"
     })
   },
   methods: {
@@ -165,9 +168,6 @@ import { LanguageModel } from "../assets/i18n/language";
     ...mapActions("modal", {
       setLessonModalVisible: "setLessonModalVisible",
       setAuthorizeModalVisible: "setAuthorizeModalVisible"
-    }),
-    ...mapActions("language", {
-      localTime: "getLocalTime"
     })
   }
 })
@@ -179,7 +179,8 @@ class Management extends Vue {
   private setLessonModalVisible!: ActionMethod;
   private setAuthorizeModalVisible!: ActionMethod;
   private postStatus!: ActionMethod;
-  private localTime!: ActionMethod;
+  private languageKey!: string;
+  private getTime = getLocalTime;
 
   private onCreateLesson() {
     this.setLessonModalVisible({
@@ -300,16 +301,6 @@ class Management extends Vue {
 
   private mapState(state: string) {
     return this.language[state];
-  }
-
-  private async onLocalTime(date: string) {
-    let localDate = "";
-
-    await this.localTime(date).then(
-      (response: string) => (localDate = response)
-    );
-
-    return localDate;
   }
 }
 
